@@ -11,7 +11,7 @@ CWeapon::CWeapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 }
 
 CWeapon::CWeapon(const CWeapon & Prototype)
-	: CPartObject{ Prototype }
+	: CPartObject(Prototype)
 {
 }
 

@@ -35,7 +35,6 @@ public:
 
 public:
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) override;
-	virtual void Set_RevisionMatrix(_matrix vRevision) override { m_revisionMatrix = vRevision; }
 	void StoreShield(_bool bDraw);
 
 private:
@@ -46,7 +45,6 @@ private:
 private:
 	const _float4x4*			m_pSocketMatrix = { nullptr };
 	const _uint*				m_pParentState = { nullptr };
-	_matrix						m_revisionMatrix = {};
 	_bool						m_isStored = { false };
 
 private:

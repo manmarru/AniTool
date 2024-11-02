@@ -30,17 +30,38 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	m_pGameInstance->PlayBGM(L"judgingLoop.ogg", 1.f, true);
 
+	// ImGui 초기화
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+	// ImGui 스타일 고르기
+	ImGui::StyleColorsDark(); // 다크 모드
+	//ImGui::StyleColorsLight(); // 일반 모드
+
+	ImGui_ImplWin32_Init(g_hWnd);
+	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 
 	return S_OK;
 }
 
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
-	
+	Format_ImGUI();
 }
 
 HRESULT CLevel_GamePlay::Render()
 {
+	if (!m_bGuiStart)
+	{
+		m_bGuiStart = true;
+		return S_OK;
+	}
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 	return S_OK;
 }
 
@@ -117,6 +138,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 	return S_OK;
 }
 
+void CLevel_GamePlay::Format_ImGUI()
+{
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	ImGui::Begin("Hello_World");
+
+	ImGui::End();
+}
+
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CLevel_GamePlay*		pInstance = new CLevel_GamePlay(pDevice, pContext);
@@ -134,4 +165,7 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }

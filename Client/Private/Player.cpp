@@ -91,11 +91,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-//#ifdef _DEBUG
-//	m_pColliderCom->Render();
-//	m_pNavigationCom->Render();
-//#endif
-
 
 	return S_OK;
 }
@@ -106,11 +101,15 @@ void CPlayer::Set_State(OBJ_STATE _eState)
 	{
 		part->Set_State((_uint)_eState);
 	}
-	//static_cast<CBody_Player*>(m_Parts[PART_BODY])->Set_State(_eState);
 }
 
 void CPlayer::Key_Input(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON)) 
+	{
+		Set_State(OBJSTATE_ATT1);
+	}
+	
 	if (m_pGameInstance->Get_DIKeyState(KeyType::DOWN))
 		m_pTransformCom->Go_Backward(fTimeDelta);
 	if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::DOWN))

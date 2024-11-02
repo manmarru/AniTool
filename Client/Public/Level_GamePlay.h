@@ -30,7 +30,12 @@ public:
 	
 	HRESULT Ready_Layer_Player();
 	//HRESULT Ready_Layer_Monster(CLandObject::LANDOBJECT_DESC& LandObjectDesc);
-	
+
+private:
+	_bool m_bGuiStart = { false };
+
+private:
+	void Format_ImGUI();
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

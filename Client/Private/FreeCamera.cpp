@@ -43,7 +43,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 	_long		MouseMove = { 0 };
 
-	if (m_pGameInstance->Get_DIMouseState(DIMK_WHEEL)) 
+	if (m_pGameInstance->Get_DIKeyState(KeyType::LCTRL))
 	{
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{

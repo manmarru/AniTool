@@ -47,10 +47,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_iState = STATE_IDLE;
 
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.1f, 0.f, 0.1f, 1.f));
-
-
-
 	return S_OK;
 }
 
@@ -82,7 +78,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		pPartObject->Late_Update(fTimeDelta);
 	
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	//m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
@@ -109,6 +105,19 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	{
 		Set_State(OBJSTATE_ATT1);
 	}
+
+	if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Z))
+	{
+		m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bone_Skirt_L_Root"));
+		m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine2"));
+
+		
+		Vector3 look = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		//m_Parts[PART_SHIELD]->Set_RevisionMatrix(XMMatrixRotationY(XMConvertToRadians(90.f)));
+		static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield();
+	}
+
 	
 	if (m_pGameInstance->Get_DIKeyState(KeyType::DOWN))
 		m_pTransformCom->Go_Backward(fTimeDelta);
@@ -212,13 +221,13 @@ HRESULT CPlayer::Ready_PartObjects()
 	CWeapon::WEAPON_DESC WeaponDesc{};
 	WeaponDesc.ModelTag = ModelTag_Sword;
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01");
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01");
 	if (FAILED(Add_PartObject(PART_SWORD, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 
 	WeaponDesc.ModelTag = ModelTag_Shield;
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01");
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01");
 	if (FAILED(Add_PartObject(PART_SHIELD, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 

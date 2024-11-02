@@ -22,6 +22,7 @@ public:
 	void Set_State(STATE eState, _fvector vState) {
 		XMStoreFloat3((_float3*)&m_WorldMatrix.m[eState][0], vState);
 	}
+	void Set_Look(_fvector vLook);
 
 	_vector Get_State(STATE eState) {
 		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];

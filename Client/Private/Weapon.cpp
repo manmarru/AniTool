@@ -37,7 +37,6 @@ HRESULT CWeapon::Initialize(void * pArg)
 
 void CWeapon::Priority_Update(_float fTimeDelta)
 {
-	int a = 10;
 }
 
 _int CWeapon::Update(_float fTimeDelta)
@@ -48,6 +47,7 @@ _int CWeapon::Update(_float fTimeDelta)
 	{
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 	}
+	
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 	
 	m_pColliderCom->Update(&m_WorldMatrix);
@@ -98,6 +98,17 @@ HRESULT CWeapon::Render()
 
 
 	return S_OK;
+}
+
+void CWeapon::Set_SocketMatrix(const _float4x4* pSocketMatrix)
+{
+	m_pSocketMatrix = pSocketMatrix;
+}
+
+void CWeapon::StoreShield()
+{
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.5f, 1.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 }
 
 HRESULT CWeapon::Ready_Components(_wstring _MoadeTag)

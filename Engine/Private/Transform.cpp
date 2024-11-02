@@ -8,6 +8,19 @@ CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
 }
 
+void CTransform::Set_Look(_fvector vLook)
+{
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook));
+	_float3		vScale = Get_Scaled();
+
+	_vector vRight = XMVector3Cross(Get_State(STATE_UP), vLook);
+	_vector vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE_UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
 _float3 CTransform::Get_Scaled() const
 {
 	_matrix		WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);

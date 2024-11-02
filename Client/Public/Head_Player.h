@@ -16,6 +16,7 @@ public:
 	typedef struct HEAD_DESC : PARTOBJ_DESC
 	{
 		const _uint* pParentState = { nullptr };
+		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
 	}HEAD_DESC;
 
 private:
@@ -48,7 +49,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_FSM();
+	HRESULT Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex);
 
 public:
 	static CHead_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

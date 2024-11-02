@@ -43,7 +43,7 @@ HRESULT CHair_Player::Initialize(void * pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	if (FAILED(Ready_FSM()))
+	if (FAILED(Ready_FSM(pDesc->mapAnimationIndex)))
 		return E_FAIL;
 
 	return S_OK;
@@ -151,30 +151,18 @@ HRESULT CHair_Player::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CHair_Player::Ready_FSM()
+HRESULT CHair_Player::Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex)
 {
 	m_pFSM = CFSM::Create(m_pModelCom);
 	if (nullptr == m_pFSM)
 		return E_FAIL;
 
-	m_pFSM->Register_AnimationIndex(OBJSTATE_IDLE, 73, ANI_LOOP);
-
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT1, 0, ANI_BACKTOIDLE);
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT2, 2, ANI_BACKTOIDLE);
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT3, 4, ANI_BACKTOIDLE);
-
-
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT1_B, 1, ANI_BACKTOIDLE);
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT2_B, 3, ANI_BACKTOIDLE);
-	m_pFSM->Register_AnimationIndex(OBJSTATE_ATT3_B, 5, ANI_BACKTOIDLE);
-
-
-	m_pFSM->Register_AnimationIndex(OBJSTATE_RUN, 34, ANI_LOOP);
-
+	for (auto pair : *_pAnimationIndex)
+	{
+		m_pFSM->Register_AnimationIndex(pair.first, pair.second.first, pair.second.second);
+	}
 
 	m_pFSM->Set_State(OBJSTATE_IDLE);
-
-
 
 	return S_OK;
 }

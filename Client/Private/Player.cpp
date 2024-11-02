@@ -113,12 +113,18 @@ void CPlayer::Key_Input(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_DIKeyState(KeyType::DOWN))
 		m_pTransformCom->Go_Backward(fTimeDelta);
-
+	if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::DOWN))
+		Set_State(OBJSTATE_IDLE);
+	
 	if (m_pGameInstance->Get_DIKeyState(KeyType::LEFT))
 		m_pTransformCom->Turn(false, true, false, fTimeDelta * -1.f);
+	if (m_pGameInstance->Get_DIKeyState(KeyType::LEFT))
+		Set_State(OBJSTATE_IDLE);
 
 	if (m_pGameInstance->Get_DIKeyState(KeyType::RIGHT))
 		m_pTransformCom->Turn(false, true, false, fTimeDelta);
+	if (m_pGameInstance->Get_DIKeyState(KeyType::RIGHT))
+		Set_State(OBJSTATE_IDLE);
 
 	if (m_pGameInstance->Get_DIKeyState(KeyType::UP))
 	{
@@ -166,19 +172,39 @@ HRESULT CPlayer::Ready_PartObjects()
 	vector<CPartObject*>().swap(m_Parts); //캐퍼시티가 이상해서 리셋하고 시작함
 	m_Parts.resize(PART_END);
 
+	map<OBJ_STATE, pair<_uint, ANITYPE>> AnimationIndex;
+
+	AnimationIndex[OBJSTATE_IDLE] = { 73, ANI_LOOP };
+
+	AnimationIndex[OBJSTATE_ATT1] = { 0, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT2] = { 2, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT3] = { 4, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT4] = { 6, ANI_BACKTOIDLE };
+
+	AnimationIndex[OBJSTATE_ATT1_B] = { 1, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT2_B] = { 3, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT3_B] = { 5, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_ATT4_B] = { 7, ANI_BACKTOIDLE };
+
+	AnimationIndex[OBJSTATE_RUN] = { 34, ANI_LOOP};
+
+
 	CBody_Player::BODY_DESC		BodyDesc{};
+	BodyDesc.mapAnimationIndex = &AnimationIndex;
 	BodyDesc.pParentState = &m_iState;
 	BodyDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	if (FAILED(Add_PartObject(PART_BODY, TEXT("Prototype_GameObject_Body_Player"), &BodyDesc)))
 		return E_FAIL;
 
 	CHead_Player::HEAD_DESC HeadDesc{};
+	HeadDesc.mapAnimationIndex = &AnimationIndex;
 	HeadDesc.pParentState = &m_iState;
 	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	if (FAILED(Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Head_Player"), &HeadDesc)))
 		return E_FAIL;
 	
 	CHair_Player::HAIR_DESC HairDesc{};
+	HairDesc.mapAnimationIndex = &AnimationIndex;
 	HairDesc.pParentState = &m_iState;
 	HairDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	if (FAILED(Add_PartObject(PART_HAIR, TEXT("Prototype_GameObject_Hair_Player"), &HairDesc)))

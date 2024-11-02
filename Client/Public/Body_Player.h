@@ -16,6 +16,7 @@ public:
 	typedef struct : public CPartObject::PARTOBJ_DESC
 	{
 		const _uint* pParentState = { nullptr };
+		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
 	}BODY_DESC;
 
 private:
@@ -52,7 +53,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_FSM();
+	HRESULT Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex);
 
 public:
 	static CBody_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

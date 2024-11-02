@@ -36,7 +36,7 @@ public:
 public:
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) override;
 	virtual void Set_RevisionMatrix(_matrix vRevision) override { m_revisionMatrix = vRevision; }
-	void StoreShield();
+	void StoreShield(_bool bDraw);
 
 private:
 	CShader*			m_pShaderCom = { nullptr };

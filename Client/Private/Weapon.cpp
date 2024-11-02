@@ -105,10 +105,11 @@ void CWeapon::Set_SocketMatrix(const _float4x4* pSocketMatrix)
 	m_pSocketMatrix = pSocketMatrix;
 }
 
-void CWeapon::StoreShield()
+//true면 방패 꺼내드는거임
+void CWeapon::StoreShield(_bool bDraw)
 {
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.5f, 1.f));
-	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, bDraw ? 0.f : 0.5f, 1.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(bDraw ? 0.f : 180.f));
 }
 
 HRESULT CWeapon::Ready_Components(_wstring _MoadeTag)

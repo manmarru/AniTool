@@ -108,14 +108,24 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Z))
 	{
-		m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bone_Skirt_L_Root"));
-		m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine2"));
+		m_bDrawWeapon = !m_bDrawWeapon;
 
+		if (m_bDrawWeapon)
+		{
+			Set_State(OBJSTATE_WEAPON_DRAW);
+			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01"));
+			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01"));
+
+			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(true);
+		}
+		else
+		{
+			Set_State(OBJSTATE_WEAPON_UNDRAW);
+			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bone_Skirt_L_Root"));
+			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine2"));
 		
-		Vector3 look = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-		//m_Parts[PART_SHIELD]->Set_RevisionMatrix(XMMatrixRotationY(XMConvertToRadians(90.f)));
-		static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield();
+			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(false);
+		}
 	}
 
 	
@@ -193,6 +203,16 @@ HRESULT CPlayer::Ready_PartObjects()
 	AnimationIndex[OBJSTATE_ATT2_B] = { 3, ANI_BACKTOIDLE };
 	AnimationIndex[OBJSTATE_ATT3_B] = { 5, ANI_BACKTOIDLE };
 	AnimationIndex[OBJSTATE_ATT4_B] = { 7, ANI_BACKTOIDLE };
+
+	AnimationIndex[OBJSTATE_ROLL_B] = { 8, ANI_BACKTOIDLE };
+
+	AnimationIndex[OBJSTATE_WEAPON_DRAW]	= { 9, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_WAEPON_DRAW_B] = { 10, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_WEAPON_UNDRAW]		= { 11, ANI_BACKTOIDLE };
+	AnimationIndex[OBJSTATE_WEAPON_UNDRAW_B]	= { 12, ANI_BACKTOIDLE };
+	
+
+	
 
 	AnimationIndex[OBJSTATE_RUN] = { 34, ANI_LOOP};
 

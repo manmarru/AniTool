@@ -41,7 +41,8 @@ private:
 	void Key_Input(_float fTimeDelta);
 
 
-
+private:
+	_bool m_bDrawWeapon = { true };
 
 private:
 	_uint				m_iState = {  };

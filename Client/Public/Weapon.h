@@ -14,9 +14,9 @@ BEGIN(Client)
 class CWeapon final : public CPartObject
 {
 public:
-	typedef struct : public CPartObject::PARTOBJ_DESC
+	typedef struct WEAPON_DESC : PARTOBJ_DESC
 	{
-		const _uint* pParentState = { nullptr };
+		_wstring ModelTag;
 		const _float4x4* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
@@ -33,6 +33,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+
 private:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };
@@ -43,7 +44,7 @@ private:
 	const _uint*				m_pParentState = { nullptr };
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(_wstring _MoadeTag);
 
 public:
 	static CWeapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

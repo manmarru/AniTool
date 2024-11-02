@@ -16,7 +16,7 @@ BEGIN(Client)
 class CPlayer final : public CActor
 {
 public:
-	enum PARTID { PART_BODY, PART_HEAD, PART_HAIR, PART_END };
+	enum PARTID { PART_BODY, PART_HEAD, PART_HAIR, PART_SWORD, PART_SHIELD, PART_END };
 	enum STATE {
 		STATE_IDLE
 		, STATE_WALK

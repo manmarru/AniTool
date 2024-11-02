@@ -16,3 +16,11 @@ extern HWND g_hWnd;
 
 using namespace Client;
 using namespace std;
+
+
+
+
+#define ModelTag_Sword TEXT("Prototype_Component_Model_PlayerSword")
+#define ModelTag_Shield TEXT("Prototype_Component_Model_PlayerShield")
+
+#define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")

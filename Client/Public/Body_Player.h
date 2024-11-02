@@ -36,6 +36,7 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const override;
 	virtual void Set_State(_uint _eState) override;
 
 

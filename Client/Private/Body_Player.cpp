@@ -135,6 +135,11 @@ HRESULT CBody_Player::Render_LightDepth()
 	return S_OK;
 }
 
+const _float4x4* CBody_Player::Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const
+{
+	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(pBoneName);
+}
+
 void CBody_Player::Set_State(_uint _eState)
 {
 	m_pFSM->Set_State((OBJ_STATE)_eState);

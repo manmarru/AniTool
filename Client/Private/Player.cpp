@@ -80,34 +80,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 {
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
-
-#pragma region 픽셀피킹(이거지워도되나?)
-
-	/*if (GetKeyState(VK_LBUTTON) & 0x8000)
-	{
-		_float3		vPickPos;
-		if (true == m_pGameInstance->Picking(&vPickPos))
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
-	}*/
-
-	/*static _float fTimeAcc = { 0.f };
-
-	fTimeAcc += fTimeDelta;
-
-	if (fTimeAcc >= 0.05f)
-	{*/
-	//	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	//	_vector vFixPos = m_pGameInstance->Compute_Height(vPosition, XMMatrixLookAtLH(XMVectorSet(64.f, 30.f, 64.0f, 1.f), XMVectorSet(64.f, 0.f, 64.0f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 0.f)),
-	//		XMMatrixOrthographicLH(200.f, 200.f, 0.f, 50.f));
-
-	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetY(vPosition, XMVectorGetY(vFixPos)));
-
-	//	/*fTimeAcc = 0.f;
-	//}*/
-#pragma endregion
-
-
 	
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	//m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -211,6 +183,20 @@ HRESULT CPlayer::Ready_PartObjects()
 	HairDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	if (FAILED(Add_PartObject(PART_HAIR, TEXT("Prototype_GameObject_Hair_Player"), &HairDesc)))
 		return E_FAIL;
+
+	CWeapon::WEAPON_DESC WeaponDesc{};
+	WeaponDesc.ModelTag = ModelTag_Sword;
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01");
+	if (FAILED(Add_PartObject(PART_SWORD, GameTag_Weapon, &WeaponDesc)))
+		return E_FAIL;
+
+	WeaponDesc.ModelTag = ModelTag_Shield;
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01");
+	if (FAILED(Add_PartObject(PART_SHIELD, GameTag_Weapon, &WeaponDesc)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

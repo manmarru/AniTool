@@ -27,6 +27,7 @@ public:
 
 public:
 	virtual void Set_State(_uint _eState) {};
+	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return nullptr; }
 
 protected:
 	/* m_pTransformCom->m_WorldMatrix * 부모의 월드 */

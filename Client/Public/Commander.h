@@ -20,7 +20,7 @@ public:
 public:
 	void Register(CGameObject* pObj);
 public:
-	_float* m_pAnimationSpeed = { nullptr };//이거 사용할거면 꼭 동적할당 해줘라;;
+	_float* m_pAnimationSpeed = { nullptr };//이거 사용할거면 꼭 동적할당 해줘야 함!
 
 public:
 	virtual void Set_CurrentTrackPosition(_double dPosition);

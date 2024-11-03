@@ -153,12 +153,25 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
 
+	if (ImGui::Button("Speed->1"))
+	{
+		*m_pAnimationSpeed = 1.f;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Speed->0"))
+	{
+		*m_pAnimationSpeed = 0.f;
+	}
+
 	ImGui::SliderFloat("AnimationSpeed", m_pAnimationSpeed, 0, 2.f);
 	_float CurrentTrackPosition = (_float)*m_pCommander->Get_CurrentTrackPosition_ptr();
 	
 	ImGui::SliderFloat("Duration", &CurrentTrackPosition, 0, m_pCommander->Get_Duration());
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
+
+	ImGui::Text("CurrentAnim : %d", m_pCommander->Get_CurrentAnimationIndex());
+
 
 	ImGui::End();
 }

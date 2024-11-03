@@ -132,18 +132,18 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	
 	if (m_pGameInstance->Get_DIKeyState(KeyType::DOWN))
 		m_pTransformCom->Go_Backward(fTimeDelta);
-	if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::DOWN))
-		Set_State(OBJSTATE_IDLE);
+	//if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::DOWN))
+	//	Set_State(OBJSTATE_IDLE);
 	
 	if (m_pGameInstance->Get_DIKeyState(KeyType::LEFT))
 		m_pTransformCom->Turn(false, true, false, fTimeDelta * -1.f);
-	if (m_pGameInstance->Get_DIKeyState(KeyType::LEFT))
-		Set_State(OBJSTATE_IDLE);
+	//if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::LEFT))
+	//	Set_State(OBJSTATE_IDLE);
 
 	if (m_pGameInstance->Get_DIKeyState(KeyType::RIGHT))
 		m_pTransformCom->Turn(false, true, false, fTimeDelta);
-	if (m_pGameInstance->Get_DIKeyState(KeyType::RIGHT))
-		Set_State(OBJSTATE_IDLE);
+	//if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::RIGHT))
+	//	Set_State(OBJSTATE_IDLE);
 
 	if (m_pGameInstance->Get_DIKeyState(KeyType::UP))
 	{
@@ -151,10 +151,8 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 		Set_State(OBJSTATE_RUN);
 	}
-	if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::UP))
-	{
-		Set_State(OBJSTATE_IDLE);
-	}
+	/*if (m_pGameInstance->Get_DIKeyState_Once_Up(KeyType::UP))
+		Set_State(OBJSTATE_IDLE);*/
 }
 
 void CPlayer::Set_CurrentTrackPosition(_double dPosition)

@@ -5,6 +5,7 @@
 #include "../ImGui/imgui_impl_win32.h"
 #include <process.h>
 #include "Client_Enums.h"
+#include <queue>;
 
 namespace Client
 {

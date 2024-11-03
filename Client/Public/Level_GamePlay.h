@@ -38,8 +38,11 @@ public:
 
 private:
 	_bool m_bGuiStart = { false };
+	_bool m_bDemoStart = { false };
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
+	map<_uint, priority_queue<_double, vector<_double>, greater<_double>>> m_mapAnimationSave;
+
 
 private:
 	void Format_ImGUI();

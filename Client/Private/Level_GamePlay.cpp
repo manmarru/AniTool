@@ -43,9 +43,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-	// ImGui 스타일 고르기
-	ImGui::StyleColorsDark(); // 다크 모드
-	//ImGui::StyleColorsLight(); // 일반 모드
+	ImGui::StyleColorsDark();
 
 	ImGui_ImplWin32_Init(g_hWnd);
 	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
@@ -56,6 +54,9 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	Format_ImGUI();
+
+	if (m_bDemoStart)
+		ImGui::ShowDemoWindow(&m_bDemoStart);
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -152,6 +153,8 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
+	if (ImGui::Button("open_demo"))
+		m_bDemoStart = true;
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -170,8 +173,16 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
 
+	if (ImGui::Button("Trigger_Save"))
+	{
+		m_mapAnimationSave[m_pCommander->Get_CurrentAnimationIndex()].push(*m_pCommander->Get_CurrentTrackPosition_ptr());
+	}
+	
+	//애니메이션 진행 퍼센트를 저장하는 버튼 -> (애니번호, 퍼센트) 순서쌍으로 리스트에 넣고 애니별로 맵에 저장
+	//최종 저장 버튼 누르면 이거 바이너리화할거임, 그러고 이거 불러와보는거까지 해보자.
+	//불러올때는 각 애니메이션의 맴버벡터에 퍼센트를 받아서 저장하고, 마지막으로 모든 애니에 애니 마지막 길이를 넣을거임.
+	
 	ImGui::Text("CurrentAnim : %d", m_pCommander->Get_CurrentAnimationIndex());
-
 
 	ImGui::End();
 }

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 // dear imgui, v1.91.5 WIP
 // (widgets code)
 

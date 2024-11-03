@@ -38,3 +38,8 @@ _double* CCommander::Get_CurrentTrackPosition_ptr()
 {
 	return m_pContaining_Models.front()->Get_CurrentTrackPosition_ptr();
 }
+
+_uint CCommander::Get_CurrentAnimationIndex()
+{
+	return m_pContaining_Models.front()->Get_CurrentAnimationIndex();
+}

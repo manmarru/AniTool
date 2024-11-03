@@ -47,6 +47,7 @@ public:
 	_double& Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
 	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
 	_double Get_Duration();
+	_uint Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
 	void SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false)
 	{
 		m_iCurrentAnimIndex = iAnimationIndex;
@@ -62,7 +63,7 @@ public:
 		m_isLoop = isLoop;
 		m_NextStartTrackPosition = dStartPosition;
 	}
-
+	 
 	vector<class CMesh*>* Get_Meshs() { return &m_Meshes; }
 
 public:

@@ -278,7 +278,7 @@ HRESULT CSoundManager::Load_Sound(const char* _folderName)
 
 		if (eRes == FMOD_OK)
 		{
-			int iLength = strlen(fd.name) + 1;
+			int iLength = (_int)strlen(fd.name) + 1;
 
 			TCHAR* pSoundKey = new TCHAR[iLength];
 			ZeroMemory(pSoundKey, sizeof(TCHAR) * iLength);

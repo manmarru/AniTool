@@ -15,7 +15,7 @@ public:
 	typedef struct EDITING_PARTOBJECT_DESC : PARTOBJ_DESC
 	{
 		_float* pAnimationSpeed;
-	};
+	}EDITING_PARTOBJECT_DESC;
 
 protected:
 	CPartObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -78,7 +78,7 @@ HRESULT CVIBuffer_Mesh_Instance::Initialize(void* pArg)
 
 #pragma endregion
 	m_fjumpSpeed = new _float[m_iNumInstance];
-	for (int i = 0; i < m_iNumInstance; ++i)
+	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
 		m_fjumpSpeed[i] = 5.f;
 	}
@@ -439,7 +439,7 @@ HRESULT CVIBuffer_Mesh_Instance::Ready_Materials(const _tchar* pModelFilePath)
 	if (nullptr == m_pBin_Scene)
 		return E_FAIL;
 
-	for (_uint i = 0; i < m_pBin_Scene->iMaterialCount; ++i)
+	for (_uint i = 0; i < (_uint)m_pBin_Scene->iMaterialCount; ++i)
 	{
 		MESH_MATERIAL		MeshMaterial;
 		ZeroMemory(&MeshMaterial, sizeof(MESH_MATERIAL));
@@ -460,7 +460,7 @@ HRESULT CVIBuffer_Mesh_Instance::Ready_Materials(const _tchar* pModelFilePath)
 
 			//_splitpath_s(pAIMaterial.cNames[j], nullptr, 0, nullptr, 0, szFullPath, MAX_PATH, szExt, MAX_PATH);
 
-			WideCharToMultiByte(CP_ACP, 0, pModelFilePath, wcslen(pModelFilePath), szFullPath, MAX_PATH, NULL, NULL);
+			WideCharToMultiByte(CP_ACP, 0, pModelFilePath, (_int)wcslen(pModelFilePath), szFullPath, MAX_PATH, NULL, NULL);
 			char* lastBackslash = strrchr(szFullPath, '/');
 			if (lastBackslash != nullptr) {
 				// 마지막 백슬래시 다음 문자를 null로 설정하여 백슬래시를 유지
@@ -471,7 +471,7 @@ HRESULT CVIBuffer_Mesh_Instance::Ready_Materials(const _tchar* pModelFilePath)
 
 			_tchar			szWideFullPath[MAX_PATH] = TEXT("");
 
-			MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szWideFullPath, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szFullPath, (_int)strlen(szFullPath), szWideFullPath, MAX_PATH);
 
 			memcpy(&DataMaterialDesc.cNames[j], &pAIMaterial.cNames[j], sizeof(char) * MAX_PATH);
 			m_pTextureCom = CTexture::Create(m_pDevice, m_pContext, szWideFullPath, 1);

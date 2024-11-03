@@ -512,7 +512,7 @@ HRESULT CModel::Ready_Materials(const _tchar* pModelFilePath)
 
 			//_splitpath_s(pAIMaterial.cNames[j], nullptr, 0, nullptr, 0, szFullPath, MAX_PATH, szExt, MAX_PATH);
 
-			WideCharToMultiByte(CP_ACP, 0, pModelFilePath, wcslen(pModelFilePath), szFullPath, MAX_PATH, NULL, NULL);
+			WideCharToMultiByte(CP_ACP, 0, pModelFilePath, (_int)wcslen(pModelFilePath), szFullPath, MAX_PATH, NULL, NULL);
 			char* lastBackslash = strrchr(szFullPath, '/');
 			if (lastBackslash != nullptr) {
 				// 마지막 백슬래시 다음 문자를 null로 설정하여 백슬래시를 유지
@@ -523,7 +523,7 @@ HRESULT CModel::Ready_Materials(const _tchar* pModelFilePath)
 
 			_tchar			szWideFullPath[MAX_PATH] = TEXT("");
 
-			MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szWideFullPath, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szFullPath, (_int)strlen(szFullPath), szWideFullPath, MAX_PATH);
 
 			memcpy(&DataMaterialDesc.cNames[j], &pAIMaterial.cNames[j], sizeof(char) * MAX_PATH);
 			MeshMaterial.pMaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szWideFullPath, 1);

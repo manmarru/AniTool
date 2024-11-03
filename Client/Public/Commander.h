@@ -27,7 +27,7 @@ public:
 	virtual _double Get_CurrentTrackPosition();
 	virtual _double Get_Duration();
 	virtual _double* Get_CurrentTrackPosition_ptr();
-
+	virtual _uint Get_CurrentAnimationIndex();
 
 private:
 	CGameObject* m_pUnit = { nullptr };

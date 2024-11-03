@@ -24,8 +24,8 @@ HRESULT CPicking::Initialize(HWND hWnd)
 	D3D11_TEXTURE2D_DESC	TextureDesc{};
 	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
-	TextureDesc.Width = m_iViewportWidth = ViewportDesc.Width;
-	TextureDesc.Height = m_iViewportHeight = ViewportDesc.Height;
+	TextureDesc.Width = m_iViewportWidth = (UINT)ViewportDesc.Width;
+	TextureDesc.Height = m_iViewportHeight = (UINT)ViewportDesc.Height;
 	TextureDesc.MipLevels = 1;
 	TextureDesc.ArraySize = 1;
 	TextureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;

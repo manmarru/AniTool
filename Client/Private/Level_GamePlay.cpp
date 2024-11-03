@@ -208,4 +208,5 @@ void CLevel_GamePlay::Free()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 	Safe_Delete(m_pCommander);
+	Safe_Delete(m_pAnimationSpeed);
 }

@@ -43,8 +43,10 @@ public:
 		Play_Animation(0.f);
 	}
 
-	void Set_CurrentTrackPosition(_double dPosition) { m_CurrentTrackPosition = dPosition; };
+	void Set_CurrentTrackPosition(_double dPosition);
 	_double& Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
+	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
+	_double Get_Duration();
 	void SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false)
 	{
 		m_iCurrentAnimIndex = iAnimationIndex;

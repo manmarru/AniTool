@@ -78,6 +78,11 @@ CComponent * CGameObject::Find_Component(const _wstring & strComponentTag, _uint
 	return iter->second;
 }
 
+void CGameObject::Register_ModelCom(list<class CModel*>& ModelList)
+{
+	ModelList.push_back(static_cast<CModel*>(Find_Component(TEXT("Com_Model"))));
+}
+
 HRESULT CGameObject::Add_Component(_uint iLevelIndex, const _wstring & strPrototypeTag, const _wstring & strComponentTag, CComponent** ppOut, void * pArg)
 {
 	if (nullptr != Find_Component(strComponentTag))

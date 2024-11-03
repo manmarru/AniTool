@@ -3,6 +3,7 @@
 
 #include "FreeCamera.h"
 #include "GameInstance.h"
+#include "Commander.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -12,6 +13,8 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 HRESULT CLevel_GamePlay::Initialize()
 {
 	m_pAnimationSpeed = new _float(1.f);
+
+	m_pCommander = new CCommander();
 
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
@@ -30,7 +33,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
 
-	m_pGameInstance->PlayBGM(L"judgingLoop.ogg", 1.f, true);
+	m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
 
 	// ImGui ÃÊ±âÈ­
@@ -138,7 +141,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), m_pAnimationSpeed)))
 		return E_FAIL;
 
-	m_pTarget = m_pGameInstance->Get_Object(LEVEL_GAMEPLAY, TEXT("Layer_Player"));
+	m_pCommander->Register(m_pGameInstance->Get_Object(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
 
 	return S_OK;
 }
@@ -151,7 +154,11 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::Begin("Hello_World");
 
 	ImGui::SliderFloat("AnimationSpeed", m_pAnimationSpeed, 0, 2.f);
+	_float CurrentTrackPosition = (_float)*m_pCommander->Get_CurrentTrackPosition_ptr();
+	
+	ImGui::SliderFloat("Duration", &CurrentTrackPosition, 0, m_pCommander->Get_Duration());
 
+	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
 
 	ImGui::End();
 }
@@ -176,4 +183,5 @@ void CLevel_GamePlay::Free()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	Safe_Delete(m_pCommander);
 }

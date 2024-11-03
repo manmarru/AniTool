@@ -45,10 +45,13 @@ public:
 
 //For Editing
 public:
-	_float* m_pAnimationSpeed;
-
+	_float* m_pAnimationSpeed = { nullptr };//이거 그냥 값 넣지 말고 꼭 동적할당 해줘야 함;;
 public:
 	virtual void Set_CurrentTrackPosition(_double dPosition) {} // 다형성
+	virtual _double Get_Duration() { return (_double)0; }
+	virtual _double Get_CurrentTrackPosition() { return (_double)0; };
+	virtual _double* Get_CurrentTrackPosition_ptr() { return nullptr; }
+	virtual void Register_ModelCom(list<class CModel*>& ModelList);
 
 
 protected:

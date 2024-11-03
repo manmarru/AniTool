@@ -28,6 +28,10 @@ public:
 	virtual void Set_State(_uint _eState) override;
 	const _float4x4* Get_BoneMatrix_Ptr(const _char* pBoneName) const;
 
+//For Editing
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) override;
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

@@ -138,6 +138,11 @@ void CHead_Player::Set_State(_uint _eState)
 	m_pFSM->Set_State((OBJ_STATE)_eState);
 }
 
+void CHead_Player::Set_CurrentTrackPosition(_double dPosition)
+{
+	m_pModelCom->Set_CurrentTrackPosition(dPosition);
+}
+
 HRESULT CHead_Player::Ready_Components()
 {
 	/* FOR.Com_Shader */

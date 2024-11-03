@@ -43,7 +43,9 @@ private:
 //For Editing
 public:
 	virtual void Set_CurrentTrackPosition(_double dPosition) override;
-
+	virtual _double Get_Duration() override; // 그냥 몸 기준으로 받아와라
+	virtual _double* Get_CurrentTrackPosition_ptr() override;
+	virtual void Register_ModelCom(list<class CModel*>& ModelList) override;
 
 
 private:

@@ -43,6 +43,8 @@ public:
 //For Editing
 public:
 	virtual void Set_CurrentTrackPosition(_double dPosition) override;
+	virtual _double Get_Duration() override;
+	virtual _double* Get_CurrentTrackPosition_ptr() override;
 
 private:
 	class CShader*				m_pShaderCom = { nullptr };

@@ -18,6 +18,7 @@ public://get
 	vector<class CChannel*>	Get_Channels(void) { return m_Channels; }
 	const _char* Get_Name() const { return m_szName; }
 	_uint& Get_KeyFrameIdxex() { return m_iKeyFrameIndex; }
+	_double Get_Duration() { return m_Duration; }
 private:
 	char				m_szName[MAX_PATH] = "";
 	/* 이 애니메이션이 사용하는 뼈의 갯수 */

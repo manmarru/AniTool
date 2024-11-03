@@ -39,6 +39,10 @@ public:
 public:
 	virtual void Set_State(_uint _eState) override;
 
+//For Editing
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) override;
+
 private:
 	class CShader*				m_pShaderCom = { nullptr };
 	class CModel*				m_pModelCom = { nullptr };

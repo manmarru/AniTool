@@ -101,7 +101,8 @@ void CPlayer::Set_State(OBJ_STATE _eState)
 
 void CPlayer::Key_Input(_float fTimeDelta)
 {
-	if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON)) 
+	//if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON)) 
+	if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Q))
 	{
 		Set_State(OBJSTATE_ATT1);
 	}
@@ -161,6 +162,23 @@ void CPlayer::Set_CurrentTrackPosition(_double dPosition)
 	m_Parts[PART_BODY]->Set_CurrentTrackPosition(dPosition);
 	m_Parts[PART_HEAD]->Set_CurrentTrackPosition(dPosition);
 	m_Parts[PART_HAIR]->Set_CurrentTrackPosition(dPosition);
+}
+
+_double CPlayer::Get_Duration()
+{
+	return m_Parts[PART_BODY]->Get_Duration();
+}
+
+_double* CPlayer::Get_CurrentTrackPosition_ptr()
+{
+	return m_Parts[PART_BODY]->Get_CurrentTrackPosition_ptr();
+}
+
+void CPlayer::Register_ModelCom(list<class CModel*>& ModelList)
+{
+	ModelList.push_back(static_cast<CModel*>(m_Parts[PART_BODY]->Find_Component(TEXT("Com_Model"))));
+	ModelList.push_back(static_cast<CModel*>(m_Parts[PART_HEAD]->Find_Component(TEXT("Com_Model"))));
+	ModelList.push_back(static_cast<CModel*>(m_Parts[PART_HAIR]->Find_Component(TEXT("Com_Model"))));
 }
 
 HRESULT CPlayer::Ready_Components()

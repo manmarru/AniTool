@@ -47,10 +47,7 @@ HRESULT CBody_Player::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CBody_Player::Priority_Update(_float fTimeDelta)
-{
-	int a = 10;
-}
+void CBody_Player::Priority_Update(_float fTimeDelta) {}
 
 _int CBody_Player::Update(_float fTimeDelta)
 {
@@ -149,6 +146,16 @@ void CBody_Player::Set_State(_uint _eState)
 void CBody_Player::Set_CurrentTrackPosition(_double dPosition)
 {
 	m_pModelCom->Set_CurrentTrackPosition(dPosition);
+}
+
+_double CBody_Player::Get_Duration()
+{
+	return m_pModelCom->Get_Duration();
+}
+
+_double* CBody_Player::Get_CurrentTrackPosition_ptr()
+{
+	return m_pModelCom->Get_CurrentTrackPosition_ptr();
 }
 
 HRESULT CBody_Player::Ready_Components()

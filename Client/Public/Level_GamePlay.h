@@ -5,8 +5,13 @@
 
 #include "Level.h"
 
-BEGIN(Client)
 
+BEGIN(Engine)
+class CGameObject;
+END
+
+BEGIN(Client)
+class CCommander;
 class CLevel_GamePlay final : public CLevel
 {
 private:
@@ -33,8 +38,8 @@ public:
 
 private:
 	_bool m_bGuiStart = { false };
-	CGameObject* m_pTarget = { nullptr };
 	_float* m_pAnimationSpeed = { nullptr };
+	CCommander* m_pCommander = { nullptr };
 
 private:
 	void Format_ImGUI();

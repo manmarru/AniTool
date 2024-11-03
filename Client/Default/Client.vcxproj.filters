@@ -103,6 +103,9 @@
     <Filter Include="ImGUI">
       <UniqueIdentifier>{0f52d5fd-00a4-4ef0-a4f7-85fbc0164ce7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Commander">
+      <UniqueIdentifier>{ab175406-7cbf-44ec-a5a0-47f1154e4815}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="..\ImGui\imstb_truetype.h">
       <Filter>ImGUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Commander.h">
+      <Filter>Commander</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="..\ImGui\imgui_widgets.cpp">
       <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Commander.cpp">
+      <Filter>Commander</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

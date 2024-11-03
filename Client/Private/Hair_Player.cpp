@@ -26,6 +26,11 @@ const _float4x4 * CHair_Player::Get_BoneMatrix_Ptr(const _char * pBoneName) cons
 	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(pBoneName);	
 }
 
+void CHair_Player::Set_CurrentTrackPosition(_double dPosition)
+{
+	m_pModelCom->Set_CurrentTrackPosition(dPosition);
+}
+
 HRESULT CHair_Player::Initialize_Prototype()
 {
 	return S_OK;

@@ -102,6 +102,18 @@ void CModel::Set_Bones(const vector<class CBone*>* vBone)
 	}*/
 }
 
+void CModel::Set_CurrentTrackPosition(_double dPosition)
+{
+	m_CurrentTrackPosition = dPosition;
+	
+	m_Animations[m_iCurrentAnimIndex];
+}
+
+_double CModel::Get_Duration()
+{
+	return m_Animations[m_iCurrentAnimIndex]->Get_Duration();
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	m_eType = eType;
@@ -318,6 +330,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 
 			m_bLinearFinished = true;
 		}
+#pragma region 뭔지모름(주석)
+
 		////보간중에 중간에 들어왔을때
 		//if (!m_bLinearFinished)
 		//{
@@ -345,6 +359,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 		//	}
 		//}
 		//else
+#pragma endregion
+		
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
 	}
 

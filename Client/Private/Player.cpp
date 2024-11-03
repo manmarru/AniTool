@@ -29,13 +29,13 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void * pArg)
 {
-	CGameObject::GAMEOBJECT_DESC		Desc{};
+	CGameObject::EDITING_DESC		Desc{};
 
 	Desc.fSpeedPerSec = 10.0f;
 	Desc.fRotationPerSec = XMConvertToRadians(180.0f);
 	Desc.fSpeedPerSec = 10.f;
 	Desc.fRotationPerSec = 5.f;
-
+	m_pAnimationSpeed = (_float*)(pArg);
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
@@ -156,6 +156,13 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	}
 }
 
+void CPlayer::Set_CurrentTrackPosition(_double dPosition)
+{
+	m_Parts[PART_BODY]->Set_CurrentTrackPosition(dPosition);
+	m_Parts[PART_HEAD]->Set_CurrentTrackPosition(dPosition);
+	m_Parts[PART_HAIR]->Set_CurrentTrackPosition(dPosition);
+}
+
 HRESULT CPlayer::Ready_Components()
 {
 	/* For.Com_Navigation */
@@ -221,6 +228,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	BodyDesc.mapAnimationIndex = &AnimationIndex;
 	BodyDesc.pParentState = &m_iState;
 	BodyDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	BodyDesc.pAnimationSpeed = m_pAnimationSpeed;
 	if (FAILED(Add_PartObject(PART_BODY, TEXT("Prototype_GameObject_Body_Player"), &BodyDesc)))
 		return E_FAIL;
 
@@ -228,6 +236,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	HeadDesc.mapAnimationIndex = &AnimationIndex;
 	HeadDesc.pParentState = &m_iState;
 	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HeadDesc.pAnimationSpeed = m_pAnimationSpeed;
 	if (FAILED(Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Head_Player"), &HeadDesc)))
 		return E_FAIL;
 	
@@ -235,6 +244,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	HairDesc.mapAnimationIndex = &AnimationIndex;
 	HairDesc.pParentState = &m_iState;
 	HairDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HairDesc.pAnimationSpeed = m_pAnimationSpeed;
 	if (FAILED(Add_PartObject(PART_HAIR, TEXT("Prototype_GameObject_Hair_Player"), &HairDesc)))
 		return E_FAIL;
 

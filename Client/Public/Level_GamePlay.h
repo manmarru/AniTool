@@ -33,6 +33,8 @@ public:
 
 private:
 	_bool m_bGuiStart = { false };
+	CGameObject* m_pTarget = { nullptr };
+	_float* m_pAnimationSpeed = { nullptr };
 
 private:
 	void Format_ImGUI();

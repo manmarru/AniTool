@@ -12,6 +12,11 @@ public:
 	{
 		const _float4x4* pParentWorldMatrix = { nullptr };
 	}PARTOBJ_DESC;
+	typedef struct EDITING_PARTOBJECT_DESC : PARTOBJ_DESC
+	{
+		_float* pAnimationSpeed;
+	};
+
 protected:
 	CPartObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPartObject(const CPartObject& Prototype);
@@ -29,6 +34,10 @@ public:
 	virtual void Set_State(_uint _eState) {};
 	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return nullptr; }
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) {};
+
+//For Editing
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) {};
 
 protected:
 	/* m_pTransformCom->m_WorldMatrix * 부모의 월드 */

@@ -7,7 +7,7 @@ CPartObject::CPartObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 }
 
 CPartObject::CPartObject(const CPartObject & Prototype)
-	: CGameObject { Prototype }
+	: CGameObject(Prototype)
 {
 }
 

@@ -13,7 +13,7 @@ BEGIN(Client)
 class CHair_Player final : public CPartObject
 {
 public:
-	typedef struct HAIR_DESC : PARTOBJ_DESC
+	typedef struct HAIR_DESC : EDITING_PARTOBJECT_DESC
 	{
 		const _uint* pParentState = { nullptr };
 		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;

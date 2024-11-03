@@ -14,6 +14,10 @@ public:
 	{
 		
 	} GAMEOBJECT_DESC;
+	typedef struct EDITING_DESC : GAMEOBJECT_DESC
+	{
+		_float* pAnimationSpeed = nullptr;
+	}EDITING_DESC;
 
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -38,6 +42,14 @@ public:
 
 public:
 	virtual class CComponent* Find_Component(const _wstring& strComponentTag, _uint iPartObjIndex = 0);
+
+//For Editing
+public:
+	_float* m_pAnimationSpeed;
+
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) {} // ´ÙÇü¼º
+
 
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };

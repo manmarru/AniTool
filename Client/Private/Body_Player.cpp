@@ -28,16 +28,17 @@ HRESULT CBody_Player::Initialize_Prototype()
 
 HRESULT CBody_Player::Initialize(void * pArg)
 {
-	BODY_DESC*			pDesc = static_cast<BODY_DESC*>(pArg);
-	m_pParentState = pDesc->pParentState;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
-	if (FAILED(__super::Initialize(pDesc)))
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	BODY_DESC*			pDesc = static_cast<BODY_DESC*>(pArg);
+	m_pParentState = pDesc->pParentState;
+	m_pAnimationSpeed = pDesc->pAnimationSpeed;
 	if (FAILED(Ready_FSM(pDesc->mapAnimationIndex)))
 		return E_FAIL;
 
@@ -54,7 +55,7 @@ void CBody_Player::Priority_Update(_float fTimeDelta)
 _int CBody_Player::Update(_float fTimeDelta)
 {
 
-	m_pFSM->Update(fTimeDelta);
+	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
 	return OBJ_NOEVENT;
 }
@@ -77,7 +78,7 @@ HRESULT CBody_Player::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;	
+		return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();	
 
@@ -143,6 +144,11 @@ const _float4x4* CBody_Player::Get_BoneCombindTransformationMatrix_Ptr(const _ch
 void CBody_Player::Set_State(_uint _eState)
 {
 	m_pFSM->Set_State((OBJ_STATE)_eState);
+}
+
+void CBody_Player::Set_CurrentTrackPosition(_double dPosition)
+{
+	m_pModelCom->Set_CurrentTrackPosition(dPosition);
 }
 
 HRESULT CBody_Player::Ready_Components()

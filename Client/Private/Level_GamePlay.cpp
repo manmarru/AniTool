@@ -11,6 +11,8 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 HRESULT CLevel_GamePlay::Initialize()
 {
+	m_pAnimationSpeed = new _float(1.f);
+
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
@@ -29,6 +31,7 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	m_pGameInstance->PlayBGM(L"judgingLoop.ogg", 1.f, true);
+
 
 	// ImGui ÃÊ±âÈ­
 	IMGUI_CHECKVERSION();
@@ -132,8 +135,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Paticle()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Player()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"))))
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), m_pAnimationSpeed)))
 		return E_FAIL;
+
+	m_pTarget = m_pGameInstance->Get_Object(LEVEL_GAMEPLAY, TEXT("Layer_Player"));
 
 	return S_OK;
 }
@@ -144,6 +149,9 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
+
+	ImGui::SliderFloat("AnimationSpeed", m_pAnimationSpeed, 0, 2.f);
+
 
 	ImGui::End();
 }

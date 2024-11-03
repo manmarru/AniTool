@@ -40,13 +40,17 @@ private:
 	void Set_State(OBJ_STATE _eState);
 	void Key_Input(_float fTimeDelta);
 
+//For Editing
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) override;
+
+
 
 private:
-	_bool m_bDrawWeapon = { true };
+	_bool			m_bDrawWeapon = { true };
+	_uint			m_iState = {  };
 
 private:
-	_uint				m_iState = {  };
-
 	CNavigation*	m_pNavigationCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };

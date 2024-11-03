@@ -46,6 +46,8 @@ HRESULT CHair_Player::Initialize(void * pArg)
 	if (FAILED(Ready_FSM(pDesc->mapAnimationIndex)))
 		return E_FAIL;
 
+	m_pAnimationSpeed = pDesc->pAnimationSpeed;
+
 	return S_OK;
 }
 
@@ -55,7 +57,7 @@ void CHair_Player::Priority_Update(_float fTimeDelta)
 
 _int CHair_Player::Update(_float fTimeDelta)
 {
-	m_pFSM->Update(fTimeDelta);
+	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
 	return OBJ_NOEVENT;
 }

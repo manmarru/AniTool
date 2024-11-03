@@ -13,7 +13,7 @@ BEGIN(Client)
 class CBody_Player final : public CPartObject
 {
 public:
-	typedef struct : public CPartObject::PARTOBJ_DESC
+	typedef struct BODY_DESC : public CPartObject::EDITING_PARTOBJECT_DESC
 	{
 		const _uint* pParentState = { nullptr };
 		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
@@ -40,10 +40,12 @@ public:
 	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const override;
 	virtual void Set_State(_uint _eState) override;
 
-
+//For Editing
+public:
+	virtual void Set_CurrentTrackPosition(_double dPosition) override;
 
 private:
-	class CShader*				m_pShaderCom = { nullptr };	
+	class CShader*				m_pShaderCom = { nullptr };
 	class CModel*				m_pModelCom = { nullptr };
 	class CFSM*					m_pFSM = { nullptr };
 

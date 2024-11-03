@@ -85,9 +85,6 @@
     <Filter Include="02.GameObjects\99.Camera\99.FreeCamera">
       <UniqueIdentifier>{9ea2f15f-a33e-49f2-b237-c05d085bbaeb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\09.Chiken">
-      <UniqueIdentifier>{a8b83b91-3edb-4d9e-bcb1-322e8274ef4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97.ShaderFiles\Instance">
       <UniqueIdentifier>{2272dd48-b3ac-402e-8dc7-209cc34555a7}</UniqueIdentifier>
     </Filter>

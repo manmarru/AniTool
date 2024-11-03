@@ -31,7 +31,7 @@ HRESULT CHead_Player::Initialize(void * pArg)
 {
 	HEAD_DESC*			pDesc = static_cast<HEAD_DESC*>(pArg);
 	m_pParentState = pDesc->pParentState;
-	//m_pNodeMatrix = pDesc->pNodeMatrix;
+	m_pAnimationSpeed = pDesc->pAnimationSpeed;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(pDesc)))
@@ -52,7 +52,7 @@ void CHead_Player::Priority_Update(_float fTimeDelta)
 
 _int CHead_Player::Update(_float fTimeDelta)
 {
-	m_pFSM->Update(fTimeDelta);
+	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
 	return OBJ_NOEVENT;
 }

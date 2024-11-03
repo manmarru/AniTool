@@ -13,7 +13,7 @@ BEGIN(Client)
 class CHead_Player final : public CPartObject
 {
 public:
-	typedef struct HEAD_DESC : PARTOBJ_DESC
+	typedef struct HEAD_DESC : EDITING_PARTOBJECT_DESC
 	{
 		const _uint* pParentState = { nullptr };
 		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;

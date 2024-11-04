@@ -41,11 +41,11 @@ private:
 	_bool m_bDemoStart = { false };
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
-	map<_uint, priority_queue<_double, vector<_double>, greater<_double>>> m_mapAnimationSave;
-
+	map<_uint, vector<_double>> m_mapAnimationSave;
 
 private:
 	void Format_ImGUI();
+	void Clear_SaveMap();
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

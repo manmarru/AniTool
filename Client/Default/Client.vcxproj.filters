@@ -70,12 +70,6 @@
     <Filter Include="02.GameObjects\00.Actor">
       <UniqueIdentifier>{c693db66-13a9-48aa-8573-eef8dad7eaf5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\00.Actor\NonAnim">
-      <UniqueIdentifier>{9020903c-9798-4940-b50b-0a48cf09f7e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\00.Actor\Creature">
-      <UniqueIdentifier>{6f64f337-0f3c-4844-a206-2c7fd708adaa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="96.Pooling_Manager">
       <UniqueIdentifier>{6738e7b3-b729-4ee7-aa2c-6b0eb49ae7a1}</UniqueIdentifier>
     </Filter>

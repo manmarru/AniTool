@@ -48,7 +48,13 @@ CModel::CModel(const CModel& Prototype)
 	for (auto& pMesh : m_Meshes)
 		Safe_AddRef(pMesh);
 
-
+	for (auto triggerpair : Prototype.m_mapAnimationTrigger)
+	{
+		for (auto trigger : triggerpair.second)
+		{
+			m_mapAnimationTrigger[triggerpair.first].push_back(trigger);
+		}
+	}
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -114,7 +120,7 @@ _double CModel::Get_Duration()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Duration();
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix, ifstream* LoadStream)
 {
 	m_eType = eType;
 
@@ -140,6 +146,12 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _
 
 	if (FAILED(Ready_Animations()))
 		return E_FAIL;
+
+	if (nullptr != LoadStream)
+	{
+		if (FAILED(Ready_Triggers(LoadStream)))
+			return E_FAIL;
+	}
 
 	Safe_Release_Scene();
 
@@ -391,6 +403,70 @@ _bool CModel::Play_Animation(_float fTimeDelta, const char* _BoneName)
 	return isFinished;
 }
 
+_bool CModel::Play_TriggerAnimation(_float fTimeDelta)
+{
+	_bool isFinished = false;
+	// 애니메이션 전환이 필요한 경우
+	if (m_iCurrentAnimIndex != m_iNextAnimIndex)
+	{
+		m_iCurrentTrigger = 0;
+		if (m_bInterupted)
+		{
+			m_CurrentTrackPosition = m_NextStartTrackPosition;
+			m_bLinearFinished = false;
+			m_bInterupted = false;
+
+			for (_uint i = 0; i < m_Bones.size(); ++i)
+				m_StartBonesTransforms[i] = m_Bones[i]->Get_TransformationMatrix();
+
+			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_NewBones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+		}
+		if (!m_bLinearFinished)
+		{
+			m_bLinearFinished = Animation_Interpolation(fTimeDelta);
+		}
+		// 보간이 완료된 경우
+		if (m_bLinearFinished)
+		{
+			for (auto& i : m_KeyFrameIndices[m_iCurrentAnimIndex])
+				i = 0;
+
+			for (auto& i : m_KeyFrameIndices[m_iNextAnimIndex])
+				i = 0;
+
+			m_iCurrentAnimIndex = m_iNextAnimIndex;
+			// 보간이 완료된 후 새로운 애니메이션 시작
+			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+		}
+	}
+	else
+	{
+		if (!m_bLinearFinished)
+		{
+			for (auto& i : m_KeyFrameIndices[m_iCurrentAnimIndex])
+				i = 0;
+
+			m_bLinearFinished = true;
+		}
+		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
+	
+		//트리거 체크
+		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger] <= m_CurrentTrackPosition)
+			++m_iCurrentTrigger;
+
+		if (isFinished) // 주의 이거 loop애님들은 절대 진입 못하는거같음
+			m_iCurrentTrigger = 0;
+	}
+
+	// 뼈대 변환 업데이트
+	for (auto& pBone : m_Bones)
+	{
+		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+	}
+
+	return isFinished;
+}
+
 _bool CModel::Animation_Interpolation(_float fTimeDelta)
 {
 	m_fLinearCurrentTime += fTimeDelta;
@@ -574,6 +650,38 @@ HRESULT CModel::Ready_Animations()
 	return S_OK;
 }
 
+HRESULT CModel::Ready_Triggers(ifstream* LoadStream)
+{
+	if (!LoadStream->is_open())
+		return E_FAIL;
+
+	_uint iNumAnimations(0); // 트리거 있는 애니 갯수
+	_uint iNumTriggers(0); // 애니메이션당 트리거 갯수
+	LoadStream->read((char*)&iNumAnimations, sizeof(_uint));
+	
+	_uint iAnimationIndex(0); // 애당 애니메이션 (구조 개선예정)
+	_double TriggerPos(0); // 트리거 위치
+	for (size_t i = 0; i < iNumAnimations; i++)
+	{
+		m_mapAnimationTrigger;
+		LoadStream->read((char*)&iNumTriggers, sizeof(_uint));
+		for (size_t i = 0; i < iNumTriggers; i++)
+		{
+			LoadStream->read((char*)&iAnimationIndex, sizeof(_uint));
+			LoadStream->read((char*)&TriggerPos, sizeof(_double));
+			m_mapAnimationTrigger[iAnimationIndex].push_back(TriggerPos);
+		}
+		sort(m_mapAnimationTrigger[iAnimationIndex].begin(), m_mapAnimationTrigger[iAnimationIndex].end());
+	}
+
+	for (size_t i = 0; i < m_iNumAnimations; i++)
+	{
+		m_mapAnimationTrigger[i].push_back(m_Animations[i]->Get_Duration());
+	}
+
+	return S_OK;
+}
+
 HRESULT CModel::Safe_Release_Scene()
 {
 	Safe_Delete_Array(m_pBin_Scene->pBinNodes);
@@ -605,11 +713,11 @@ HRESULT CModel::Safe_Release_Scene()
 }
 
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix, ifstream* LoadStream)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, LoadStream)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);

@@ -48,6 +48,7 @@ public:
 	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
 	_double Get_Duration();
 	_uint Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
+	_uint Get_CurrentTrigger() { return m_iCurrentTrigger; }
 	void SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false)
 	{
 		m_iCurrentAnimIndex = iAnimationIndex;
@@ -67,7 +68,7 @@ public:
 	vector<class CMesh*>* Get_Meshs() { return &m_Meshes; }
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype(TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix, ifstream* LoadStream = nullptr);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 
@@ -78,6 +79,7 @@ public:
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	_bool Play_Animation(_float fTimeDelta);
 	_bool Play_Animation(_float fTimeDelta, const char* _BoneName); // 루트애님
+	_bool Play_TriggerAnimation(_float fTimeDelta); // 밟은 트리거 반환
 	_bool Animation_Interpolation(_float fTimeDelta);
 
 	HRESULT Read_BinFile(const _tchar* pModelFilePath);
@@ -129,16 +131,21 @@ private:
 	_float							m_fPlaySpeed = 1.f;
 	_double							m_dSubTime = 0.;
 
+	//애니메이션 트리거 pair(<애니인덱스, 트리거 벡터>
+	map<_uint, vector<_double>> m_mapAnimationTrigger;
+	_uint						m_iCurrentTrigger = { 0 };
+
 public:
 	HRESULT	Ready_Meshes();
 	HRESULT Ready_Materials(const _tchar* pModelFilePath);
 	HRESULT Ready_Bones();
 	HRESULT Ready_Animations();
+	HRESULT Ready_Triggers(ifstream* LoadStream);
 
 	HRESULT	Safe_Release_Scene();
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _tchar* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), ifstream* LoadStream = nullptr);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

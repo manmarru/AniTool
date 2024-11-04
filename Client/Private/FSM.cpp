@@ -20,7 +20,7 @@ HRESULT CFSM::Initialize(CModel* _pModel)
 
 _bool CFSM::Update(_float _fTimeDelta)
 {
-    if (Play_Animation(_fTimeDelta))
+    if (m_bTriggerObj? Play_TriggerAnimation(_fTimeDelta) : Play_Animation(_fTimeDelta))
     {
         if (m_eCurrentAniType == ANI_BACKTOIDLE)
             Set_State(OBJSTATE_IDLE);
@@ -64,8 +64,15 @@ _bool CFSM::Play_Animation(_float _fTimeDelta)
 {
     if (m_isRootControl)
         return m_pModelCom->Play_Animation(_fTimeDelta, m_RootName);
-
+        
+    
     return m_pModelCom->Play_Animation(_fTimeDelta);
+
+}
+
+_bool CFSM::Play_TriggerAnimation(_float _fTimeDelta)
+{
+    return m_pModelCom->Play_TriggerAnimation(_fTimeDelta);
 }
 
 void CFSM::Set_RootAnim(const char* _RootName)

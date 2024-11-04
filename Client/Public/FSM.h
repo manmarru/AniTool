@@ -25,7 +25,9 @@ public:
     void Set_State(OBJ_STATE _eState);
     void SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType);
     _bool Play_Animation(_float _fTimeDelta);
+    _bool Play_TriggerAnimation(_float _fTimeDelta);
     void Set_RootAnim(const char* _RootName);
+    void isTriggerObj() { m_bTriggerObj = true; }
 
 public:
     OBJ_STATE Get_CurrentState() { return m_eCurrentState; }
@@ -35,6 +37,7 @@ private:
     OBJ_STATE   m_eCurrentState = { OBJSTATE_END };
     ANITYPE     m_eCurrentAniType = { ANI_END };
     _bool       m_isRootControl = { false };
+    _bool       m_bTriggerObj = { false };
     const char* m_RootName;
     _matrix     m_RootMatrix_Inverse = {};
 

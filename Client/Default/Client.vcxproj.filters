@@ -91,14 +91,14 @@
     <Filter Include="95.FSM">
       <UniqueIdentifier>{cb5e7912-bb84-4c2f-af6d-5bf14c88fd9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\Loader">
-      <UniqueIdentifier>{91d96f38-b5f2-4ed1-a4ee-a6224c0c3cf0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ImGUI">
       <UniqueIdentifier>{0f52d5fd-00a4-4ef0-a4f7-85fbc0164ce7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Commander">
       <UniqueIdentifier>{ab175406-7cbf-44ec-a5a0-47f1154e4815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\###Loader###">
+      <UniqueIdentifier>{91d96f38-b5f2-4ed1-a4ee-a6224c0c3cf0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,7 +130,7 @@
       <Filter>01.Levels\Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Loader.h">
-      <Filter>01.Levels\Loader</Filter>
+      <Filter>01.Levels\###Loader###</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BackGround.h">
       <Filter>02.GameObjects\98.BackGround</Filter>
@@ -237,7 +237,7 @@
       <Filter>01.Levels\Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Loader.cpp">
-      <Filter>01.Levels\Loader</Filter>
+      <Filter>01.Levels\###Loader###</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BackGround.cpp">
       <Filter>02.GameObjects\98.BackGround</Filter>

@@ -66,6 +66,38 @@ _int CPlayer::Update(_float fTimeDelta)
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
 
+	if (m_iState == OBJSTATE_WEAPON_DRAW) // 칼 방패 순으로 붙임
+	{
+		switch (m_pBodyModelCom->Get_CurrentTrigger())
+		{
+		case 1:
+			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01"));
+			break;
+		case 2:
+			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01"));
+			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(true);
+			break;
+		default:
+			break;
+		}
+	}
+	else if (m_iState == OBJSTATE_WEAPON_UNDRAW) // 방패 칼 순
+	{
+		switch (m_pBodyModelCom->Get_CurrentTrigger())
+		{
+		case 1:
+			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine2"));
+			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(false);
+			break;
+		case 2:
+			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bone_Skirt_L_Root"));
+			break;
+		default:
+			break;
+		}
+	}
+	
+
 	CPooling_Manager::Get_Instance();
 
 
@@ -93,6 +125,7 @@ HRESULT CPlayer::Render()
 
 void CPlayer::Set_State(OBJ_STATE _eState)
 {
+	m_iState = _eState;
 	for (auto part : m_Parts)
 	{
 		part->Set_State((_uint)_eState);
@@ -114,18 +147,10 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		if (m_bDrawWeapon)
 		{
 			Set_State(OBJSTATE_WEAPON_DRAW);
-			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01"));
-			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01"));
-
-			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(true);
 		}
 		else
 		{
 			Set_State(OBJSTATE_WEAPON_UNDRAW);
-			m_Parts[PART_SWORD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bone_Skirt_L_Root"));
-			m_Parts[PART_SHIELD]->Set_SocketMatrix(m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine2"));
-		
-			static_cast<CWeapon*>(m_Parts[PART_SHIELD])->StoreShield(false);
 		}
 	}
 
@@ -277,6 +302,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	if (FAILED(Add_PartObject(PART_SHIELD, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 
+	m_pBodyModelCom = static_cast<CModel*>(m_Parts[PART_BODY]->Find_Component(TEXT("Com_Model")));
 
 	return S_OK;
 }

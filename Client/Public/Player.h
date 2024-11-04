@@ -56,6 +56,7 @@ private:
 	CNavigation*	m_pNavigationCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
+	CModel*			m_pBodyModelCom = { nullptr };
 
 private:
 	vector<CPartObject*> m_Parts;

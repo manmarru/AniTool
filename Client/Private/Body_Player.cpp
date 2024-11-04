@@ -54,6 +54,7 @@ _int CBody_Player::Update(_float fTimeDelta)
 
 	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
+	cout << m_pModelCom->Get_CurrentTrigger() << endl;
 	return OBJ_NOEVENT;
 }
 
@@ -183,6 +184,8 @@ HRESULT CBody_Player::Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimatio
 	{
 		m_pFSM->Register_AnimationIndex(pair.first, pair.second.first, pair.second.second);
 	}
+
+	m_pFSM->isTriggerObj();
 
 	m_pFSM->Set_State(OBJSTATE_IDLE);
 

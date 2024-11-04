@@ -212,10 +212,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	/* For. Prototype_Component_Model_PlayerBody*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	ifstream Loadstream("../Bin/Resources/Models/Player/Trigger_Player.dat");
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerBody"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, &Loadstream))))
 		return E_FAIL;
+	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerHead*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));

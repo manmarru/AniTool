@@ -33,7 +33,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
 
-	m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
+	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
 
 	// ImGui √ ±‚»≠

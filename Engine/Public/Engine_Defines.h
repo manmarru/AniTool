@@ -57,6 +57,8 @@ using namespace std;
 #define OBJ_DEAD 1
 #define OBJ_NOEVENT 0
 
+#define ID3D11 ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext
+
 namespace Engine
 {
 	const _wstring		g_strTransformTag = TEXT("Com_Transform");

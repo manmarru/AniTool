@@ -25,26 +25,26 @@ public:
 
 public:
 	HRESULT Ready_Lights();
-	HRESULT Ready_Layer_Camera();	
+	HRESULT Ready_Layer_Camera();
 	HRESULT Ready_Layer_BackGround();
-	HRESULT Ready_Layer_Effect();
 
-	HRESULT Ready_Layer_Monster();
-	HRESULT Ready_Layer_Paticle();
+	HRESULT Ready_EditObj();
 
-	
+
 	HRESULT Ready_Layer_Player();
 	//HRESULT Ready_Layer_Monster(CLandObject::LANDOBJECT_DESC& LandObjectDesc);
 
 private:
 	_bool m_bGuiStart = { false };
 	_bool m_bDemoStart = { false };
+	_bool m_bControlGUIStart = { false };
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
 	map<_uint, vector<_double>> m_mapAnimationSave;
 
 private:
 	void Format_ImGUI();
+	void Format_Control();
 	void Clear_SaveMap();
 
 public:

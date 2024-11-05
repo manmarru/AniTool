@@ -212,14 +212,13 @@ HRESULT CGameInstance::Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstring
 	return m_pObject_Manager->Add_CloneObject_ToLayer(iLevelIndex, strLayerTag, strPrototypeTag, pArg);
 }
 
-HRESULT CGameInstance::Add_GameObject_Out(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, OUT CGameObject*& pGameObjectOut, void* pArg)
+CGameObject* CGameInstance::Add_CloneObject_ToLayer_Get(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg)
 {
-	return m_pObject_Manager->Add_GameObject_Out(pPrototypeTag, iLevelIndex, pLayerTag, pGameObjectOut, pArg);
+	return m_pObject_Manager->Add_CloneObject_ToLayer_Get(iLevelIndex, strLayerTag, strPrototypeTag, pArg);
 }
 
 CGameObject * CGameInstance::Clone_GameObject(const _wstring & strPrototypeTag, void * pArg)
 {
-
 	return m_pObject_Manager->Clone_GameObject(strPrototypeTag, pArg);
 }
 

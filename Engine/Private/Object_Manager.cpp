@@ -65,31 +65,33 @@ HRESULT CObject_Manager::Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstri
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_GameObject_Out(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, OUT CGameObject*& pGameObjectOut, void* pArg)
+CGameObject* CObject_Manager::Add_CloneObject_ToLayer_Get(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg)
 {
-	CGameObject* pPrototype = Find_Prototype(pPrototypeTag);
+	if (iLevelIndex >= m_iNumLevels)
+		return nullptr;
+
+	CGameObject* pPrototype = Find_Prototype(strPrototypeTag);
 	if (nullptr == pPrototype)
-		return E_FAIL;
+		return nullptr;
 
 	CGameObject* pGameObject = pPrototype->Clone(pArg);
 	if (nullptr == pGameObject)
-		return E_FAIL;
+		return nullptr;
 
-	CLayer* pLayer = Find_Layer(iLevelIndex, pLayerTag);
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
 
 	if (nullptr == pLayer)
 	{
 		pLayer = CLayer::Create();
 		pLayer->Add_GameObject(pGameObject);
-		m_pLayers[iLevelIndex].emplace(pLayerTag, pLayer);
+		m_pLayers[iLevelIndex].emplace(strLayerTag, pLayer);
 	}
 	else
 		pLayer->Add_GameObject(pGameObject);
 
-	pGameObjectOut = pGameObject;
-
-	return S_OK;
+	return pGameObject;
 }
+
 
 HRESULT CObject_Manager::Priority_Update(_float fTimeDelta)
 {

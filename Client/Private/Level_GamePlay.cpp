@@ -1,9 +1,12 @@
+#pragma once
 #include "stdafx.h"
 #include "..\Public\Level_GamePlay.h"
 
 #include "FreeCamera.h"
 #include "GameInstance.h"
 #include "Commander.h"
+
+#include "EditObj.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -23,14 +26,11 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;
-	if (FAILED(Ready_Layer_Effect()))
-		return E_FAIL;
-	if (FAILED(Ready_Layer_Monster()))
+
+	if (FAILED(Ready_EditObj()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player()))
-		return E_FAIL;
-	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
 
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
@@ -54,6 +54,9 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	Format_ImGUI();
+
+	if (m_bControlGUIStart)
+		Format_Control();
 
 	if (m_bDemoStart)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
@@ -122,18 +125,15 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Effect()
+HRESULT CLevel_GamePlay::Ready_EditObj()
 {
-	return S_OK;
-}
+	CEditObj::EDITOBJ_DESC Desc;
+	Desc.isShadowObj = true;
+	Desc.ModelTag = ModelTag_Syar;
+	Desc.pAnimationSpeed = m_pAnimationSpeed;
+	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
+	
 
-HRESULT CLevel_GamePlay::Ready_Layer_Monster()
-{
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_Paticle()
-{
 	return S_OK;
 }
 
@@ -141,8 +141,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 {
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), m_pAnimationSpeed)))
 		return E_FAIL;
-
-	m_pCommander->Register(m_pGameInstance->Get_Object(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
 
 	return S_OK;
 }
@@ -153,6 +151,9 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
+	if (ImGui::Button("Ani_Control"))
+		m_bControlGUIStart = true;
+	ImGui::SameLine();
 	if (ImGui::Button("open_demo"))
 		m_bDemoStart = true;
 
@@ -254,6 +255,32 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::End();
 }
 
+void CLevel_GamePlay::Format_Control()
+{
+	ImGui::Begin("Animation_Control" , &m_bControlGUIStart);
+
+	ImGui::Text("Animation : %d / %d", m_pCommander->Get_CurrentAnimationIndex(), m_pCommander->Get_AnimationNum() - 1);
+
+	int aniNum(0);
+	if (ImGui::InputInt("set_ani", &aniNum, 0, 0) && ImGui::IsItemDeactivatedAfterEdit())
+	{
+		m_pCommander->Set_Animation(min(aniNum, m_pCommander->Get_AnimationNum() - 1));
+	}
+
+	if (ImGui::Button("-", ImVec2(50.f, 50.f)))
+	{
+		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() - 1);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("+", ImVec2(50.f, 50.f)))
+	{
+		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() + 1);
+	}
+
+
+	ImGui::End();
+}
+
 void CLevel_GamePlay::Clear_SaveMap()
 {
 	for (auto pair : m_mapAnimationSave)
@@ -283,6 +310,7 @@ void CLevel_GamePlay::Free()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
 	Safe_Delete(m_pCommander);
 	Safe_Delete(m_pAnimationSpeed);
 }

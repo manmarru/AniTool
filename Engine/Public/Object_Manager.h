@@ -18,7 +18,7 @@ public:
 	HRESULT Initialize(_uint iNumLevels);
 	HRESULT Add_Prototype(const _wstring& strPrototypeTag, class CGameObject* pPrototype);	
 	HRESULT Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg);
-	HRESULT Add_GameObject_Out(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, OUT CGameObject*& pGameObjectOut, void* pArg = nullptr);
+	CGameObject* Add_CloneObject_ToLayer_Get(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg);
 	HRESULT Priority_Update(_float fTimeDelta);
 	HRESULT Update(_float fTimeDelta);
 	HRESULT Late_Update(_float fTimeDelta);

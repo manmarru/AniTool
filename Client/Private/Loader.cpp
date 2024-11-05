@@ -15,6 +15,8 @@
 #include "Hair_Player.h"
 #pragma endregion
 
+#include "EditObj.h"
+
 #include "Particle_Snow.h"
 #include "Effect_Explosion.h"
 #include "Particle_Explosion.h"
@@ -245,6 +247,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 #pragma endregion
 
+	/* For. Prototype_Component_Model_Syar*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Syar,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Syar/syar"), PreTransformMatrix))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -299,6 +307,14 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon"),
 		CWeapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* For. Prototype_GameObject_EditObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_EditObj,
+		CEditObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
 
 	/* For. Prototype_GameObject_FreeCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),

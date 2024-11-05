@@ -32,14 +32,20 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 
 void CFreeCamera::Priority_Update(_float fTimeDelta)
 {
+	_float m_fspeed = { 1.f };
+	if (m_pGameInstance->Get_DIKeyState(KeyType::LSHIFT))
+	{
+		m_fspeed = 0.2f;
+	}
+
 	if (m_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
-		m_pTransformCom->Go_Straight(fTimeDelta);
+		m_pTransformCom->Go_Straight(fTimeDelta * m_fspeed);
 	if (m_pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
-		m_pTransformCom->Go_Backward(fTimeDelta);
+		m_pTransformCom->Go_Backward(fTimeDelta * m_fspeed);
 	if (m_pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
-		m_pTransformCom->Go_Left(fTimeDelta);
+		m_pTransformCom->Go_Left(fTimeDelta * m_fspeed);
 	if (m_pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
-		m_pTransformCom->Go_Right(fTimeDelta);
+		m_pTransformCom->Go_Right(fTimeDelta * m_fspeed);
 
 	_long		MouseMove = { 0 };
 

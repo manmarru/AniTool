@@ -48,6 +48,7 @@ public:
 	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
 	_double Get_Duration();
 	_uint Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
+	_uint Get_AnimationNum() { return m_iNumAnimations; }
 	_uint Get_CurrentTrigger() { return m_iCurrentTrigger; }
 	void SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false)
 	{

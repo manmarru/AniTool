@@ -43,3 +43,21 @@ _uint CCommander::Get_CurrentAnimationIndex()
 {
 	return m_pContaining_Models.front()->Get_CurrentAnimationIndex();
 }
+
+void CCommander::Set_Animation(_uint _iAnimationIndex)
+{
+	for (auto model : m_pContaining_Models)
+	{
+		model->Set_NextAnimIndex(_iAnimationIndex, true);
+	}
+}
+
+_uint CCommander::Get_AnimationNum()
+{
+	return m_pContaining_Models.front()->Get_AnimationNum();
+}
+
+void CCommander::Key_Input(_float _fTimeDelta)
+{
+	
+}

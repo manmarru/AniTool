@@ -100,6 +100,9 @@
     <Filter Include="01.Levels\###Loader###">
       <UniqueIdentifier>{91d96f38-b5f2-4ed1-a4ee-a6224c0c3cf0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\EditObj">
+      <UniqueIdentifier>{263c5ea6-e0b2-4c0b-a95f-e215b6c7ec8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="..\public\Commander.h">
       <Filter>Commander</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\EditObj.h">
+      <Filter>02.GameObjects\EditObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -316,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Commander.cpp">
       <Filter>Commander</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\EditObj.cpp">
+      <Filter>02.GameObjects\EditObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

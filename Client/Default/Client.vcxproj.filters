@@ -61,9 +61,6 @@
     <Filter Include="02.GameObjects\06.Effect">
       <UniqueIdentifier>{38d0ca3c-8850-4277-ba14-71f70831eac9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\07.ForkLift">
-      <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\98.BackGround">
       <UniqueIdentifier>{21287f1c-586b-4a97-90d2-9e630f240bae}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="02.GameObjects\EditObj">
       <UniqueIdentifier>{263c5ea6-e0b2-4c0b-a95f-e215b6c7ec8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Effect\BoneFlag">
+      <UniqueIdentifier>{3ada043c-7e7e-4f70-bd9a-087c8c397df8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +165,6 @@
     <ClInclude Include="..\Public\Effect_Explosion.h">
       <Filter>02.GameObjects\06.Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ForkLift.h">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Actor.h">
       <Filter>02.GameObjects\00.Actor</Filter>
     </ClInclude>
@@ -222,6 +219,9 @@
     <ClInclude Include="..\public\EditObj.h">
       <Filter>02.GameObjects\EditObj</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\BoneFlag.h">
+      <Filter>02.GameObjects\06.Effect\BoneFlag</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -275,9 +275,6 @@
     <ClCompile Include="..\Private\Effect_Explosion.cpp">
       <Filter>02.GameObjects\06.Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ForkLift.cpp">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Actor.cpp">
       <Filter>02.GameObjects\00.Actor</Filter>
     </ClCompile>
@@ -325,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="..\private\EditObj.cpp">
       <Filter>02.GameObjects\EditObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BoneFlag.cpp">
+      <Filter>02.GameObjects\06.Effect\BoneFlag</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

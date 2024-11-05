@@ -179,6 +179,7 @@
     <ClInclude Include="..\ImGui\imstb_rectpack.h" />
     <ClInclude Include="..\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\ImGui\imstb_truetype.h" />
+    <ClInclude Include="..\public\BoneFlag.h" />
     <ClInclude Include="..\public\Commander.h" />
     <ClInclude Include="..\Public\Actor.h" />
     <ClInclude Include="..\public\BackGround.h" />
@@ -187,7 +188,6 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\EditObj.h" />
     <ClInclude Include="..\Public\Effect_Explosion.h" />
-    <ClInclude Include="..\Public\ForkLift.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\FSM.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -228,11 +228,11 @@
     <ClCompile Include="..\Private\Actor.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body_Player.cpp" />
+    <ClCompile Include="..\private\BoneFlag.cpp" />
     <ClCompile Include="..\private\CameraManager.cpp" />
     <ClCompile Include="..\Private\Commander.cpp" />
     <ClCompile Include="..\private\EditObj.cpp" />
     <ClCompile Include="..\Private\Effect_Explosion.cpp" />
-    <ClCompile Include="..\Private\ForkLift.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\FSM.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

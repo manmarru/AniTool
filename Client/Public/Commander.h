@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 class CModel;
+class CBone;
 END
 
 BEGIN(Client)
@@ -31,6 +32,7 @@ public:
 	virtual _uint Get_CurrentAnimationIndex();
 	void Set_Animation(_uint _iAnimationIndex);
 	_uint Get_AnimationNum();
+	const vector<CBone*>* Get_Bones();
 
 public:
 	void Key_Input(_float _fTimeDelta);

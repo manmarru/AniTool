@@ -7,6 +7,7 @@
 #include "Commander.h"
 
 #include "EditObj.h"
+#include "BoneFlag.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -60,6 +61,9 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 
 	if (m_bDemoStart)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
+
+	if (m_bEffectTrigger)
+		Format_EffectTrigger();
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -97,7 +101,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 {
 	CFreeCamera::CAMERA_FREE_DESC		Desc{};
 
-	Desc.fSensor = 0.2f;
+	Desc.fSensor = 0.7f;
 	Desc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
 	Desc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
@@ -152,10 +156,14 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
 	if (ImGui::Button("Ani_Control"))
-		m_bControlGUIStart = true;
+		m_bControlGUIStart = !m_bControlGUIStart;
 	ImGui::SameLine();
 	if (ImGui::Button("open_demo"))
-		m_bDemoStart = true;
+		m_bDemoStart = !m_bDemoStart;
+	if (ImGui::Button("EffectTrigger"))
+		m_bEffectTrigger = !m_bEffectTrigger;
+
+	ImGui::NewLine();
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -276,6 +284,71 @@ void CLevel_GamePlay::Format_Control()
 	{
 		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() + 1);
 	}
+
+
+	ImGui::End();
+}
+
+void CLevel_GamePlay::Format_EffectTrigger()
+{
+	ImGui::Begin("Trigger_Effect");
+	//뼈 위치에 플래그들 보여주기 (add_renderobj)
+	//커멘더에서 뼈 받아와서 뼈목록 보여주기
+	if (ImGui::Button("Show_Flags"))
+	{
+		m_bShow_BoneFlags = !m_bShow_BoneFlags;
+		switch (m_bShow_BoneFlags)
+		{
+		case true:
+			// 플래그 생성
+		{
+			CBoneFlag::BONEFLAG_DESC desc;
+			for (auto bone : *m_pCommander->Get_Bones())
+			{
+				desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
+				m_vecFlags.push_back(static_cast<CBoneFlag*>(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_BoneFlag"), GameTag_BoneFlag, &desc)));
+			}
+		}
+			break;
+		case false:
+			// 플래그 삭제
+			break;
+		}
+	}
+
+
+	ImGui::BeginTable("bones", 2);
+	
+	int i(0);
+	for (auto bone : *m_pCommander->Get_Bones())
+	{
+		if (i == m_iSelectedBone)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 1.f, 1.f));
+
+		if (ImGui::Button(bone->Get_Name()))
+		{
+			if (i != m_iSelectedBone)
+			{
+				m_vecFlags[m_iSelectedBone]->Set_TextureNum(0);
+				m_iSelectedBone = i;
+				m_vecFlags[i]->Set_TextureNum(1);
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 1.f, 1.f));
+			}
+		}
+
+		if (i == m_iSelectedBone)
+			ImGui::PopStyleColor();
+
+		ImGui::TableNextColumn();
+		++i;
+	}
+	ImGui::EndTable();
+
+	//선택한 뼈의 플래그 색상 변경
+
+
+
+
 
 
 	ImGui::End();

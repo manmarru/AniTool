@@ -32,7 +32,6 @@ public:
 private:
 	class CShader*				m_pShaderCom = { nullptr };
 	class CTexture*				m_pTextureCom[TEXTURE_END] = { nullptr };
-	class CNavigation*			m_pNavigationCom = { nullptr };
 	class CVIBuffer_Terrain*	m_pVIBufferCom = { nullptr };
 
 private:

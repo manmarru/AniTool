@@ -49,7 +49,7 @@ HRESULT CPartObject::Render()
 
 HRESULT CPartObject::Bind_WorldMatrix(CShader * pShader, const _char * pContantName)
 {
-	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix);	
+	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix);
 }
 
 void CPartObject::Free()

@@ -57,6 +57,11 @@ _uint CCommander::Get_AnimationNum()
 	return m_pContaining_Models.front()->Get_AnimationNum();
 }
 
+const vector<CBone*>* CCommander::Get_Bones()
+{
+	return m_pContaining_Models.front()->Get_Bones();
+}
+
 void CCommander::Key_Input(_float _fTimeDelta)
 {
 	

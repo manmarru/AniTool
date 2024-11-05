@@ -113,7 +113,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
 }
 
@@ -172,7 +171,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	if (m_pGameInstance->Get_DIKeyState(KeyType::UP))
 	{
-		m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
+		m_pTransformCom->Go_Straight(fTimeDelta);
 
 		Set_State(OBJSTATE_RUN);
 	}
@@ -206,15 +205,6 @@ void CPlayer::Register_ModelCom(list<class CModel*>& ModelList)
 
 HRESULT CPlayer::Ready_Components()
 {
-	/* For.Com_Navigation */
-	CNavigation::NAVIGATION_DESC			NaviDesc{};
-
-	NaviDesc.iCurrentIndex = 0;
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
-		return E_FAIL;
-
 	/* For.Com_Collider */
 	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
 	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
@@ -353,6 +343,5 @@ void CPlayer::Free()
 		Safe_Release(pPartObject);
 
 	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pShaderCom);
 }

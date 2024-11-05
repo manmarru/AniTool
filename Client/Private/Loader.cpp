@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "Terrain.h"
-#include "ForkLift.h"
 #include "FreeCamera.h"
 #include "BackGround.h"
 
@@ -16,6 +15,7 @@
 #pragma endregion
 
 #include "EditObj.h"
+#include "BoneFlag.h"
 
 #include "Particle_Snow.h"
 #include "Effect_Explosion.h"
@@ -127,6 +127,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
 		return E_FAIL;
+	
+	/* For. Prototype_Component_Texture_BoneFlag*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TextureTag_BoneFlag,
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Flags/Flag%d.png"), 2))))
+		return E_FAIL;
 
 	/* For. Prototype_Component_Texture_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Mask"),
@@ -201,13 +206,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Fiona/TestModel"), PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_ForkLift*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_ForkLift"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/River/River"), PreTransformMatrix))))
 		return E_FAIL;
 
 #pragma region PLAYERPARTS
@@ -312,8 +310,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_EditObj,
 		CEditObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
+	
+	/* For. Prototype_GameObject_BoneFlag */
+	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_BoneFlag,
+		CBoneFlag::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	/* For. Prototype_GameObject_FreeCamera */
@@ -325,11 +326,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_GameObject_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
 		CSky::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_ForkLift */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ForkLift"),
-		CForkLift::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Particle_Explosion */

@@ -70,7 +70,6 @@ VS_OUT_EFFECT VS_MAIN_EFFECT(VS_IN In)
 	return Out;
 }
 
-
 /* Triangle : 정점 세개가 다 vs_main을 통과할때까지 대기 */
 /* 세개가 모두다 통과되면. 밑의 과정을 수행. */
 /* 리턴된 정점의 w로 정점의 xyzw를 나눈다. 투영 */
@@ -139,6 +138,18 @@ PS_OUT PS_MAIN_EFFECT(PS_IN_EFFECT In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_Blend(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    Out.vColor = Sample(In.vTexcoord);
+    if (0 == Out.vColor.a)
+        discard;
+	
+	return Out;
+}
+
+
 
 
 technique11	DefaultTechnique
@@ -167,4 +178,16 @@ technique11	DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_EFFECT();
 	}
+
+    pass BoneFlag // 2
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_Blend();
+    }
 }

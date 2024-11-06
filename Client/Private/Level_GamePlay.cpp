@@ -60,10 +60,14 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
 
 	if (m_bEffectTrigger)
-		Format_EffectTrigger();
+		Format_SelectBone();
 
 	if (m_bShow_TriggerSetting)
 		Format_Trigger();
+
+	if (m_bShow_Chain)
+		Format_AniChain();
+
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -137,6 +141,12 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	
+	CBoneFlag::BONEFLAG_DESC desc;
+	for (auto bone : *m_pCommander->Get_Bones())
+	{
+		desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
+		m_vecFlags.push_back(static_cast<CBoneFlag*>(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_BoneFlag"), GameTag_BoneFlag, &desc)));
+	}
 
 	return S_OK;
 }
@@ -158,11 +168,12 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	if (ImGui::Button("open_demo"))
 		m_bDemoStart = !m_bDemoStart;
-	if (ImGui::Button("EffectTrigger"))
-		m_bEffectTrigger = !m_bEffectTrigger;
 	ImGui::SameLine();
 	if (ImGui::Button("TriggerSetting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
+	ImGui::SameLine();
+	if (ImGui::Button("Chain"))
+		m_bShow_Chain = !m_bShow_Chain;
 
 	ImGui::NewLine();
 
@@ -182,12 +193,9 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::SliderFloat("Duration", &CurrentTrackPosition, 0, m_pCommander->Get_Duration());
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
-
-
-	//애니메이션 진행 퍼센트를 저장하는 버튼 -> (애니번호, 퍼센트) 순서쌍으로 리스트에 넣고 애니별로 맵에 저장
-	//최종 저장 버튼 누르면 이거 바이너리화할거임, 그러고 이거 불러와보는거까지 해보자.
-	//불러올때는 각 애니메이션의 맴버벡터에 퍼센트를 받아서 저장하고, 마지막으로 모든 애니에 애니 마지막 길이를 넣을거임.
 	
+
+
 	ImGui::Text("Animation : %d / %d", m_pCommander->Get_CurrentAnimationIndex(), m_pCommander->Get_AnimationNum() - 1);
 
 	int aniNum(0);
@@ -233,31 +241,25 @@ void CLevel_GamePlay::Format_Trigger()
 	ImGui::End();
 }
 
-void CLevel_GamePlay::Format_EffectTrigger()
+void CLevel_GamePlay::Format_SelectBone()
 {
 	ImGui::Begin("Trigger_Effect");
-	//뼈 위치에 플래그들 보여주기 (add_renderobj)
-	//커멘더에서 뼈 받아와서 뼈목록 보여주기
+	ImGui::SameLine();
 	if (ImGui::Button("Show_Flags"))
 	{
 		m_bShow_BoneFlags = !m_bShow_BoneFlags;
-		switch (m_bShow_BoneFlags)
+	}
+	if (m_bShow_BoneFlags)
+	{
+
+		for (auto BoneFLag : m_vecFlags)
 		{
-		case true:
-			// 플래그 생성
-		{
-			CBoneFlag::BONEFLAG_DESC desc;
-			for (auto bone : *m_pCommander->Get_Bones())
-			{
-				desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
-				m_vecFlags.push_back(static_cast<CBoneFlag*>(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_BoneFlag"), GameTag_BoneFlag, &desc)));
-			}
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, BoneFLag);
 		}
-			break;
-		case false:
-			// 플래그 삭제
-			break;
-		}
+	}
+	else
+	{
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_vecFlags[m_iSelectedBone]);
 	}
 
 
@@ -287,13 +289,6 @@ void CLevel_GamePlay::Format_EffectTrigger()
 		++i;
 	}
 	ImGui::EndTable();
-
-	//선택한 뼈의 플래그 색상 변경
-
-
-
-
-
 
 	ImGui::End();
 }
@@ -385,10 +380,14 @@ void CLevel_GamePlay::TriggerSetting_Event()
 void CLevel_GamePlay::TriggerSetting_Effect()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	if (ImGui::Button("Select_Bone"))
+		m_bEffectTrigger = !m_bEffectTrigger;
+	ImGui::SameLine();
 	if (ImGui::Button("Flag_Trigger"))
 	{
 		pair<_double, char[MAX_PATH]> Trigger;
 		Trigger.first = m_pCommander->Get_CurrentTrackPosition();
+		strcpy_s(Trigger.second, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
 		m_mapEffectTriggers[iCurrentAnimationIndex].push_back(Trigger);
 		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
 	}
@@ -407,6 +406,39 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::EndTable();
 
 
+}
+
+void CLevel_GamePlay::Format_AniChain()
+{
+	ImGui::Begin("Animation_Chain");
+
+	ImGui::SetNextItemWidth(50);
+	ImGui::InputInt("Before", &m_stlChain.first, 0, 0);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(50);
+	ImGui::InputInt("After", &m_stlChain.second, 0, 0);
+
+	if (ImGui::Button("Chain!"))
+	{
+		m_listAniChained.push_back(m_stlChain);
+	}
+	ImGui::NewLine();
+
+	char buffer[16];
+	int i(0);
+	for (auto& pair : m_listAniChained)
+	{
+		sprintf_s(buffer, "%d -> %d##%d", pair.first, pair.second, i);
+		if (ImGui::Button(buffer))
+		{
+			pair.first = m_stlChain.first;
+			pair.second = m_stlChain.second;
+		}
+		++i;
+	}
+
+
+	ImGui::End();
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

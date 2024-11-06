@@ -52,7 +52,6 @@ _int CBoneFlag::Update(_float _fTimeDelta)
 void CBoneFlag::Late_Update(_float _fTimeDelta)
 {
     m_pTransformCom->LookAt(m_pGameInstance->Get_CamPosition_Vector());
-    m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this);
 }
 
 HRESULT CBoneFlag::Render()

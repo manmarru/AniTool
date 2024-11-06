@@ -62,6 +62,7 @@ private:
 	void TriggerSetting_Effect();
 
 	void Clear_SaveMap();
+	void Save_ChainndeAnimation();
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

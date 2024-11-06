@@ -293,6 +293,21 @@ void CLevel_GamePlay::Format_SelectBone()
 	ImGui::End();
 }
 
+void CLevel_GamePlay::Save_ChainndeAnimation()
+{
+	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
+	_int iSize(m_listAniChained.size());
+	SaveStream.write((const char*)(&iSize), sizeof(iSize));
+	
+	for (auto& ChainPair : m_listAniChained)
+	{
+		SaveStream.write((const char*)(&ChainPair.first), sizeof(_int));
+		SaveStream.write((const char*)(&ChainPair.second), sizeof(_int));
+	}
+
+	SaveStream.close();
+}
+
 void CLevel_GamePlay::Clear_SaveMap()
 {
 	for (auto& pair : m_mapAnimationSave)
@@ -317,7 +332,7 @@ void CLevel_GamePlay::TriggerSetting_Event()
 	_uint SizeofTrigger;
 	if (ImGui::Button("Save_Trigger"))
 	{
-		ofstream SaveStream("../Bin/Resources/Export.dat", ios::trunc || ios::binary);
+		ofstream SaveStream("../Bin/Resources/Export.dat", ios::out | ios::trunc | ios::binary);
 		if (!SaveStream.is_open())
 			MSG_BOX(TEXT("파일 스트림 오류!"));
 
@@ -411,12 +426,11 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 void CLevel_GamePlay::Format_AniChain()
 {
 	ImGui::Begin("Animation_Chain");
-
-	ImGui::SetNextItemWidth(50);
-	ImGui::InputInt("Before", &m_stlChain.first, 0, 0);
-	ImGui::SameLine();
-	ImGui::SetNextItemWidth(50);
-	ImGui::InputInt("After", &m_stlChain.second, 0, 0);
+	if (ImGui::Button("Save"))
+	{
+		Save_ChainndeAnimation();
+	}
+	ImGui::InputInt2("a -> b", &m_stlChain.first);
 
 	if (ImGui::Button("Chain!"))
 	{
@@ -424,10 +438,14 @@ void CLevel_GamePlay::Format_AniChain()
 	}
 	ImGui::NewLine();
 
+	ImGui::BeginGroup();
+	ImGui::BeginChild("list");
 	char buffer[16];
 	int i(0);
+	ImGui::BeginTable("list", 2);
 	for (auto& pair : m_listAniChained)
 	{
+		ImGui::TableNextColumn();
 		sprintf_s(buffer, "%d -> %d##%d", pair.first, pair.second, i);
 		if (ImGui::Button(buffer))
 		{
@@ -436,6 +454,9 @@ void CLevel_GamePlay::Format_AniChain()
 		}
 		++i;
 	}
+	ImGui::EndTable();
+	ImGui::EndChild();
+	ImGui::EndGroup();
 
 
 	ImGui::End();

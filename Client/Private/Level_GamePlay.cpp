@@ -56,14 +56,14 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	Format_ImGUI();
 
-	if (m_bControlGUIStart)
-		Format_Control();
-
 	if (m_bDemoStart)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
 
 	if (m_bEffectTrigger)
 		Format_EffectTrigger();
+
+	if (m_bShow_TriggerSetting)
+		Format_Trigger();
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -155,13 +155,14 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("Hello_World");
-	if (ImGui::Button("Ani_Control"))
-		m_bControlGUIStart = !m_bControlGUIStart;
-	ImGui::SameLine();
+
 	if (ImGui::Button("open_demo"))
 		m_bDemoStart = !m_bDemoStart;
 	if (ImGui::Button("EffectTrigger"))
 		m_bEffectTrigger = !m_bEffectTrigger;
+	ImGui::SameLine();
+	if (ImGui::Button("TriggerSetting"))
+		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
 
 	ImGui::NewLine();
 
@@ -182,91 +183,11 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
 
-	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	if (ImGui::Button("Flag_Trigger"))
-	{
-		m_mapAnimationSave[iCurrentAnimationIndex].push_back(*m_pCommander->Get_CurrentTrackPosition_ptr());
-		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
-	}
-	
-#pragma region 세이브로드
-
-	_uint SizeofSave(m_mapAnimationSave.size());
-	_uint SizeofTrigger;
-	if (ImGui::Button("Save_Trigger"))
-	{
-		ofstream SaveStream("../Bin/Resources/Export.dat", ios::trunc || ios::binary);
-		if (!SaveStream.is_open())
-			MSG_BOX(TEXT("파일 스트림 오류!"));
-
-		//세이브
-		SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
-		for (auto pair : m_mapAnimationSave)
-		{
-			SizeofTrigger = pair.second.size();
-			SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
-
-			for (auto Trigger : pair.second)
-			{
-				SaveStream.write((const char*)&pair.first, sizeof(_uint));
-				SaveStream.write((const char*)&Trigger, sizeof(_double));
-			}
-		}
-		SaveStream.close();
-	}
-	ImGui::SameLine();
-	_uint iAnimationNum;
-	_double dTriggerPos;
-	if (ImGui::Button("Load_Trigger"))
-	{
-		Clear_SaveMap();
-		ifstream Loadstream("../Bin/Resources/Export.dat", ios::binary);
-		if (!Loadstream.is_open())
-			MSG_BOX(TEXT("파일 스트림 오류!"));
-		//로드
-		Loadstream.read((char*)&SizeofSave, sizeof(_uint));
-		for (size_t i = 0; i < SizeofSave; i++)
-		{
-			Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
-			for (size_t i = 0; i < SizeofTrigger; i++)
-			{
-				Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
-				Loadstream.read((char*)&dTriggerPos, sizeof(_double));
-				m_mapAnimationSave[iAnimationNum].push_back(dTriggerPos);
-			}
-		}
-		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
-
-		Loadstream.close();
-	}
-
-#pragma endregion
-
-	ImGui::BeginTable("Triggers", 2);
-	for (auto pair : m_mapAnimationSave)
-	{
-		for (auto Trigger : pair.second)
-		{
-			ImGui::TableNextColumn();
-			ImGui::Text("%d : %d", (int)pair.first, (int)Trigger);
-		}
-		ImGui::TableNextRow();
-	}
-	ImGui::EndTable();
 
 	//애니메이션 진행 퍼센트를 저장하는 버튼 -> (애니번호, 퍼센트) 순서쌍으로 리스트에 넣고 애니별로 맵에 저장
 	//최종 저장 버튼 누르면 이거 바이너리화할거임, 그러고 이거 불러와보는거까지 해보자.
 	//불러올때는 각 애니메이션의 맴버벡터에 퍼센트를 받아서 저장하고, 마지막으로 모든 애니에 애니 마지막 길이를 넣을거임.
 	
-	ImGui::Text("CurrentAnim : %d", m_pCommander->Get_CurrentAnimationIndex());
-
-	ImGui::End();
-}
-
-void CLevel_GamePlay::Format_Control()
-{
-	ImGui::Begin("Animation_Control" , &m_bControlGUIStart);
-
 	ImGui::Text("Animation : %d / %d", m_pCommander->Get_CurrentAnimationIndex(), m_pCommander->Get_AnimationNum() - 1);
 
 	int aniNum(0);
@@ -284,6 +205,29 @@ void CLevel_GamePlay::Format_Control()
 	{
 		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() + 1);
 	}
+
+	ImGui::End();
+}
+
+void CLevel_GamePlay::Format_Trigger()
+{
+	ImGui::Begin("Triggers");
+	ImGui::BeginTabBar("asdf");
+	if (ImGui::BeginTabItem("Event"))
+	{
+		TriggerSetting_Event();
+
+		ImGui::EndTabItem();
+	}
+	if (ImGui::BeginTabItem("Effect"))
+	{
+		TriggerSetting_Effect();
+
+
+		ImGui::EndTabItem();
+	}
+
+	ImGui::EndTabBar();
 
 
 	ImGui::End();
@@ -356,11 +300,113 @@ void CLevel_GamePlay::Format_EffectTrigger()
 
 void CLevel_GamePlay::Clear_SaveMap()
 {
-	for (auto pair : m_mapAnimationSave)
+	for (auto& pair : m_mapAnimationSave)
 	{
 		pair.second.clear();
 	}
 	m_mapAnimationSave.clear();
+}
+
+void CLevel_GamePlay::TriggerSetting_Event()
+{
+	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	if (ImGui::Button("Flag_Trigger"))
+	{
+		m_mapAnimationSave[iCurrentAnimationIndex].push_back(*m_pCommander->Get_CurrentTrackPosition_ptr());
+		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+	}
+
+#pragma region 세이브로드
+
+	_uint SizeofSave(m_mapAnimationSave.size());
+	_uint SizeofTrigger;
+	if (ImGui::Button("Save_Trigger"))
+	{
+		ofstream SaveStream("../Bin/Resources/Export.dat", ios::trunc || ios::binary);
+		if (!SaveStream.is_open())
+			MSG_BOX(TEXT("파일 스트림 오류!"));
+
+		//세이브
+		SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
+		for (auto& pair : m_mapAnimationSave)
+		{
+			SizeofTrigger = pair.second.size();
+			SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
+
+			for (auto& Trigger : pair.second)
+			{
+				SaveStream.write((const char*)&pair.first, sizeof(_uint));
+				SaveStream.write((const char*)&Trigger, sizeof(_double));
+			}
+		}
+		SaveStream.close();
+	}
+	ImGui::SameLine();
+	_uint iAnimationNum;
+	_double dTriggerPos;
+	if (ImGui::Button("Load_Trigger"))
+	{
+		Clear_SaveMap();
+		ifstream Loadstream("../Bin/Resources/Export.dat", ios::binary);
+		if (!Loadstream.is_open())
+			MSG_BOX(TEXT("파일 스트림 오류!"));
+		//로드
+		Loadstream.read((char*)&SizeofSave, sizeof(_uint));
+		for (size_t i = 0; i < SizeofSave; i++)
+		{
+			Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
+			for (size_t i = 0; i < SizeofTrigger; i++)
+			{
+				Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
+				Loadstream.read((char*)&dTriggerPos, sizeof(_double));
+				m_mapAnimationSave[iAnimationNum].push_back(dTriggerPos);
+			}
+		}
+		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+
+		Loadstream.close();
+	}
+
+#pragma endregion
+
+	ImGui::BeginTable("Triggers", 2);
+	for (auto& pair : m_mapAnimationSave)
+	{
+		for (auto& Trigger : pair.second)
+		{
+			ImGui::TableNextColumn();
+			ImGui::Text("%u : %f", pair.first, Trigger);
+		}
+		ImGui::TableNextRow();
+	}
+	ImGui::EndTable();
+}
+
+void CLevel_GamePlay::TriggerSetting_Effect()
+{
+	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	if (ImGui::Button("Flag_Trigger"))
+	{
+		pair<_double, char[MAX_PATH]> Trigger;
+		Trigger.first = m_pCommander->Get_CurrentTrackPosition();
+		m_mapEffectTriggers[iCurrentAnimationIndex].push_back(Trigger);
+		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+	}
+	ImGui::BeginTable("list", 2);
+
+	for (auto& pair : m_mapEffectTriggers)
+	{
+		for (auto& Trigger : pair.second)
+		{
+			ImGui::TableNextColumn();
+			ImGui::Text("%u, %f, %s", pair.first, Trigger.first, Trigger.second);
+		}
+		ImGui::TableNextRow();
+	}
+
+	ImGui::EndTable();
+
+
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

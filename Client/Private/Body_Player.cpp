@@ -54,7 +54,7 @@ _int CBody_Player::Update(_float fTimeDelta)
 
 	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
-	cout << m_pModelCom->Get_CurrentTrigger() << endl;
+	//cout << m_pModelCom->Get_CurrentTrigger() << endl;
 	return OBJ_NOEVENT;
 }
 

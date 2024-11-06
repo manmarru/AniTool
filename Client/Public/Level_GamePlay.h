@@ -35,11 +35,12 @@ public:
 private:
 	_bool m_bGuiStart = { false };
 	_bool m_bDemoStart = { false };
-	_bool m_bControlGUIStart = { false };
 	_bool m_bEffectTrigger = { false };
+	_bool m_bShow_TriggerSetting = { false };
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
-	map<_uint, vector<_double>> m_mapAnimationSave;
+	map<_uint, vector<_double>> m_mapAnimationSave; // 애니번호, 시간 순서쌍의 트리거
+	map<_uint, vector<pair<_double, char[MAX_PATH]>>> m_mapEffectTriggers; // 이펙트트리거 : 애니번호 -> 시간, 뼈이름
 	vector<class CBoneFlag*> m_vecFlags;
 
 	_bool m_bShow_BoneFlags = { false };
@@ -47,9 +48,12 @@ private:
 
 private:
 	void Format_ImGUI();
-	void Format_Control();
+	void Format_Trigger();
 	void Format_EffectTrigger();
 	void Clear_SaveMap();
+
+	void TriggerSetting_Event();
+	void TriggerSetting_Effect();
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -62,6 +62,11 @@ const vector<CBone*>* CCommander::Get_Bones()
 	return m_pContaining_Models.front()->Get_Bones();
 }
 
+void CCommander::Register_Trigger(ifstream* _pLoadStream)
+{
+	_pLoadStream->read();
+}
+
 void CCommander::Key_Input(_float _fTimeDelta)
 {
 	

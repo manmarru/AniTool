@@ -341,38 +341,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 				i = 0;
 
 			m_bLinearFinished = true;
-		}
-#pragma region 뭔지모름(주석)
-
-		////보간중에 중간에 들어왔을때
-		//if (!m_bLinearFinished)
-		//{
-		//	if (!m_bInterupted)
-		//	{
-		//		m_CurrentTrackPosition = 0;
-
-		//		for (auto& i : m_KeyFrameIndices[m_iCurrentAnimIndex])
-		//			i = 0;
-
-		//		for (_uint i = 0; i < m_Bones.size(); ++i)
-		//			m_OldBonesMatrix[i] = m_Bones[i]->Get_TransformationMatrix();
-
-		//		m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta);
-
-		//		for (_uint i = 0; i < m_Bones.size(); ++i)
-		//			m_NewBonesMatrix[i] = m_Bones[i]->Get_TransformationMatrix();
-
-		//		m_bInterupted = true;
-		//		
-		//	}
-		//	else
-		//	{
-		//		m_bLinearFinished = Animation_Interpolation(fTimeDelta);
-		//	}
-		//}
-		//else
-#pragma endregion
-		
+		}		
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
 	}
 
@@ -452,7 +421,9 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 	
 		//트리거 체크
 		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger] <= m_CurrentTrackPosition)
+		{
 			++m_iCurrentTrigger;
+		}
 
 		if (isFinished) // 주의 이거 loop애님들은 절대 진입 못하는거같음
 			m_iCurrentTrigger = 0;

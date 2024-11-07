@@ -175,6 +175,14 @@ void CLevel_GamePlay::Format_ImGUI()
 	if (ImGui::Button("Chain"))
 		m_bShow_Chain = !m_bShow_Chain;
 
+	if (ImGui::Button("Save_Triggers"))
+		Save_Triggers();
+	ImGui::SameLine();
+	if (ImGui::Button("Load_Triggers"))
+		Load_Triggers();
+
+
+
 	ImGui::NewLine();
 
 	if (ImGui::Button("Speed->1"))
@@ -221,6 +229,9 @@ void CLevel_GamePlay::Format_Trigger()
 {
 	ImGui::Begin("Triggers");
 	ImGui::BeginTabBar("asdf");
+
+	ImGui::NewLine();
+
 	if (ImGui::BeginTabItem("Event"))
 	{
 		TriggerSetting_Event();
@@ -231,12 +242,10 @@ void CLevel_GamePlay::Format_Trigger()
 	{
 		TriggerSetting_Effect();
 
-
 		ImGui::EndTabItem();
 	}
 
 	ImGui::EndTabBar();
-
 
 	ImGui::End();
 }
@@ -308,6 +317,126 @@ void CLevel_GamePlay::Save_ChainndeAnimation()
 	SaveStream.close();
 }
 
+void CLevel_GamePlay::Save_Triggers()
+{
+	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	_uint SizeofSave(m_mapAnimationSave.size());
+	_uint SizeofTrigger;
+
+	ofstream SaveStream("../Bin/==Export==/Triggers.dat", ios::out | ios::trunc | ios::binary);
+	if (!SaveStream.is_open())
+		MSG_BOX(TEXT("파일 스트림 오류!"));
+
+	map<_uint, vector<pair<_double, _bool>>> Triggers;
+	queue<BONENAME> listBoneNames;
+	BONENAME BONENAME;
+	for (auto& pair : m_mapAnimationSave)
+	{
+		for (auto EventTrigger : pair.second)
+		{
+			Triggers[pair.first].push_back({ EventTrigger, false });
+		}
+	}
+	for (auto& pair : m_mapEffectTriggers)
+	{
+		for (auto EffectTrigger : pair.second)
+		{
+			Triggers[pair.first].push_back({ EffectTrigger.TriggerTime, true });
+			strcpy_s(BONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
+			listBoneNames.push(BONENAME);
+		}
+	}// 뼈이름은 그냥 순서대로 저장
+
+	for (auto& vecPair : Triggers)
+	{
+		sort(vecPair.second.begin(), vecPair.second.end());
+	}
+
+	//세이브
+	SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
+	for (auto& pair : Triggers)
+	{
+		SizeofTrigger = pair.second.size();
+		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint)); // 트리거 갯수 먼저 한번 저장하고
+
+		for (auto& Trigger : pair.second) // <시간, 이펙트여부>
+		{
+			SaveStream.write((const char*)&pair.first, sizeof(_uint));		//몇번 애니
+			SaveStream.write((const char*)&Trigger.first, sizeof(_double));	//몇초에 트리거
+			SaveStream.write((const char*)&Trigger.second, sizeof(_bool)); //이펙트여부
+			if (Trigger.second) // 뼈이름도저장
+			{
+				SaveStream.write((const char*)&listBoneNames.front(), sizeof(char) * MAX_PATH);
+				listBoneNames.pop();
+			}
+		}
+	}
+
+#pragma region 예전코드
+
+	//SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
+	//for (auto& pair : m_mapAnimationSave)
+	//{
+	//	SizeofTrigger = pair.second.size();
+	//	SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
+
+	//	for (auto& Trigger : pair.second)
+	//	{
+	//		SaveStream.write((const char*)&pair.first, sizeof(_uint));
+	//		SaveStream.write((const char*)&Trigger, sizeof(_double));
+	//	}
+	//}
+#pragma endregion
+	SaveStream.close();
+}
+
+void CLevel_GamePlay::Load_Triggers()
+{
+	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	_uint SizeofLoad(m_mapAnimationSave.size());
+	_uint SizeofTrigger;
+	_uint iAnimationNum;
+	_double dTriggerPos;
+
+	_bool Temp;
+	_char BoneName[260];
+
+	Clear_SaveMap();
+	ifstream Loadstream("../Bin/==Export==/Triggers.dat", ios::binary | ios::in);
+	if (!Loadstream.is_open())
+		MSG_BOX(TEXT("파일 스트림 오류!"));
+
+	Loadstream.read((char*)&SizeofLoad, sizeof(_uint));
+	for (size_t i = 0; i < SizeofLoad; i++)
+	{
+		Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
+		for (size_t i = 0; i < SizeofTrigger; i++)
+		{
+			Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
+			Loadstream.read((char*)&dTriggerPos, sizeof(_double));
+			Loadstream.read((char*)&Temp, sizeof(_bool));
+			if (Temp)
+			{
+				Loadstream.read((char*)&BoneName, sizeof(char) * MAX_PATH);
+				EFFECTTRIGGER EffectTriggerData;
+				//pair<_double, char[MAX_PATH]> Trigger;
+				EffectTriggerData.TriggerTime = dTriggerPos;
+				strcpy_s(EffectTriggerData.BoneName, MAX_PATH, BoneName);
+				m_mapEffectTriggers[iAnimationNum].push_back(EffectTriggerData);
+				//strcpy_s(Trigger.second, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
+			}
+			else
+			{
+				m_mapAnimationSave[iAnimationNum].push_back(dTriggerPos);
+			}
+		}
+	}
+	sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+
+	Loadstream.close();
+
+}
+
 void CLevel_GamePlay::Clear_SaveMap()
 {
 	for (auto& pair : m_mapAnimationSave)
@@ -326,58 +455,7 @@ void CLevel_GamePlay::TriggerSetting_Event()
 		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
 	}
 
-#pragma region 세이브로드
 
-	_uint SizeofSave(m_mapAnimationSave.size());
-	_uint SizeofTrigger;
-	if (ImGui::Button("Save_Trigger"))
-	{
-		ofstream SaveStream("../Bin/Resources/Export.dat", ios::out | ios::trunc | ios::binary);
-		if (!SaveStream.is_open())
-			MSG_BOX(TEXT("파일 스트림 오류!"));
-
-		//세이브
-		SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
-		for (auto& pair : m_mapAnimationSave)
-		{
-			SizeofTrigger = pair.second.size();
-			SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
-
-			for (auto& Trigger : pair.second)
-			{
-				SaveStream.write((const char*)&pair.first, sizeof(_uint));
-				SaveStream.write((const char*)&Trigger, sizeof(_double));
-			}
-		}
-		SaveStream.close();
-	}
-	ImGui::SameLine();
-	_uint iAnimationNum;
-	_double dTriggerPos;
-	if (ImGui::Button("Load_Trigger"))
-	{
-		Clear_SaveMap();
-		ifstream Loadstream("../Bin/Resources/Export.dat", ios::binary);
-		if (!Loadstream.is_open())
-			MSG_BOX(TEXT("파일 스트림 오류!"));
-		//로드
-		Loadstream.read((char*)&SizeofSave, sizeof(_uint));
-		for (size_t i = 0; i < SizeofSave; i++)
-		{
-			Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
-			for (size_t i = 0; i < SizeofTrigger; i++)
-			{
-				Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
-				Loadstream.read((char*)&dTriggerPos, sizeof(_double));
-				m_mapAnimationSave[iAnimationNum].push_back(dTriggerPos);
-			}
-		}
-		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
-
-		Loadstream.close();
-	}
-
-#pragma endregion
 
 	ImGui::BeginTable("Triggers", 2);
 	for (auto& pair : m_mapAnimationSave)
@@ -400,9 +478,9 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::SameLine();
 	if (ImGui::Button("Flag_Trigger"))
 	{
-		pair<_double, char[MAX_PATH]> Trigger;
-		Trigger.first = m_pCommander->Get_CurrentTrackPosition();
-		strcpy_s(Trigger.second, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
+		EFFECTTRIGGER Trigger;
+		Trigger.TriggerTime = m_pCommander->Get_CurrentTrackPosition();
+		strcpy_s(Trigger.BoneName, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
 		m_mapEffectTriggers[iCurrentAnimationIndex].push_back(Trigger);
 		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
 	}
@@ -413,7 +491,7 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 		for (auto& Trigger : pair.second)
 		{
 			ImGui::TableNextColumn();
-			ImGui::Text("%u, %f, %s", pair.first, Trigger.first, Trigger.second);
+			ImGui::Text("%u, %f, %s", pair.first, Trigger.TriggerTime, Trigger.BoneName);
 		}
 		ImGui::TableNextRow();
 	}

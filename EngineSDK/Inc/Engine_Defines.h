@@ -40,6 +40,7 @@ using DirectX::SimpleMath::Vector3;
 #include <map>
 #include <list>
 #include <vector>
+#include <queue>
 #include <algorithm>
 #include <string>
 #include <unordered_set>

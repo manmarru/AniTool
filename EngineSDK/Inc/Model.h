@@ -80,7 +80,7 @@ public:
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	_bool Play_Animation(_float fTimeDelta);
 	_bool Play_Animation(_float fTimeDelta, const char* _BoneName); // 루트애님
-	_bool Play_TriggerAnimation(_float fTimeDelta); // 밟은 트리거 반환
+	_bool Play_TriggerAnimation(_float fTimeDelta); // 밟은 트리거 반환 -> 밟은 트리거를 스텍에 넣어주는걸로 변경
 	_bool Animation_Interpolation(_float fTimeDelta);
 
 	HRESULT Read_BinFile(const _tchar* pModelFilePath);
@@ -132,9 +132,13 @@ private:
 	_float							m_fPlaySpeed = 1.f;
 	_double							m_dSubTime = 0.;
 
-	//애니메이션 트리거 pair(<애니인덱스, 트리거 벡터>
+	//애니메이션 트리거 pair(<애니인덱스, 트리거가 들어간 벡터>
 	map<_uint, vector<_double>> m_mapAnimationTrigger;
 	_uint						m_iCurrentTrigger = { 0 };
+	queue<_uint>				m_queueTrigger; // 실행해야 할 트리거, 이거 뽑을때 아래 어떤 트리거인지도 같이 받아와서 이펙트면 뼈이름도 받아오면 됨
+	queue<_bool>				m_queueTriggerDiv; // ? 이펙트 : 이벤트 -> 애니 세팅시마다 복사해와서 사용
+
+
 
 public:
 	HRESULT	Ready_Meshes();

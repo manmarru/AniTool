@@ -43,7 +43,7 @@ private:
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
 	map<_uint, vector<_double>> m_mapAnimationSave; // 애니번호, 시간 순서쌍의 트리거
-	map<_uint, vector<pair<_double, char[MAX_PATH]>>> m_mapEffectTriggers; // 이펙트트리거 : 애니번호 -> 시간, 뼈이름
+	map<_uint, vector<EFFECTTRIGGER>> m_mapEffectTriggers; // 이펙트트리거 : 애니번호 -> 시간, 뼈이름
 	vector<class CBoneFlag*> m_vecFlags;
 	list<pair<_int, _int>> m_listAniChained;
 	pair<_int, _int> m_stlChain = { 0,0 };
@@ -62,6 +62,8 @@ private:
 	void TriggerSetting_Effect();
 
 	void Clear_SaveMap();
+	void Save_Triggers();
+	void Load_Triggers();
 	void Save_ChainndeAnimation();
 
 public:

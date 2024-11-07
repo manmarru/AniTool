@@ -292,6 +292,19 @@ HRESULT CPlayer::Ready_PartObjects()
 	if (FAILED(Add_PartObject(PART_SHIELD, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 
+
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Root"), 2);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001"), 3);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001-Pelvis"), 4);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001-Spine-Upper"), 5);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001-Spine"), 6);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001-Spine1"), 7);
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Change_Bone(static_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_Bone("Bip001-Spine2"), 8);
+	
+	static_cast<CHead_Player*>(m_Parts[PART_HEAD])->Set_Skip(9);
+
+
+
 	m_pBodyModelCom = static_cast<CModel*>(m_Parts[PART_BODY]->Find_Component(TEXT("Com_Model")));
 
 	return S_OK;

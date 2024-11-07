@@ -42,6 +42,9 @@ HRESULT CBody_Player::Initialize(void * pArg)
 	if (FAILED(Ready_FSM(pDesc->mapAnimationIndex)))
 		return E_FAIL;
 
+	m_pModelCom->Set_Skip(9);
+	
+
 	//m_pModelCom->SetUp_Animation(3, true);
 
 	return S_OK;
@@ -142,6 +145,16 @@ const _float4x4* CBody_Player::Get_BoneCombindTransformationMatrix_Ptr(const _ch
 void CBody_Player::Set_State(_uint _eState)
 {
 	m_pFSM->Set_State((OBJ_STATE)_eState);
+}
+
+void CBody_Player::Change_Bone(CBone* pBone, _uint iBoneIndex)
+{
+	m_pModelCom->Change_Bone(pBone, iBoneIndex);
+}
+
+CBone* CBody_Player::Get_Bone(const char* BoneName)
+{
+	return m_pModelCom->Get_Bone(BoneName);
 }
 
 void CBody_Player::Set_CurrentTrackPosition(_double dPosition)

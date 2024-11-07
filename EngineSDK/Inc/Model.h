@@ -44,6 +44,10 @@ public:
 	}
 
 	void Set_CurrentTrackPosition(_double dPosition);
+	void Change_Bone(CBone* _pBone, _uint _iBoneIndex);
+	CBone* Get_Bone(const char* BoneName);
+	void Set_Skip(_int _iSkip) { m_iNumSkip = _iSkip; }
+
 	_double& Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
 	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
 	_double Get_Duration();
@@ -138,6 +142,9 @@ private:
 	_uint						m_iCurrentTrigger = { 0 };
 	queue<_uint>				m_queueTrigger;			// 실행해야 할 트리거, 이거 뽑을때 아래 어떤 트리거인지도 같이 받아와서 이펙트면 뼈이름도 받아오면 됨
 	queue<BONENAME>				m_pCurrentTriggerBoneName; // 현재 이벤트에서 사용할 예정인 뼈 이름들
+
+	//몇개 건너뛰면 되는지(뼈 통합하면서 중복업뎃을 막는 상황의 경우
+	_int					m_iNumSkip = { 0 };
 
 public:
 	void Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger); // 툴에서만 쓰는거고 클라에선 모델생성할떄 받는거 수정해서 받아야됨;

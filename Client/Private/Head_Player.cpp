@@ -138,6 +138,16 @@ void CHead_Player::Set_State(_uint _eState)
 	m_pFSM->Set_State((OBJ_STATE)_eState);
 }
 
+void CHead_Player::Change_Bone(CBone* pBone, _uint iBoneIndex)
+{
+	m_pModelCom->Change_Bone(pBone, iBoneIndex);
+}
+
+void CHead_Player::Set_Skip(_int iSkip)
+{
+	m_pModelCom->Set_Skip(iSkip);
+}
+
 void CHead_Player::Set_CurrentTrackPosition(_double dPosition)
 {
 	m_pModelCom->Set_CurrentTrackPosition(dPosition);

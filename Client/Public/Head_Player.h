@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CShader;
 class CModel;
+class CBone;
 END
 
 BEGIN(Client)
@@ -38,6 +39,8 @@ public:
 
 public:
 	virtual void Set_State(_uint _eState) override;
+	void Change_Bone(CBone* pBone, _uint iBoneIndex);
+	void Set_Skip(_int iSkip);
 
 //For Editing
 public:

@@ -115,6 +115,26 @@ void CModel::Set_CurrentTrackPosition(_double dPosition)
 	m_Animations[m_iCurrentAnimIndex];
 }
 
+void CModel::Change_Bone(CBone* _pBone, _uint _iBoneIndex)
+{
+	Safe_Release(m_Bones[_iBoneIndex]);
+	m_Bones[_iBoneIndex] = _pBone;
+	Safe_AddRef(_pBone);
+}
+
+CBone* CModel::Get_Bone(const char* BoneName)
+{
+	for (auto& pBone : m_Bones)
+	{
+		if (!strcmp(pBone->Get_Name(), BoneName))
+		{
+			return pBone;
+		}
+	}
+
+	return nullptr;
+}
+
 _double CModel::Get_Duration()
 {
 	return m_Animations[m_iCurrentAnimIndex]->Get_Duration();
@@ -310,7 +330,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_bLinearFinished = false;
 			m_bInterupted = false;
 
-			for (_uint i = 0; i < m_Bones.size(); ++i)
+			for (_uint i = m_iNumSkip; i < m_Bones.size(); ++i)
 				m_StartBonesTransforms[i] = m_Bones[i]->Get_TransformationMatrix();
 
 			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_NewBones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);

@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CShader;
 class CModel;
+class CBone;
 END
 
 BEGIN(Client)
@@ -39,6 +40,8 @@ public:
 public:
 	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const override;
 	virtual void Set_State(_uint _eState) override;
+	void Change_Bone(CBone* pBone, _uint iBoneIndex);
+	CBone* Get_Bone(const char* BoneName);
 
 //For Editing
 public:

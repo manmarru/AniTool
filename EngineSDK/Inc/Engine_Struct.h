@@ -225,4 +225,23 @@ namespace Engine
 		DATA_BINANIM* pBinAnim;
 
 	}DATA_BINSCENE;
+
+	
+	typedef struct DEFAULTTRIGGER
+	{
+		double TriggerTime = 0.0;
+		bool isEffectTrigger = false;
+	}DEFAULTTRIGGER;
+
+	typedef struct EFFECTTRIGGER
+	{
+		double TriggerTime;
+		char BoneName[MAX_PATH];
+	}EFFECTTRIGGER;
+
+	typedef struct BONENAME
+	{
+		char BoneName[MAX_PATH];
+	}BONENAME;
+
 }

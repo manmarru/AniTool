@@ -33,7 +33,7 @@ public:
 	void Set_Animation(_uint _iAnimationIndex);
 	_uint Get_AnimationNum();
 	const vector<CBone*>* Get_Bones();
-	void Register_Trigger(ifstream* _pLoadStream);
+	void Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger);
 
 public:
 	void Key_Input(_float _fTimeDelta);

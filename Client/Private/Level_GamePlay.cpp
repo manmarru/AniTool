@@ -329,7 +329,8 @@ void CLevel_GamePlay::Save_Triggers()
 
 	map<_uint, vector<pair<_double, _bool>>> Triggers;
 	queue<BONENAME> listBoneNames;
-	BONENAME BONENAME;
+	BONENAME tBONENAME;
+	// 두 종류의 트리거를 같은 컨테이너에 저장
 	for (auto& pair : m_mapAnimationSave)
 	{
 		for (auto EventTrigger : pair.second)
@@ -342,11 +343,11 @@ void CLevel_GamePlay::Save_Triggers()
 		for (auto EffectTrigger : pair.second)
 		{
 			Triggers[pair.first].push_back({ EffectTrigger.TriggerTime, true });
-			strcpy_s(BONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
-			listBoneNames.push(BONENAME);
+			strcpy_s(tBONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
+			listBoneNames.push(tBONENAME);
 		}
 	}// 뼈이름은 그냥 순서대로 저장
-
+	//sort
 	for (auto& vecPair : Triggers)
 	{
 		sort(vecPair.second.begin(), vecPair.second.end());

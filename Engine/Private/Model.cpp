@@ -420,7 +420,7 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
 	
 		//트리거 체크
-		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger] <= m_CurrentTrackPosition)
+		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger].TriggerTime <= m_CurrentTrackPosition)
 		{
 			++m_iCurrentTrigger;
 		}
@@ -513,6 +513,32 @@ HRESULT CModel::Bind_Bone_Mesh(CModel* pOtherModel)
 	vector<class CMesh*>* pOtherMeshes = pOtherModel->Get_Meshs();
 
 	return S_OK;
+}
+
+void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
+{
+
+	for (auto& pair : *pEventTrigger)
+	{
+		for (auto EventTrigger : pair.second)
+		{
+			m_mapAnimationTrigger[pair.first].push_back({ EventTrigger, false });
+		}
+	}
+	BONENAME tBONENAME;
+	for (auto& pair : *_pEffectTrigger)
+	{
+		for (auto EffectTrigger : pair.second)
+		{
+			m_mapAnimationTrigger[pair.first].push_back({ EffectTrigger.TriggerTime, true });
+			strcpy_s(tBONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
+			m_mapTrigger_BoneNames[pair.first].push(tBONENAME);
+		}
+	}// 뼈이름은 그냥 순서대로 저장
+	for (auto& vecPair : m_mapAnimationTrigger)
+	{
+		sort(vecPair.second.begin(), vecPair.second.end(), [](DEFAULTTRIGGER a, DEFAULTTRIGGER b) {return a.TriggerTime < b.TriggerTime; });
+	}
 }
 
 HRESULT CModel::Ready_Meshes()
@@ -631,7 +657,7 @@ HRESULT CModel::Ready_Triggers(ifstream* LoadStream)
 	LoadStream->read((char*)&iNumAnimations, sizeof(_uint));
 	
 	_uint iAnimationIndex(0); // 애당 애니메이션 (구조 개선예정)
-	_double TriggerPos(0); // 트리거 위치
+	DEFAULTTRIGGER TriggerPos; // 트리거 위치
 	for (size_t i = 0; i < iNumAnimations; i++)
 	{
 		m_mapAnimationTrigger;
@@ -639,15 +665,19 @@ HRESULT CModel::Ready_Triggers(ifstream* LoadStream)
 		for (size_t i = 0; i < iNumTriggers; i++)
 		{
 			LoadStream->read((char*)&iAnimationIndex, sizeof(_uint));
-			LoadStream->read((char*)&TriggerPos, sizeof(_double));
+			LoadStream->read((char*)&TriggerPos.TriggerTime, sizeof(_double));
 			m_mapAnimationTrigger[iAnimationIndex].push_back(TriggerPos);
 		}
-		sort(m_mapAnimationTrigger[iAnimationIndex].begin(), m_mapAnimationTrigger[iAnimationIndex].end());
+		sort(m_mapAnimationTrigger[iAnimationIndex].begin(), m_mapAnimationTrigger[iAnimationIndex].end(), []
+		(DEFAULTTRIGGER a, DEFAULTTRIGGER b) 
+			{
+				return a.TriggerTime < b.TriggerTime;
+			});
 	}
 
 	for (_uint i = 0; i < m_iNumAnimations; i++)
 	{
-		m_mapAnimationTrigger[i].push_back(m_Animations[i]->Get_Duration());
+		m_mapAnimationTrigger[i].push_back({ m_Animations[i]->Get_Duration() , false });
 	}
 
 	return S_OK;

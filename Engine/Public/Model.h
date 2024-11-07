@@ -133,11 +133,14 @@ private:
 	_double							m_dSubTime = 0.;
 
 	//애니메이션 트리거 pair(<애니인덱스, 트리거가 들어간 벡터>
-	map<_uint, vector<_double>> m_mapAnimationTrigger;
+	map<_uint, vector<DEFAULTTRIGGER>> m_mapAnimationTrigger;
+	map<_uint, queue<BONENAME>> m_mapTrigger_BoneNames; // 이펙트 트리거가 발생할 뼈의 이름 -> 쓸때마다 여기서 복사해감
 	_uint						m_iCurrentTrigger = { 0 };
-	queue<_uint>				m_queueTrigger; // 실행해야 할 트리거, 이거 뽑을때 아래 어떤 트리거인지도 같이 받아와서 이펙트면 뼈이름도 받아오면 됨
-	queue<_bool>				m_queueTriggerDiv; // ? 이펙트 : 이벤트 -> 애니 세팅시마다 복사해와서 사용
+	queue<_uint>				m_queueTrigger;			// 실행해야 할 트리거, 이거 뽑을때 아래 어떤 트리거인지도 같이 받아와서 이펙트면 뼈이름도 받아오면 됨
+	queue<BONENAME>				m_pCurrentTriggerBoneName; // 현재 이벤트에서 사용할 예정인 뼈 이름들
 
+public:
+	void Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger); // 툴에서만 쓰는거고 클라에선 모델생성할떄 받는거 수정해서 받아야됨;
 
 
 public:

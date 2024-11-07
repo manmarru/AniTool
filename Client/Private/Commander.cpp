@@ -62,9 +62,9 @@ const vector<CBone*>* CCommander::Get_Bones()
 	return m_pContaining_Models.front()->Get_Bones();
 }
 
-void CCommander::Register_Trigger(ifstream* _pLoadStream)
+void CCommander::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
 {
-
+	m_pContaining_Models.front()->Register_Trigger(pEventTrigger, _pEffectTrigger);
 }
 
 void CCommander::Key_Input(_float _fTimeDelta)

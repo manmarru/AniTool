@@ -14,7 +14,7 @@ BEGIN(Client)
 class CParticle_Explosion final : public CPartObject
 {
 public:
-	typedef struct : public CPartObject::PARTOBJ_DESC
+	typedef struct EFFECT_DESC : public CPartObject::PARTOBJ_DESC
 	{
 		const _uint* pParentState = { nullptr };
 		const _float4x4* pSocketBoneMatrix = { nullptr };

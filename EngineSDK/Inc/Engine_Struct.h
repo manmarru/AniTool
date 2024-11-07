@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	typedef struct
+	typedef struct ENGINE_DESC
 	{
 		HWND			hWnd;
 		unsigned int	iWinSizeX;
@@ -10,7 +10,7 @@ namespace Engine
 		bool			isWindowsed;
 	}ENGINE_DESC;
 
-	typedef struct
+	typedef struct LIGHT_DESC
 	{
 		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_END };
 
@@ -24,12 +24,12 @@ namespace Engine
 		XMFLOAT4	vSpecular;
 	}LIGHT_DESC;
 
-	typedef struct
+	typedef struct MESH_MATERIAL
 	{
 		class CTexture*	pMaterialTextures[AI_TEXTURE_TYPE_MAX];
 	}MESH_MATERIAL;
 
-	typedef struct
+	typedef struct KEYFRAME
 	{
 		XMFLOAT3		vScale;
 		XMFLOAT4		vRotation;
@@ -37,7 +37,7 @@ namespace Engine
 		_double			TrackPosition;
 	}KEYFRAME;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXPOS
 	{
 		XMFLOAT3		vPosition;	
 
@@ -45,7 +45,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXPOS;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXPOINT
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT2		vPSize;
@@ -54,7 +54,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXPOINT;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXPOSTEX
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT2		vTexcoord;
@@ -63,7 +63,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];	
 	}VTXPOSTEX;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXCUBETEX
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vTexcoord;
@@ -72,7 +72,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXCUBETEX;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXNORTEX
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -82,7 +82,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXNORTEX;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXMESH
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -93,7 +93,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXMESH;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXANIMMESH
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -106,8 +106,8 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXANIMMESH;
 
-
-	typedef struct ENGINE_DLL
+	
+	typedef struct ENGINE_DLL VTXRECTINSTANCE
 	{
 		XMFLOAT4		vRight;
 		XMFLOAT4		vUp;
@@ -120,7 +120,7 @@ namespace Engine
 		
 	}VTXRECTINSTANCE;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VTXPOINTINSTANCE
 	{
 		XMFLOAT4		vRight;
 		XMFLOAT4		vUp;

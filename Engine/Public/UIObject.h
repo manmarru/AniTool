@@ -9,7 +9,7 @@ BEGIN(Engine)
 class ENGINE_DLL CUIObject abstract : public CGameObject
 {
 public:
-	typedef struct : public CGameObject::GAMEOBJECT_DESC
+	typedef struct UI_DESC : public CGameObject::GAMEOBJECT_DESC
 	{
 		_float	fX{}, fY{}, fSizeX{}, fSizeY{};
 	} UI_DESC;

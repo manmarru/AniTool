@@ -198,7 +198,7 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::SliderFloat("AnimationSpeed", m_pAnimationSpeed, 0, 2.f);
 	_float CurrentTrackPosition = (_float)*m_pCommander->Get_CurrentTrackPosition_ptr();
 	
-	ImGui::SliderFloat("Duration", &CurrentTrackPosition, 0, m_pCommander->Get_Duration());
+	ImGui::SliderFloat("Duration", &CurrentTrackPosition, 0, (float)m_pCommander->Get_Duration());
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
 	
@@ -209,7 +209,7 @@ void CLevel_GamePlay::Format_ImGUI()
 	int aniNum(0);
 	if (ImGui::InputInt("set_ani", &aniNum, 0, 0) && ImGui::IsItemDeactivatedAfterEdit())
 	{
-		m_pCommander->Set_Animation(min(aniNum, m_pCommander->Get_AnimationNum() - 1));
+		m_pCommander->Set_Animation((_uint)min(aniNum, m_pCommander->Get_AnimationNum() - 1));
 	}
 
 	if (ImGui::Button("-", ImVec2(50.f, 50.f)))
@@ -305,7 +305,7 @@ void CLevel_GamePlay::Format_SelectBone()
 void CLevel_GamePlay::Save_ChainndeAnimation()
 {
 	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
-	_int iSize(m_listAniChained.size());
+	_int iSize((_int)m_listAniChained.size());
 	SaveStream.write((const char*)(&iSize), sizeof(iSize));
 	
 	for (auto& ChainPair : m_listAniChained)
@@ -320,7 +320,7 @@ void CLevel_GamePlay::Save_ChainndeAnimation()
 void CLevel_GamePlay::Save_Triggers()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	_uint SizeofSave(m_mapAnimationSave.size());
+	_uint SizeofSave((_uint)m_mapAnimationSave.size());
 	_uint SizeofTrigger;
 
 	ofstream SaveStream("../Bin/==Export==/Triggers.dat", ios::out | ios::trunc | ios::binary);
@@ -356,7 +356,7 @@ void CLevel_GamePlay::Save_Triggers()
 	SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
 	for (auto& pair : Triggers)
 	{
-		SizeofTrigger = pair.second.size();
+		SizeofTrigger = (_uint)pair.second.size();
 		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint)); // 트리거 갯수 먼저 한번 저장하고
 
 		for (auto& Trigger : pair.second) // <시간, 이펙트여부>
@@ -393,7 +393,7 @@ void CLevel_GamePlay::Save_Triggers()
 void CLevel_GamePlay::Load_Triggers()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	_uint SizeofLoad(m_mapAnimationSave.size());
+	_uint SizeofLoad((_uint)m_mapAnimationSave.size());
 	_uint SizeofTrigger;
 	_uint iAnimationNum;
 	_double dTriggerPos;
@@ -444,6 +444,12 @@ void CLevel_GamePlay::Clear_SaveMap()
 		pair.second.clear();
 	}
 	m_mapAnimationSave.clear();
+
+	for (auto& pair : m_mapEffectTriggers)
+	{
+		pair.second.clear();
+	}
+	m_mapEffectTriggers.clear();
 }
 
 void CLevel_GamePlay::TriggerSetting_Event()

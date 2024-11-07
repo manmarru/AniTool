@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CTransform final : public CComponent
 {
 public:
-	typedef struct
+	typedef struct TRANSFORM_DESC
 	{
 		_float		fSpeedPerSec{}, fRotationPerSec{};
 	}TRANSFORM_DESC;

@@ -73,6 +73,7 @@ HRESULT CBoneFlag::Render()
     if (FAILED(m_pVIBufferCom->Render()))
         return E_FAIL;
 
+    return S_OK;
 }
 
 HRESULT CBoneFlag::Ready_Components()

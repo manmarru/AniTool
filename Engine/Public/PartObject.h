@@ -8,7 +8,7 @@ BEGIN(Engine)
 class ENGINE_DLL CPartObject abstract : public CGameObject
 {
 public:
-	typedef struct
+	typedef struct PARTOBJ_DESC
 	{
 		const _float4x4* pParentWorldMatrix = { nullptr };
 	}PARTOBJ_DESC;

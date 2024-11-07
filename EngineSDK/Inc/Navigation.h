@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CNavigation final : public CComponent
 {
 public:
-	typedef struct
+	typedef struct NAVIGATION_DESC
 	{
 		_int			iCurrentIndex = {-1};
 	}NAVIGATION_DESC;

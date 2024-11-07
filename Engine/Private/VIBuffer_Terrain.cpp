@@ -55,15 +55,15 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath
 	m_pVertexPositions = new _float3[m_iNumVertices];
 	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
 
-	for (size_t i = 0; i < m_iNumVerticesZ; i++)
+	for (_uint i = 0; i < m_iNumVerticesZ; i++)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX; j++)
+		for (_uint j = 0; j < m_iNumVerticesX; j++)
 		{
 			_uint			iIndex = i * m_iNumVerticesX + j;
 
-			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = _float3(j, 0.f/*(pPixel[iIndex] & 0x000000ff) / 10.0f*/, i);
+			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = _float3((float)j, 0.f/*(pPixel[iIndex] & 0x000000ff) / 10.0f*/, (float)i);
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
-			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f), i / (m_iNumVerticesZ - 1.f));
+			pVertices[iIndex].vTexcoord = _float2((float)j / (m_iNumVerticesX - 1.f), (float)i / (m_iNumVerticesZ - 1.f));
 		}
 	}
 #pragma endregion
@@ -75,9 +75,9 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath
 
 	_uint		iNumIndices = { 0 };
 
-	for (size_t i = 0; i < m_iNumVerticesZ - 1; i++)
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; i++)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX - 1; j++)
+		for (_uint j = 0; j < m_iNumVerticesX - 1; j++)
 		{
 			_uint			iIndex = i * m_iNumVerticesX + j;
 			

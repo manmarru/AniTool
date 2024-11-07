@@ -645,7 +645,7 @@ HRESULT CModel::Ready_Triggers(ifstream* LoadStream)
 		sort(m_mapAnimationTrigger[iAnimationIndex].begin(), m_mapAnimationTrigger[iAnimationIndex].end());
 	}
 
-	for (size_t i = 0; i < m_iNumAnimations; i++)
+	for (_uint i = 0; i < m_iNumAnimations; i++)
 	{
 		m_mapAnimationTrigger[i].push_back(m_Animations[i]->Get_Duration());
 	}

@@ -10,7 +10,7 @@ BEGIN(Engine)
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
-	typedef struct : public CTransform::TRANSFORM_DESC
+	typedef struct GAMEOBJECT_DESC : public CTransform::TRANSFORM_DESC
 	{
 		
 	} GAMEOBJECT_DESC;

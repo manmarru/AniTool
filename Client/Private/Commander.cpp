@@ -64,7 +64,7 @@ const vector<CBone*>* CCommander::Get_Bones()
 
 void CCommander::Register_Trigger(ifstream* _pLoadStream)
 {
-	_pLoadStream->read();
+
 }
 
 void CCommander::Key_Input(_float _fTimeDelta)

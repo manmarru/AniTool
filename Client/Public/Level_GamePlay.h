@@ -65,6 +65,8 @@ private:
 	void Save_Triggers();
 	void Load_Triggers();
 	void Save_ChainndeAnimation();
+	void Passing_Trigger();
+
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

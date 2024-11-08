@@ -227,6 +227,10 @@ namespace Engine
 	}DATA_BINSCENE;
 
 	
+
+	// ===============================TRIGGER===============================
+#pragma region TRIGGER
+
 	typedef struct DEFAULTTRIGGER
 	{
 		double TriggerTime = 0.0;
@@ -243,5 +247,7 @@ namespace Engine
 	{
 		char BoneName[MAX_PATH];
 	}BONENAME;
+
+#pragma endregion
 
 }

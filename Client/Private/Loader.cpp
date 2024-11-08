@@ -17,9 +17,12 @@
 #include "EditObj.h"
 #include "BoneFlag.h"
 
+#pragma region Effect
 #include "Particle_Snow.h"
 #include "Effect_Explosion.h"
 #include "Particle_Explosion.h"
+#include "TestStar.h"
+#pragma endregion
 
 #include "GameInstance.h"
 
@@ -143,11 +146,17 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
-
 	/* For. Prototype_Component_Texture_Particle */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Particle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
+	
+	/* For. Prototype_Component_Texture_TestStar */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TextureTag_TestStar,
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/flame/cookingFlame%d.png"), 7))))
+		return E_FAIL;
+
+	
 
 	/* For. Prototype_Component_Texture_Explosion */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Explosion"),
@@ -342,6 +351,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Explosion"),
 		CEffect_Explosion::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* For. Prototype_GameObject_Effect_TestStar */
+	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_TestStar,
+		CTestStar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 

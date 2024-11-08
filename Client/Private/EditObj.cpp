@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "EditObj.h"
 #include "GameInstance.h"
+#include "TestStar.h"
 
 CEditObj::CEditObj(ID3D11)
 	:CGameObject{_pDevice, _pContext}
@@ -44,6 +45,15 @@ void CEditObj::Priority_Update(_float fTimeDelta) {}
 _int CEditObj::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta * (*m_pAnimationSpeed));
+
+	const _float4x4* BoneMatrix;
+	if (m_pModelCom->Check_TriggerQueue(BoneMatrix))
+	{
+		BoneMatrix;
+		CTestStar::TESTSTAR_DESC desc;
+		desc.pSocketBoneMatrix = BoneMatrix;
+		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestStar, &desc);
+	}
 
 	return OBJ_NOEVENT;
 }

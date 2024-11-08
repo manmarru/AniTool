@@ -103,6 +103,9 @@
     <Filter Include="02.GameObjects\06.Effect\BoneFlag">
       <UniqueIdentifier>{3ada043c-7e7e-4f70-bd9a-087c8c397df8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\06.Effect\TestStar">
+      <UniqueIdentifier>{7a2433aa-a193-472d-87e3-4d142801c3e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="..\public\BoneFlag.h">
       <Filter>02.GameObjects\06.Effect\BoneFlag</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TestStar.h">
+      <Filter>02.GameObjects\06.Effect\TestStar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -325,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="..\private\BoneFlag.cpp">
       <Filter>02.GameObjects\06.Effect\BoneFlag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestStar.cpp">
+      <Filter>02.GameObjects\06.Effect\TestStar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

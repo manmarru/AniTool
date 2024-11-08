@@ -169,21 +169,22 @@ void CLevel_GamePlay::Format_ImGUI()
 	if (ImGui::Button("open_demo"))
 		m_bDemoStart = !m_bDemoStart;
 	ImGui::SameLine();
+	if (ImGui::Button("Chain"))
+		m_bShow_Chain = !m_bShow_Chain;
+	ImGui::SameLine();
+	if (ImGui::Button("Passing##__Trigger"))
+		Passing_Trigger();
+
 	if (ImGui::Button("TriggerSetting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
 	ImGui::SameLine();
-	if (ImGui::Button("Chain"))
-		m_bShow_Chain = !m_bShow_Chain;
-
 	if (ImGui::Button("Save_Triggers"))
 		Save_Triggers();
 	ImGui::SameLine();
 	if (ImGui::Button("Load_Triggers"))
 		Load_Triggers();
-
-
-
-	ImGui::NewLine();
+	if (ImGui::Button("Clear## Trigger"))
+		Clear_SaveMap();
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -394,7 +395,7 @@ void CLevel_GamePlay::Save_Triggers()
 void CLevel_GamePlay::Load_Triggers()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	_uint SizeofLoad((_uint)m_mapAnimationSave.size());
+	_uint SizeofLoad;
 	_uint SizeofTrigger;
 	_uint iAnimationNum;
 	_double dTriggerPos;
@@ -432,10 +433,24 @@ void CLevel_GamePlay::Load_Triggers()
 			}
 		}
 	}
-	sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+
+	for (auto& vecTrigger : m_mapAnimationSave)
+	{
+		sort(vecTrigger.second.begin(), vecTrigger.second.end());
+	}
+	for (auto& vecTrigger : m_mapEffectTriggers)
+	{
+		sort(vecTrigger.second.begin(), vecTrigger.second.end(), [](EFFECTTRIGGER Temp, EFFECTTRIGGER Src) {return Temp.TriggerTime < Src.TriggerTime; });
+	}
+
 
 	Loadstream.close();
 
+}
+
+void CLevel_GamePlay::Passing_Trigger()
+{
+	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers);
 }
 
 void CLevel_GamePlay::Clear_SaveMap()

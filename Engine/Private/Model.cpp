@@ -351,6 +351,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_iCurrentAnimIndex = m_iNextAnimIndex;
 			// 보간이 완료된 후 새로운 애니메이션 시작
 			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+
+			TriggerSetting();
 		}
 	}
 	else
@@ -361,7 +363,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 				i = 0;
 
 			m_bLinearFinished = true;
-		}		
+		}
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
 	}
 
@@ -559,6 +561,57 @@ void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_u
 	{
 		sort(vecPair.second.begin(), vecPair.second.end(), [](DEFAULTTRIGGER a, DEFAULTTRIGGER b) {return a.TriggerTime < b.TriggerTime; });
 	}
+}
+
+void CModel::TriggerSetting()
+{
+	//애니메이션이 전환되면서 트리거 세팅을 다시 해주는 시점
+	//currentanimationindex는 next로 바뀌어있어야 함
+
+	//기존 큐 비우기
+	queue<DEFAULTTRIGGER> emptyTrigger;
+	m_queueTrigger.swap(emptyTrigger);
+	queue<BONENAME> emptyNameTrigger;
+	m_queueTrigger_BoneName.swap(emptyNameTrigger);
+
+	// 해당 애니메이션의 트리거들과 이펙트트리거 뼈 이름들을 Queue에 넣어야 해
+
+	/*
+	queue<시간위치, 이펙트트리거인지> -> DEFAULTTRIGGER -> 몇번째인지는 객체 만드는 미래의 내가 알아서 해라;; 더 복잡하게는 못하겠다.
+	play_animation 이후에 check_queue 함수를 넣어서 현재 애니 시간위치가 queue.top의 원소의 시간위치를 넘어갔는지를 체크하는게 나을거같아.
+	check_queue(&매트릭스 포인터) 는 받은 포인터에 뼈 매트릭스 포인터를 넣어주고, 트리거 밟았는지를 bool 로 반환하자.
+	*/
+
+	if (m_mapAnimationTrigger.end() != m_mapAnimationTrigger.find(m_iNextAnimIndex))
+	{
+		int i(0);
+		for (auto Trigger : m_mapAnimationTrigger[m_iCurrentAnimIndex])
+		{
+			m_queueTrigger.push(Trigger);
+
+		
+		}
+		if (m_mapTrigger_BoneNames.end() != m_mapTrigger_BoneNames.find(m_iCurrentAnimIndex))
+			m_queueTrigger_BoneName = m_mapTrigger_BoneNames[m_iCurrentAnimIndex];
+	}
+}
+
+// 뺄 게 있으면 true니까 트리거 밟았으면 false 나올때까지 반복하면 됨
+_bool CModel::Check_TriggerQueue(const _float4x4* &BoneMatrix)
+{
+	if (m_queueTrigger.empty())
+		return false;
+
+	if (m_CurrentTrackPosition >= m_queueTrigger.front().TriggerTime)
+	{
+		if (m_queueTrigger.front().isEffectTrigger)
+		{
+			BoneMatrix = Get_Bone(m_queueTrigger_BoneName.front().BoneName)->Get_CombinedTransformationMatrix_Ptr();
+		}
+		return true;
+	}
+
+	return false;
 }
 
 HRESULT CModel::Ready_Meshes()

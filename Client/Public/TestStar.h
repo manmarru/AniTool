@@ -18,8 +18,8 @@ public:
     typedef struct TESTSTAR_DESC : GAMEOBJECT_DESC
     {
         const _float4x4* pSocketBoneMatrix = { nullptr };
-        _float fLifeTime;
-    }BONEFLAG_DESC;
+        _float fLifeTime = 1.f;
+    }TESTSTAR_DESC;
 
 private:
     CTestStar(ID3D11);

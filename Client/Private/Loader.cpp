@@ -22,6 +22,7 @@
 #include "Effect_Explosion.h"
 #include "Particle_Explosion.h"
 #include "TestStar.h"
+#include "TestSnow.h"
 #pragma endregion
 
 #include "GameInstance.h"
@@ -355,6 +356,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_GameObject_Effect_TestStar */
 	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_TestStar,
 		CTestStar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_TestSnow */
+	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_TestSnow,
+		CTestSnow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

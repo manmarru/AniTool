@@ -30,13 +30,13 @@ HRESULT CTestStar::Initialize(void* _pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    BONEFLAG_DESC* pDesc = static_cast<BONEFLAG_DESC*>(_pArg);
+    TESTSTAR_DESC* pDesc = static_cast<TESTSTAR_DESC*>(_pArg);
 
     m_pSocketMatrix = pDesc->pSocketBoneMatrix;
     //m_fLifeTime = pDesc->fLifeTime;
     m_fLifeTime = 1.f;
 
-    m_pTransformCom->Set_Scaled(0.5f, 0.5f, 0.5f);
+    m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
 
     return S_OK;
 }

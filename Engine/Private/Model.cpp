@@ -365,6 +365,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_bLinearFinished = true;
 		}
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
+		if (m_CurrentTrackPosition == 0)
+			TriggerSetting();
 	}
 
 	// 뼈대 변환 업데이트
@@ -607,6 +609,7 @@ _bool CModel::Check_TriggerQueue(const _float4x4* &BoneMatrix)
 		if (m_queueTrigger.front().isEffectTrigger)
 		{
 			BoneMatrix = Get_Bone(m_queueTrigger_BoneName.front().BoneName)->Get_CombinedTransformationMatrix_Ptr();
+			m_queueTrigger.pop();
 		}
 		return true;
 	}

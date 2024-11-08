@@ -42,6 +42,7 @@ private:
 private:
 	_bool m_bShadowObj = { false };
 	_float* m_pAnimationSpeed = { nullptr };
+	_uint TriggerCount = { 0 };
 
 private:
 	HRESULT Ready_Components(_wstring& _ModelTag);

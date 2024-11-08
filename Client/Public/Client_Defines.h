@@ -33,8 +33,10 @@ using namespace std;
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")
 #define GameTag_BoneFlag TEXT("Prototype_GameObject_BoneFlag")
 #define GameTag_TestStar TEXT("Prototype_GameObject_TestStar")
+#define GameTag_TestSnow TEXT("Prototype_GameObject_TestSnow")
 
 #define TextureTag_BoneFlag TEXT("Prototype_Component_Texture_BoneFlag")
 #define TextureTag_TestStar TEXT("Prototype_Component_Texture_TestStar")
+#define TextureTag_Snow TEXT("Prototype_Component_Texture_Particle")
 
 #define BufferTag_Rect TEXT("Prototype_Component_VIBuffer_Rect")

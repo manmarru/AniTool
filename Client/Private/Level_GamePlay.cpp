@@ -172,7 +172,7 @@ void CLevel_GamePlay::Format_ImGUI()
 	if (ImGui::Button("Chain"))
 		m_bShow_Chain = !m_bShow_Chain;
 	ImGui::SameLine();
-	if (ImGui::Button("Passing##__Trigger"))
+	if (ImGui::Button("Apply##__Trigger"))
 		Passing_Trigger();
 
 	if (ImGui::Button("TriggerSetting"))
@@ -215,12 +215,12 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	if (ImGui::Button("-", ImVec2(50.f, 50.f)))
 	{
-		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() - 1);
+		m_pCommander->Set_Animation((_uint)max(0, (_int)m_pCommander->Get_CurrentAnimationIndex() - 1));
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("+", ImVec2(50.f, 50.f)))
 	{
-		m_pCommander->Set_Animation(m_pCommander->Get_CurrentAnimationIndex() + 1);
+		m_pCommander->Set_Animation(min(m_pCommander->Get_AnimationNum() - 1, m_pCommander->Get_CurrentAnimationIndex() + 1));
 	}
 
 	ImGui::End();

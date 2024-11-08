@@ -149,6 +149,18 @@ PS_OUT PS_MAIN_Blend(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_NonBlend(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    Out.vColor = Sample(In.vTexcoord);
+    if (0 == Out.vColor.a)
+        discard;
+    Out.vColor.a = 1.f;
+	
+	return Out;
+}
+
 
 
 
@@ -190,4 +202,17 @@ technique11	DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_Blend();
     }
+
+    pass NonBlend// 3
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_NonBlend();
+    }
+
 }

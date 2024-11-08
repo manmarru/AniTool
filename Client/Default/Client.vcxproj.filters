@@ -106,6 +106,9 @@
     <Filter Include="02.GameObjects\06.Effect\TestStar">
       <UniqueIdentifier>{7a2433aa-a193-472d-87e3-4d142801c3e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\06.Effect\TestSnow">
+      <UniqueIdentifier>{dac29c0a-7bf6-41fb-83fc-0478464e2e33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="..\Public\TestStar.h">
       <Filter>02.GameObjects\06.Effect\TestStar</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\TestSnow.h">
+      <Filter>02.GameObjects\06.Effect\TestSnow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -334,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TestStar.cpp">
       <Filter>02.GameObjects\06.Effect\TestStar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\TestSnow.cpp">
+      <Filter>02.GameObjects\06.Effect\TestSnow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

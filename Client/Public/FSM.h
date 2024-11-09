@@ -22,8 +22,10 @@ public:
 
 public:
     void Register_AnimationIndex(OBJ_STATE _eState, _uint _AnimationIndex, ANITYPE _AniType);
+    void Setup_Chains(ifstream* _LoadStream);
     void Set_State(OBJ_STATE _eState);
     void SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType);
+    void SetUp_Animation(string _strChain);
     _bool Play_Animation(_float _fTimeDelta);
     _bool Play_TriggerAnimation(_float _fTimeDelta);
     void Set_RootAnim(const char* _RootName);
@@ -40,10 +42,12 @@ private:
     _bool       m_bTriggerObj = { false };
     const char* m_RootName;
     _matrix     m_RootMatrix_Inverse = {};
+    string      m_strCurrentChain;
 
 private: //컴포넌트 + 컨테이너
     CModel* m_pModelCom = { nullptr };
     map<OBJ_STATE, pair<_uint, ANITYPE>> m_mapAnimationIndex;
+    map<string, CHAIN_For_Map> m_mapChainnedAnimation;
 
 public:
     static CFSM* Create(CModel* _pModel);

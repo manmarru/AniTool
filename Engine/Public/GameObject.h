@@ -52,7 +52,7 @@ public:
 	virtual _double Get_CurrentTrackPosition() { return (_double)0; };
 	virtual _double* Get_CurrentTrackPosition_ptr() { return nullptr; }
 	virtual void Register_ModelCom(list<class CModel*>& ModelList);
-
+	virtual void* Get_FSM() { return nullptr; }
 
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };

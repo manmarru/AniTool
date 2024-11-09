@@ -35,17 +35,25 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
 
+public:
+	virtual void* Get_FSM() { return m_pFSM; }
+
 private:
-	class CShader* m_pShaderCom = { nullptr };
-	class CModel* m_pModelCom = { nullptr };
+	class CShader*	m_pShaderCom = { nullptr };
+	class CModel*	m_pModelCom = { nullptr };
+	class CFSM*		m_pFSM = { nullptr };
 
 private:
 	_bool m_bShadowObj = { false };
 	_float* m_pAnimationSpeed = { nullptr };
 	_uint TriggerCount = { 0 };
 
+
+
 private:
 	HRESULT Ready_Components(_wstring& _ModelTag);
+	HRESULT Ready_FSM();
+
 
 public:
 	static CEditObj* Create(ID3D11);

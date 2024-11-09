@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "TestStar.h"
 #include "TestSnow.h"
+#include "FSM.h"
 
 CEditObj::CEditObj(ID3D11)
 	:CGameObject{_pDevice, _pContext}
@@ -36,6 +37,9 @@ HRESULT CEditObj::Initialize(void* _pArg)
 	if (FAILED(Ready_Components(pDesc->ModelTag)))
 		return E_FAIL;
 
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
+
 	m_pAnimationSpeed = pDesc->pAnimationSpeed;
 
 	return S_OK;
@@ -45,9 +49,12 @@ void CEditObj::Priority_Update(_float fTimeDelta) {}
 
 _int CEditObj::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta * (*m_pAnimationSpeed));
+	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
+	//m_pModelCom->Play_Animation(fTimeDelta * (*m_pAnimationSpeed));
 
-	const _float4x4* BoneMatrix;
+#pragma region 요호 이펙트트리거(주석)
+
+	/*const _float4x4* BoneMatrix;
 	if (m_pModelCom->Check_TriggerQueue(BoneMatrix))
 	{
 		switch (TriggerCount)
@@ -67,11 +74,12 @@ _int CEditObj::Update(_float fTimeDelta)
 			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestSnow, &desc);
 			TriggerCount = 0;
 		}
-			break;
+		break;
 		default:
 			break;
 		}
-	}
+	}*/
+#pragma endregion
 
 	return OBJ_NOEVENT;
 }
@@ -165,6 +173,17 @@ HRESULT CEditObj::Ready_Components(_wstring& _ModelTag)
 	return S_OK;
 }
 
+HRESULT CEditObj::Ready_FSM()
+{
+	m_pFSM = CFSM::Create(m_pModelCom);
+	if (nullptr == m_pFSM)
+		return E_FAIL;
+
+	//애니 등록 할 필요 없다. 체인거는거만 테스틀할거임
+
+	return S_OK;
+}
+
 CEditObj* CEditObj::Create(ID3D11)
 {
 	CEditObj* pInstance = new CEditObj(_pDevice, _pContext);
@@ -195,4 +214,5 @@ void CEditObj::Free()
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pFSM);
 }

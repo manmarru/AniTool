@@ -22,15 +22,17 @@ _bool CFSM::Update(_float _fTimeDelta)
 {
     if (m_bTriggerObj? Play_TriggerAnimation(_fTimeDelta) : Play_Animation(_fTimeDelta))
     {
-        if (m_eCurrentAniType == ANI_BACKTOIDLE)
+        if (ANI_BACKTOIDLE == m_eCurrentAniType)
             Set_State(OBJSTATE_IDLE);
-
+        else if (ANI_CHAIN == m_eCurrentAniType)
+            SetUp_Animation(m_mapChainnedAnimation[m_strCurrentChain].After, ANI_STOP);
         return true;
     }
 
     return false;
 }
 
+//어린 시절 코드의 잔재
 void CFSM::Late_Update()
 {
 }
@@ -38,6 +40,26 @@ void CFSM::Late_Update()
 void CFSM::Register_AnimationIndex(OBJ_STATE _eState, _uint _AnimationIndex, ANITYPE _eAniType)
 {
     m_mapAnimationIndex[_eState] = pair<_uint, ANITYPE>(_AnimationIndex, _eAniType);
+}
+
+void CFSM::Setup_Chains(ifstream* _LoadStream)
+{
+    
+    _int iSize;
+    _LoadStream->read((char*)&iSize, sizeof(_int));
+    CHAIN LoadChain;
+    CHAIN_For_Map LoadChain_For_Map;
+    string ChainTag;
+    for (size_t i = 0; i < iSize; i++)
+    {
+        _LoadStream->read((char*)&LoadChain, sizeof(CHAIN));
+        ChainTag = string(LoadChain.ChainTag);
+        ChainTag.shrink_to_fit();
+        LoadChain_For_Map.Before = LoadChain.Before;
+        LoadChain_For_Map.After = LoadChain.After;
+        m_mapChainnedAnimation.emplace(ChainTag, LoadChain_For_Map);// = LoadChain_For_Map;
+    }
+                
 }
 
 //SetUP_Animation이랑 같은거임
@@ -52,12 +74,18 @@ void CFSM::Set_State(OBJ_STATE _eState)
     }
 }
 
-//주의! m_eState를 등록해주지 않는다!
+//주의! m_eState를 등록해주지 않는다! 진짜 강제로 애니만 바뀜!
 void CFSM::SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType)
 {
     m_pModelCom->Set_NextAnimIndex(_iAnimationIndex, _AniType == ANI_LOOP);
     m_iCurrentIndex = _iAnimationIndex;
     m_eCurrentAniType = _AniType;
+}
+
+void CFSM::SetUp_Animation(string _strChain)
+{
+    SetUp_Animation(m_mapChainnedAnimation[_strChain].Before, ANI_CHAIN);
+    m_strCurrentChain = _strChain;
 }
 
 _bool CFSM::Play_Animation(_float _fTimeDelta)

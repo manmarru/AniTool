@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Commander.h"
 #include "GameInstance.h"
+#include "FSM.h"
 
 CCommander::CCommander()
 {
@@ -10,18 +11,20 @@ CCommander::~CCommander()
 {
 }
 
-void CCommander::Register(CGameObject* pObj)
+void CCommander::Register(CGameObject* _pObj)
 {
 	m_pContaining_Models.clear();
 
-	m_pUnit = pObj;
+	m_pUnit = _pObj;
 
 	m_pUnit->Register_ModelCom(m_pContaining_Models);
+
+	m_pFSM = static_cast<CFSM*>(m_pUnit->Get_FSM());
 }
 
-void CCommander::Set_CurrentTrackPosition(_double dPosition)
+void CCommander::Set_CurrentTrackPosition(_double _dPosition)
 {
-	m_pUnit->Set_CurrentTrackPosition(dPosition);
+	m_pUnit->Set_CurrentTrackPosition(_dPosition);
 }
 
 _double CCommander::Get_CurrentTrackPosition()
@@ -52,6 +55,11 @@ void CCommander::Set_Animation(_uint _iAnimationIndex)
 	}
 }
 
+void CCommander::Set_Animation(string _strChain)
+{
+	m_pFSM->SetUp_Animation(_strChain);
+}
+
 _uint CCommander::Get_AnimationNum()
 {
 	return m_pContaining_Models.front()->Get_AnimationNum();
@@ -62,9 +70,14 @@ const vector<CBone*>* CCommander::Get_Bones()
 	return m_pContaining_Models.front()->Get_Bones();
 }
 
-void CCommander::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
+void CCommander::Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
 {
-	m_pContaining_Models.front()->Register_Trigger(pEventTrigger, _pEffectTrigger);
+	m_pContaining_Models.front()->Register_Trigger(_pEventTrigger, _pEffectTrigger);
+}
+
+void CCommander::Setup_Chains(ifstream* _LoadStream)
+{
+	m_pFSM->Setup_Chains(_LoadStream);
 }
 
 void CCommander::Key_Input(_float _fTimeDelta)

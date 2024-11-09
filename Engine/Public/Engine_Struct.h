@@ -248,6 +248,19 @@ namespace Engine
 		char BoneName[MAX_PATH];
 	}BONENAME;
 
+	typedef struct CHAIN
+	{
+		_uint Before;
+		_uint After;
+		char ChainTag[32];
+	};
+
+	typedef struct CHAIN_For_Map//맵에는 chaintag가 키로 들어갈거라서 없음
+	{
+		_uint Before;
+		_uint After;
+	};
+
 #pragma endregion
 
 }

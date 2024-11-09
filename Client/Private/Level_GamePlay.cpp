@@ -138,6 +138,7 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	CEditObj::EDITOBJ_DESC Desc;
 	Desc.isShadowObj = true;
 	Desc.ModelTag = ModelTag_Syar;
+	//Desc.ModelTag = ModelTag_PlayerBody;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	
@@ -174,6 +175,7 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::SameLine();
 	if (ImGui::Button("Apply##__Trigger"))
 		Passing_Trigger();
+
 
 	if (ImGui::Button("TriggerSetting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
@@ -303,19 +305,116 @@ void CLevel_GamePlay::Format_SelectBone()
 	ImGui::End();
 }
 
-void CLevel_GamePlay::Save_ChainndeAnimation()
+void CLevel_GamePlay::Format_AniChain()
 {
-	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
-	_int iSize((_int)m_listAniChained.size());
-	SaveStream.write((const char*)(&iSize), sizeof(iSize));
-	
-	for (auto& ChainPair : m_listAniChained)
+	ImGui::Begin("Animation_Chain");
+	if (ImGui::Button("Save"))
 	{
-		SaveStream.write((const char*)(&ChainPair.first), sizeof(_int));
-		SaveStream.write((const char*)(&ChainPair.second), sizeof(_int));
+		Save_ChainnedAnimation();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load"))
+	{
+		Load_ChainnedAnimation();
 	}
 
-	SaveStream.close();
+	if (ImGui::Button("Apply##Chain"))
+	{
+		ifstream Loadstream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::in);
+		m_pCommander->Setup_Chains(&Loadstream);
+		Loadstream.close();
+		//fsm에 적용시키기
+	}
+	ImGui::InputInt2("a -> b", (int*) & m_tChain.Before);
+	ImGui::InputText("Tag##Chain", m_tChain.ChainTag, sizeof(CHAIN::ChainTag));
+
+	if (ImGui::Button("Chain!"))
+	{
+		m_listAniChained.push_back(m_tChain);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Clear##Chain"))
+	{
+		m_listAniChained.clear();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Preview"))
+	{
+		m_pCommander->Set_Animation(m_tChain.ChainTag);
+	}
+
+	ImGui::NewLine();
+
+
+
+	ImGui::BeginGroup();
+	ImGui::BeginChild("list");
+	char buffer[128];
+	int i(0);
+	ImGui::BeginTable("list", 2);
+	//for (auto& pair : m_listAniChained)
+	for(auto pair = m_listAniChained.begin(); pair != m_listAniChained.end(); ++pair)
+	{
+		ImGui::TableNextColumn();
+		sprintf_s(buffer, "%s : %u -> %u##%d", (*pair).ChainTag, (*pair).Before, (*pair).After, i);
+		if (ImGui::Button(buffer))
+		{
+			m_SelectedChain = pair;
+			m_bShow_ChainPopup = true;
+		}
+		++i;
+	}
+	ImGui::EndTable();
+	ImGui::EndChild();
+	ImGui::EndGroup();
+	if (m_bShow_ChainPopup) 
+	{
+		ImGui::OpenPopup("Fix Chain?");
+	}
+	if (ImGui::BeginPopupModal("Fix Chain?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+
+		ImGui::Text("Before : % u -> % u\nAfter : % u -> % u", (*m_SelectedChain).Before, (*m_SelectedChain).After, m_tChain.Before, m_tChain.After);
+
+		if (ImGui::Button("OK##Chain"))
+		{
+			(*m_SelectedChain).Before = m_tChain.Before;
+			(*m_SelectedChain).After = m_tChain.After;
+			m_bShow_ChainPopup = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel##Chain"))
+		{
+			m_bShow_ChainPopup = false;
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Remove##Chain"))
+		{
+			m_listAniChained.erase(m_SelectedChain);
+			m_bShow_ChainPopup = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+
+	ImGui::End();
+}
+
+void CLevel_GamePlay::Clear_SaveMap()
+{
+	for (auto& pair : m_mapAnimationSave)
+	{
+		pair.second.clear();
+	}
+	m_mapAnimationSave.clear();
+
+	for (auto& pair : m_mapEffectTriggers)
+	{
+		pair.second.clear();
+	}
+	m_mapEffectTriggers.clear();
 }
 
 void CLevel_GamePlay::Save_Triggers()
@@ -448,24 +547,46 @@ void CLevel_GamePlay::Load_Triggers()
 
 }
 
+void CLevel_GamePlay::Save_ChainnedAnimation()
+{
+	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
+	_int iSize((_int)m_listAniChained.size());
+	SaveStream.write((const char*)(&iSize), sizeof(iSize));
+	
+	for (auto& ChainPair : m_listAniChained)
+	{
+		SaveStream.write((const char*)(&ChainPair), sizeof(CHAIN));
+	}
+
+	SaveStream.close();
+}
+
+void CLevel_GamePlay::Load_ChainnedAnimation()
+{
+	ifstream LoadStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::in);
+
+	m_listAniChained.clear(); // 로드전에 비우기
+
+	_int iSize(0);
+	CHAIN tLoadChain;
+	LoadStream.read((char*)&iSize, sizeof(_int));
+	for (size_t i = 0; i < iSize; i++)
+	{
+		LoadStream.read((char*)&tLoadChain, sizeof(CHAIN));
+		m_listAniChained.push_back(tLoadChain);
+	}
+	LoadStream.close();
+	
+}
+
 void CLevel_GamePlay::Passing_Trigger()
 {
 	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers);
 }
 
-void CLevel_GamePlay::Clear_SaveMap()
+void CLevel_GamePlay::Passing_Chain()
 {
-	for (auto& pair : m_mapAnimationSave)
-	{
-		pair.second.clear();
-	}
-	m_mapAnimationSave.clear();
 
-	for (auto& pair : m_mapEffectTriggers)
-	{
-		pair.second.clear();
-	}
-	m_mapEffectTriggers.clear();
 }
 
 void CLevel_GamePlay::TriggerSetting_Event()
@@ -521,45 +642,6 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::EndTable();
 
 
-}
-
-void CLevel_GamePlay::Format_AniChain()
-{
-	ImGui::Begin("Animation_Chain");
-	if (ImGui::Button("Save"))
-	{
-		Save_ChainndeAnimation();
-	}
-	ImGui::InputInt2("a -> b", &m_stlChain.first);
-
-	if (ImGui::Button("Chain!"))
-	{
-		m_listAniChained.push_back(m_stlChain);
-	}
-	ImGui::NewLine();
-
-	ImGui::BeginGroup();
-	ImGui::BeginChild("list");
-	char buffer[16];
-	int i(0);
-	ImGui::BeginTable("list", 2);
-	for (auto& pair : m_listAniChained)
-	{
-		ImGui::TableNextColumn();
-		sprintf_s(buffer, "%d -> %d##%d", pair.first, pair.second, i);
-		if (ImGui::Button(buffer))
-		{
-			pair.first = m_stlChain.first;
-			pair.second = m_stlChain.second;
-		}
-		++i;
-	}
-	ImGui::EndTable();
-	ImGui::EndChild();
-	ImGui::EndGroup();
-
-
-	ImGui::End();
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

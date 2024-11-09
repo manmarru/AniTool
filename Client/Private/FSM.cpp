@@ -48,7 +48,7 @@ void CFSM::Setup_Chains(ifstream* _LoadStream)
     _int iSize;
     _LoadStream->read((char*)&iSize, sizeof(_int));
     CHAIN LoadChain;
-    CHAIN_For_Map LoadChain_For_Map;
+    CHAIN_FOR_MAP LoadChain_For_Map;
     string ChainTag;
     for (size_t i = 0; i < iSize; i++)
     {

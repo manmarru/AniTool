@@ -243,6 +243,12 @@ namespace Engine
 		char BoneName[MAX_PATH];
 	}EFFECTTRIGGER;
 
+	typedef struct SPEEDTRIGGER
+	{
+		double TriggerTime;
+		float AnimationSpeed = 1.f;
+	}SPEEDTRIGGER;
+
 	typedef struct BONENAME
 	{
 		char BoneName[MAX_PATH];
@@ -253,13 +259,13 @@ namespace Engine
 		_uint Before;
 		_uint After;
 		char ChainTag[32];
-	};
+	}CHAIN;
 
-	typedef struct CHAIN_For_Map//맵에는 chaintag가 키로 들어갈거라서 없음
+	typedef struct CHAIN_FOR_MAP//맵에는 chaintag가 키로 들어갈거라서 없음
 	{
 		_uint Before;
 		_uint After;
-	};
+	}CHAIN_FOR_MAP;
 
 #pragma endregion
 

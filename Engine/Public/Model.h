@@ -136,12 +136,14 @@ private:
 	_float							m_fPlaySpeed = 1.f;
 	_double							m_dSubTime = 0.;
 
-	//애니메이션 트리거 pair(<애니인덱스, 트리거가 들어간 벡터>
-	map<_uint, vector<DEFAULTTRIGGER>> m_mapAnimationTrigger;
-	map<_uint, queue<BONENAME>> m_mapTrigger_BoneNames; // 이펙트 트리거가 발생할 뼈의 이름 -> 쓸때마다 여기서 복사해감
+	//애니메이션 트리거
+	map<_uint, vector<DEFAULTTRIGGER>> m_mapAnimationTrigger;	// 얘도 큐로 바꾸고싶긴 한데....문제 없나?
+	map<_uint, queue<BONENAME>> m_mapTrigger_BoneNames;			// 이펙트 트리거가 발생할 뼈의 이름 -> 쓸때마다 여기서 복사해감
+	map<_uint, queue<SPEEDTRIGGER>>	m_mapTrigger_Speed;			// 스피드트리거
 	_uint						m_iCurrentTrigger = { 0 };
-	queue<DEFAULTTRIGGER>		m_queueTrigger;			// 실행해야 할 트리거, 뼈이름 큐는 동시에 세팅해준다.
-	queue<BONENAME>				m_queueTrigger_BoneName; // 현재 이벤트에서 사용할 예정인 뼈 이름들
+	queue<DEFAULTTRIGGER>		m_queueTrigger;					// 실행해야 할 트리거, 뼈이름 큐는 동시에 세팅해준다.
+	queue<BONENAME>				m_queueTrigger_BoneName;		// 현재 이벤트에서 사용할 예정인 뼈 이름들
+	queue<SPEEDTRIGGER>			m_queueTrigger_Speed;			// 스피드트리거 -> 얜 밖에서 확인도 못하고 걍 내부에서 다 처리될거임
 
 	//몇개 건너뛰면 되는지(뼈 통합하면서 중복업뎃을 막는 상황의 경우
 	_int					m_iNumSkip = { 0 };

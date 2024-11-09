@@ -47,7 +47,7 @@ private:
 private: //컴포넌트 + 컨테이너
     CModel* m_pModelCom = { nullptr };
     map<OBJ_STATE, pair<_uint, ANITYPE>> m_mapAnimationIndex;
-    map<string, CHAIN_For_Map> m_mapChainnedAnimation;
+    map<string, CHAIN_FOR_MAP> m_mapChainnedAnimation;
 
 public:
     static CFSM* Create(CModel* _pModel);

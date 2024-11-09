@@ -37,14 +37,17 @@ private:
 	_bool m_bDemoStart = { false };
 	_bool m_bEffectTrigger = { false };
 	_bool m_bShow_TriggerSetting = { false };
+	_bool m_bShow_Speed = { false };
+
 	_bool m_bShow_BoneFlags = { false };
 	_bool m_bShow_Chain = { false };
 	_bool m_bShow_ChainPopup = { false };
 
 	_float* m_pAnimationSpeed = { nullptr };
 	CCommander* m_pCommander = { nullptr };
-	map<_uint, vector<_double>> m_mapAnimationSave; // 애니번호, 시간 순서쌍의 트리거
-	map<_uint, vector<EFFECTTRIGGER>> m_mapEffectTriggers; // 이펙트트리거 : 애니번호 -> 시간, 뼈이름
+	map<_uint, vector<_double>>			m_mapAnimationSave;	// 애니번호, 시간 순서쌍의 트리거
+	map<_uint, vector<EFFECTTRIGGER>>	m_mapEffectTriggers;// 이펙트트리거 : 애니번호 -> 시간, 뼈이름
+	map<_uint, vector<SPEEDTRIGGER>>	m_mapSpeedTriggers;	// 스피드트리거 : 애니번호 -> 시간, 스피드 (가급적이면 1로 돌아오는 포인트도 찍어주자.)
 	vector<class CBoneFlag*> m_vecFlags;
 	list<CHAIN> m_listAniChained;
 	CHAIN m_tChain = { 0,0 };
@@ -61,6 +64,7 @@ private:
 
 	void TriggerSetting_Event();
 	void TriggerSetting_Effect();
+	void TriggerSetting_Speed();
 
 	void Clear_SaveMap();
 	void Save_Triggers();
@@ -68,7 +72,6 @@ private:
 	void Save_ChainnedAnimation();
 	void Load_ChainnedAnimation();
 	void Passing_Trigger(); // 파싱해서 editobj에 적용하기
-	void Passing_Chain(); // 체인 적용하기
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

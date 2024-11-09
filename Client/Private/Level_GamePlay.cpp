@@ -169,24 +169,15 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	if (ImGui::Button("open_demo"))
 		m_bDemoStart = !m_bDemoStart;
-	ImGui::SameLine();
+
 	if (ImGui::Button("Chain"))
 		m_bShow_Chain = !m_bShow_Chain;
 	ImGui::SameLine();
-	if (ImGui::Button("Apply##__Trigger"))
-		Passing_Trigger();
-
-
-	if (ImGui::Button("TriggerSetting"))
+	if (ImGui::Button("Trigger##Setting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
 	ImGui::SameLine();
-	if (ImGui::Button("Save_Triggers"))
-		Save_Triggers();
-	ImGui::SameLine();
-	if (ImGui::Button("Load_Triggers"))
-		Load_Triggers();
-	if (ImGui::Button("Clear## Trigger"))
-		Clear_SaveMap();
+	if (ImGui::Button("Speed##Setting"))
+		m_bShow_Speed = true;
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -235,18 +226,35 @@ void CLevel_GamePlay::Format_Trigger()
 
 	ImGui::NewLine();
 
-	if (ImGui::BeginTabItem("Event"))
+	if (ImGui::BeginTabItem("Event##Trigger"))
 	{
 		TriggerSetting_Event();
 
 		ImGui::EndTabItem();
 	}
-	if (ImGui::BeginTabItem("Effect"))
+	if (ImGui::BeginTabItem("Effect##Trigger"))
 	{
 		TriggerSetting_Effect();
 
 		ImGui::EndTabItem();
 	}
+	if (ImGui::BeginTabItem("Data##Trigger"))
+	{
+		if (ImGui::Button("Save##Triggers", ImVec2(50.f, 50.f)))
+			Save_Triggers();
+		ImGui::NewLine();
+		if (ImGui::Button("Load##Triggers", ImVec2(50.f, 50.f)))
+			Load_Triggers();
+		ImGui::NewLine();
+		if (ImGui::Button("Clear##Trigger", ImVec2(50.f, 50.f)))
+			Clear_SaveMap();
+		ImGui::NewLine();
+		if (ImGui::Button("Apply##Trigger", ImVec2(50.f, 50.f)))
+			Passing_Trigger();
+
+		ImGui::EndTabItem();
+	}
+
 
 	ImGui::EndTabBar();
 
@@ -547,6 +555,11 @@ void CLevel_GamePlay::Load_Triggers()
 
 }
 
+void CLevel_GamePlay::TriggerSetting_Speed()
+{
+
+}
+
 void CLevel_GamePlay::Save_ChainnedAnimation()
 {
 	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
@@ -582,11 +595,6 @@ void CLevel_GamePlay::Load_ChainnedAnimation()
 void CLevel_GamePlay::Passing_Trigger()
 {
 	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers);
-}
-
-void CLevel_GamePlay::Passing_Chain()
-{
-
 }
 
 void CLevel_GamePlay::TriggerSetting_Event()

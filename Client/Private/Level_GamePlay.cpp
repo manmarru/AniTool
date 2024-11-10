@@ -332,16 +332,17 @@ void CLevel_GamePlay::Format_AniChain()
 	{
 		Load_ChainnedAnimation();
 	}
-
-	if (ImGui::Button("Apply##Chain"))
+	ImGui::SameLine();
+	if (ImGui::Button("Apply_Save##Chain"))
 	{
 		ifstream Loadstream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::in);
 		m_pCommander->Setup_Chains(&Loadstream);
 		Loadstream.close();
-		//fsm에 적용시키기
 	}
 	ImGui::InputInt2("a -> b", (int*) & m_tChain.Before);
 	ImGui::InputText("Tag##Chain", m_tChain.ChainTag, sizeof(CHAIN::ChainTag));
+
+	ImGui::Checkbox("Lerp", &m_tChain.bLerp);
 
 	if (ImGui::Button("Chain!"))
 	{
@@ -352,7 +353,8 @@ void CLevel_GamePlay::Format_AniChain()
 	{
 		m_listAniChained.clear();
 	}
-	ImGui::SameLine();
+
+
 	if (ImGui::Button("Preview"))
 	{
 		m_pCommander->Set_Animation(m_tChain.ChainTag);
@@ -371,7 +373,7 @@ void CLevel_GamePlay::Format_AniChain()
 	for(auto pair = m_listAniChained.begin(); pair != m_listAniChained.end(); ++pair)
 	{
 		ImGui::TableNextColumn();
-		sprintf_s(buffer, "%s : %u -> %u##%d", (*pair).ChainTag, (*pair).Before, (*pair).After, i);
+		sprintf_s(buffer, "%s : %u -> %u [%s]##%d", (*pair).ChainTag, (*pair).Before, (*pair).After, (*pair).bLerp ? "true" : "false", i);
 		if (ImGui::Button(buffer))
 		{
 			m_SelectedChain = pair;

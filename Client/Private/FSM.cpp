@@ -25,7 +25,10 @@ _bool CFSM::Update(_float _fTimeDelta)
         if (ANI_BACKTOIDLE == m_eCurrentAniType)
             Set_State(OBJSTATE_IDLE);
         else if (ANI_CHAIN == m_eCurrentAniType)
-            SetUp_Animation(m_mapChainnedAnimation[m_strCurrentChain].After, ANI_STOP);
+        {
+            SetUp_Animation(m_mapChainnedAnimation[m_strCurrentChain].After, ANI_STOP, m_mapChainnedAnimation[m_strCurrentChain].bLerp);
+
+        }
         return true;
     }
 
@@ -57,6 +60,7 @@ void CFSM::Setup_Chains(ifstream* _LoadStream)
         ChainTag.shrink_to_fit();
         LoadChain_For_Map.Before = LoadChain.Before;
         LoadChain_For_Map.After = LoadChain.After;
+        LoadChain_For_Map.bLerp = LoadChain.bLerp;
         m_mapChainnedAnimation.emplace(ChainTag, LoadChain_For_Map);// = LoadChain_For_Map;
     }
                 
@@ -75,9 +79,9 @@ void CFSM::Set_State(OBJ_STATE _eState)
 }
 
 //주의! m_eState를 등록해주지 않는다! 진짜 강제로 애니만 바뀜!
-void CFSM::SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType)
+void CFSM::SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType, _bool bLerp)
 {
-    m_pModelCom->Set_NextAnimIndex(_iAnimationIndex, _AniType == ANI_LOOP);
+    m_pModelCom->Set_NextAnimIndex(_iAnimationIndex, _AniType == ANI_LOOP, bLerp ? 0.2f : 0.f);
     m_iCurrentIndex = _iAnimationIndex;
     m_eCurrentAniType = _AniType;
 }

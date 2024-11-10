@@ -259,6 +259,7 @@ namespace Engine
 		_uint Before;
 		_uint After;
 		char ChainTag[32];
+		_bool bLerp = false;
 	}CHAIN;
 
 	typedef struct CHAIN_FOR_MAP//맵에는 chaintag가 키로 들어갈거라서 없음

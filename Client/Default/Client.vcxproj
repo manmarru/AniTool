@@ -171,8 +171,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ImGui\dirent.h" />
     <ClInclude Include="..\ImGui\imconfig.h" />
     <ClInclude Include="..\ImGui\imgui.h" />
+    <ClInclude Include="..\ImGui\ImGuiFileDialog.h" />
+    <ClInclude Include="..\ImGui\ImGuiFileDialogConfig.h" />
     <ClInclude Include="..\ImGui\imgui_impl_dx11.h" />
     <ClInclude Include="..\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="..\ImGui\imgui_internal.h" />
@@ -221,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ImGui\imgui.cpp" />
+    <ClCompile Include="..\ImGui\ImGuiFileDialog.cpp" />
     <ClCompile Include="..\ImGui\imgui_demo.cpp" />
     <ClCompile Include="..\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\ImGui\imgui_impl_dx11.cpp" />

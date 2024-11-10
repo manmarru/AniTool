@@ -34,7 +34,7 @@ public:
 	void Set_Animation(string _strChain);
 	_uint Get_AnimationNum();
 	const vector<CBone*>* Get_Bones();
-	void Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger);
+	void Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger);
 	void Setup_Chains(ifstream* _LoadStream);
 
 

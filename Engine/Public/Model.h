@@ -149,7 +149,7 @@ private:
 	_int					m_iNumSkip = { 0 };
 
 public:
-	void Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger); // 툴에서만 쓰는거고 클라에선 모델생성할떄 받는거 수정해서 받아야됨;
+	void Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger); // 툴에서만 쓰는거고 클라에선 모델생성할떄 받는거 수정해서 받아야됨;
 	_bool Check_TriggerQueue(const _float4x4*& BoneMatrix);
 
 private:

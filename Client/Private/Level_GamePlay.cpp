@@ -31,8 +31,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_EditObj()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player()))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Player()))
+	//	return E_FAIL;
 
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
@@ -55,6 +55,9 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	Format_ImGUI();
+
+	//Imgui_Dialogue();
+
 
 	if (m_bDemoStart)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
@@ -226,16 +229,20 @@ void CLevel_GamePlay::Format_Trigger()
 
 	ImGui::NewLine();
 
+
 	if (ImGui::BeginTabItem("Event##Trigger"))
 	{
 		TriggerSetting_Event();
-
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Effect##Trigger"))
 	{
 		TriggerSetting_Effect();
-
+		ImGui::EndTabItem();
+	}
+	if (ImGui::BeginTabItem("Speed##Trigger"))
+	{
+		TriggerSetting_Speed();
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Data##Trigger"))
@@ -410,6 +417,31 @@ void CLevel_GamePlay::Format_AniChain()
 	ImGui::End();
 }
 
+void CLevel_GamePlay::Imgui_Dialogue()
+{
+	// 파일 대화 상자 초기화
+	ImGuiFileDialog::Instance()->OpenDialog(
+		"OpenFileDialog",           // vKey
+		"Select a File",           // vTitle
+		".bmp,.dat",            // vFilters
+		IGFD::FileDialogConfig()   // vConfig (기본 설정)
+	);
+
+	// 대화 상자가 열릴 때
+	if (ImGuiFileDialog::Instance()->Display("OpenFileDialog"))
+	{
+		// 사용자가 파일을 선택한 경우
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			// 선택된 파일 경로 가져오기
+			stlFilePath = ImGuiFileDialog::Instance()->GetFilePathName();
+		}
+
+		// 대화 상자 닫기
+		ImGuiFileDialog::Instance()->Close();
+	}
+}
+
 void CLevel_GamePlay::Clear_SaveMap()
 {
 	for (auto& pair : m_mapAnimationSave)
@@ -438,7 +470,7 @@ void CLevel_GamePlay::Save_Triggers()
 	map<_uint, vector<pair<_double, _bool>>> Triggers;
 	queue<BONENAME> listBoneNames;
 	BONENAME tBONENAME;
-	// 두 종류의 트리거를 같은 컨테이너에 저장
+	// 두 종류의 트리거(이벤트, 이펙트)를 같은 컨테이너에 넣고 시간순 정렬해서 세이브
 	for (auto& pair : m_mapAnimationSave)
 	{
 		for (auto EventTrigger : pair.second)
@@ -481,21 +513,21 @@ void CLevel_GamePlay::Save_Triggers()
 		}
 	}
 
-#pragma region 예전코드
 
-	//SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
-	//for (auto& pair : m_mapAnimationSave)
-	//{
-	//	SizeofTrigger = pair.second.size();
-	//	SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
+	//스피드트리거 세이브
+	SizeofSave = (_uint)m_mapSpeedTriggers.size();
+	SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
+	for (auto& pair : m_mapSpeedTriggers)
+	{
+		SizeofTrigger = (_uint)pair.second.size();
+		SaveStream.write((const char*)&pair.first, sizeof(_uint));
+		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
+		for (auto& Trigger : pair.second)
+		{
+			SaveStream.write((const char*)&Trigger, sizeof(SPEEDTRIGGER));
+		}
+	}
 
-	//	for (auto& Trigger : pair.second)
-	//	{
-	//		SaveStream.write((const char*)&pair.first, sizeof(_uint));
-	//		SaveStream.write((const char*)&Trigger, sizeof(_double));
-	//	}
-	//}
-#pragma endregion
 	SaveStream.close();
 }
 
@@ -541,6 +573,33 @@ void CLevel_GamePlay::Load_Triggers()
 		}
 	}
 
+
+
+	//스피드트리거 불러오기
+	//우선 비우고
+	for (auto pairtrigger : m_mapSpeedTriggers)
+	{
+		pairtrigger.second.clear();
+	}
+	m_mapSpeedTriggers.clear();
+	//트리거가 있는 애니 갯수
+	//애니에 들어있는 트리거 갯수
+	//트리거 내용
+	Loadstream.read((char*)&SizeofLoad, sizeof(_uint));
+	SPEEDTRIGGER LoadSpeedTrigger;
+	for (_uint i = 0; i < SizeofLoad; i++)
+	{
+		Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
+		Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
+		for (_uint j = 0; j < SizeofTrigger; j++)
+		{
+			Loadstream.read((char*)&LoadSpeedTrigger, sizeof(SPEEDTRIGGER));
+			m_mapSpeedTriggers[iAnimationNum].push_back(LoadSpeedTrigger);
+		}
+	}
+
+
+
 	for (auto& vecTrigger : m_mapAnimationSave)
 	{
 		sort(vecTrigger.second.begin(), vecTrigger.second.end());
@@ -549,15 +608,13 @@ void CLevel_GamePlay::Load_Triggers()
 	{
 		sort(vecTrigger.second.begin(), vecTrigger.second.end(), [](EFFECTTRIGGER Temp, EFFECTTRIGGER Src) {return Temp.TriggerTime < Src.TriggerTime; });
 	}
+	for (auto& vecTrigger : m_mapSpeedTriggers)
+	{
+		sort(vecTrigger.second.begin(), vecTrigger.second.end(), [](SPEEDTRIGGER Temp, SPEEDTRIGGER Src) {return Temp.TriggerTime < Src.TriggerTime; });
+	}
 
 
 	Loadstream.close();
-
-}
-
-void CLevel_GamePlay::TriggerSetting_Speed()
-{
-
 }
 
 void CLevel_GamePlay::Save_ChainnedAnimation()
@@ -594,7 +651,14 @@ void CLevel_GamePlay::Load_ChainnedAnimation()
 
 void CLevel_GamePlay::Passing_Trigger()
 {
-	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers);
+	//스피드트리거는 큐로 만들어주고 전달해야된다;;
+	map<_uint, queue<SPEEDTRIGGER>> TempSpeedTrigger;
+	for (auto pair : m_mapSpeedTriggers)
+	{
+		for (auto Trigger : pair.second)
+			TempSpeedTrigger[pair.first].push(Trigger);
+	}
+	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers, &TempSpeedTrigger);
 }
 
 void CLevel_GamePlay::TriggerSetting_Event()
@@ -650,6 +714,55 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::EndTable();
 
 
+}
+
+void CLevel_GamePlay::TriggerSetting_Speed()
+{
+	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
+	SPEEDTRIGGER InputTrigger;
+
+
+
+	ImGui::InputFloat("speed##Animation", &m_fFlag_AnimationSpeed, 0.f, 0.f);
+	ImGui::SameLine();
+	if (ImGui::Button("Flag##SpeedTriggers", ImVec2(50.f, 50.f)))
+	{
+		InputTrigger.TriggerTime = m_pCommander->Get_CurrentTrackPosition();
+		InputTrigger.AnimationSpeed = m_fFlag_AnimationSpeed;
+		m_mapSpeedTriggers[iCurrentAnimationIndex].push_back(InputTrigger);
+		sort(m_mapSpeedTriggers[iCurrentAnimationIndex].begin(), m_mapSpeedTriggers[iCurrentAnimationIndex].end(), [](SPEEDTRIGGER tmp, SPEEDTRIGGER Src) {return tmp.TriggerTime < Src.TriggerTime; });
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Clear##SpeedTriggers", ImVec2(50.f, 50.f)))
+	{
+		for (auto& pair : m_mapSpeedTriggers)
+		{	
+			pair.second.clear();
+		}
+		m_mapSpeedTriggers.clear();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Apply##SpeedTriggers", ImVec2(50.f, 50.f)))
+	{
+		
+	}
+
+	ImGui::NewLine();
+
+	ImGui::BeginTable("list##SpeedTrigger", 2);
+
+	for (auto& pair : m_mapSpeedTriggers)
+	{
+		for (auto& Trigger : pair.second)
+		{
+			ImGui::TableNextColumn();
+			ImGui::Text("%u, %f, %f", pair.first, Trigger.TriggerTime, Trigger.AnimationSpeed);
+		}
+		ImGui::TableNextRow();
+	}
+
+
+	ImGui::EndTable();
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

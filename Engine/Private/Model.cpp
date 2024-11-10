@@ -351,7 +351,6 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_iCurrentAnimIndex = m_iNextAnimIndex;
 			// 보간이 완료된 후 새로운 애니메이션 시작
 			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
-
 			TriggerSetting();
 		}
 	}
@@ -365,9 +364,28 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_bLinearFinished = true;
 		}
 		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
-		if (m_CurrentTrackPosition == 0)
+		if (m_bLinearFinished && m_CurrentTrackPosition == 0) // 루프시점처럼 보간 안들어가는 애니 시작할떄
 			TriggerSetting();
 	}
+
+	//트리거 체크 (수정하고서 일반트리거 코드도 넣기
+	if (!m_queueTrigger.empty() && m_queueTrigger.front().TriggerTime <= m_CurrentTrackPosition)
+	{
+		//트리거처리는 어떻게 할까?
+		++m_iCurrentTrigger;
+
+	}
+	if (!m_queueTrigger_Speed.empty() && m_queueTrigger_Speed.front().TriggerTime <= m_CurrentTrackPosition)
+	{
+		while (!m_queueTrigger_Speed.empty() && m_queueTrigger_Speed.front().TriggerTime <= m_CurrentTrackPosition)
+		{
+			m_fPlaySpeed = m_queueTrigger_Speed.front().AnimationSpeed;
+			m_queueTrigger_Speed.pop();
+		}
+	}
+
+	if (isFinished) // 주의 이거 loop애님들은 절대 진입 못하는거같음
+		m_iCurrentTrigger = 0;
 
 	// 뼈대 변환 업데이트
 	for (auto& pBone : m_Bones)
@@ -447,6 +465,15 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger].TriggerTime <= m_CurrentTrackPosition)
 		{
 			++m_iCurrentTrigger;
+		}
+
+		if (!m_queueTrigger_Speed.empty() && m_queueTrigger_Speed.front().TriggerTime <= m_CurrentTrackPosition)
+		{
+			while (!m_queueTrigger_Speed.empty() && m_queueTrigger_Speed.front().TriggerTime <= m_CurrentTrackPosition)
+			{
+				m_fPlaySpeed = m_queueTrigger_Speed.front().TriggerTime;
+				m_queueTrigger_Speed.pop();
+			}
 		}
 
 		if (isFinished) // 주의 이거 loop애님들은 절대 진입 못하는거같음
@@ -539,7 +566,7 @@ HRESULT CModel::Bind_Bone_Mesh(CModel* pOtherModel)
 	return S_OK;
 }
 
-void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
+void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger)
 {
 
 	for (auto& pair : *pEventTrigger)
@@ -552,7 +579,7 @@ void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_u
 	BONENAME tBONENAME;
 	for (auto& pair : *_pEffectTrigger)
 	{
-		for (auto EffectTrigger : pair.second)
+		for (auto& EffectTrigger : pair.second)
 		{
 			m_mapAnimationTrigger[pair.first].push_back({ EffectTrigger.TriggerTime, true });
 			strcpy_s(tBONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
@@ -563,11 +590,16 @@ void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_u
 	{
 		sort(vecPair.second.begin(), vecPair.second.end(), [](DEFAULTTRIGGER a, DEFAULTTRIGGER b) {return a.TriggerTime < b.TriggerTime; });
 	}
+
+	for (auto& Triggerpair : *_pSpeedTrigger)
+	{
+		m_mapTrigger_Speed[Triggerpair.first] = Triggerpair.second;
+	}
 }
 
 void CModel::TriggerSetting()
 {
-	//애니메이션이 전환되면서 트리거 세팅을 다시 해주는 시점
+	//애니메이션이 전환되면서 트리거 세팅을 다시 해주는 시점 (보간은 끝났거나 안 해서 넘어간 시점)
 	//currentanimationindex는 next로 바뀌어있어야 함
 
 	//기존 큐 비우기
@@ -576,7 +608,7 @@ void CModel::TriggerSetting()
 	queue<BONENAME> emptyNameTrigger;
 	m_queueTrigger_BoneName.swap(emptyNameTrigger);
 
-	// 해당 애니메이션의 트리거들과 이펙트트리거 뼈 이름들을 Queue에 넣어야 해
+	// 해당 애니메이션의 트리거들과 뼈이름_이펙트트리거 를 Queue에 넣어야 해
 
 	/*
 	queue<시간위치, 이펙트트리거인지> -> DEFAULTTRIGGER -> 몇번째인지는 객체 만드는 미래의 내가 알아서 해라;; 더 복잡하게는 못하겠다.
@@ -584,17 +616,21 @@ void CModel::TriggerSetting()
 	check_queue(&매트릭스 포인터) 는 받은 포인터에 뼈 매트릭스 포인터를 넣어주고, 트리거 밟았는지를 bool 로 반환하자.
 	*/
 
-	if (m_mapAnimationTrigger.end() != m_mapAnimationTrigger.find(m_iNextAnimIndex))
+	if (m_mapAnimationTrigger.end() != m_mapAnimationTrigger.find(m_iCurrentAnimIndex))
 	{
 		int i(0);
 		for (auto Trigger : m_mapAnimationTrigger[m_iCurrentAnimIndex])
 		{
 			m_queueTrigger.push(Trigger);
-
-		
 		}
 		if (m_mapTrigger_BoneNames.end() != m_mapTrigger_BoneNames.find(m_iCurrentAnimIndex))
 			m_queueTrigger_BoneName = m_mapTrigger_BoneNames[m_iCurrentAnimIndex];
+	}
+
+	//스피드트리거
+	if (m_mapTrigger_Speed.end() != m_mapTrigger_Speed.find(m_iCurrentAnimIndex))
+	{
+		m_queueTrigger_Speed = m_mapTrigger_Speed[m_iCurrentAnimIndex];
 	}
 }
 

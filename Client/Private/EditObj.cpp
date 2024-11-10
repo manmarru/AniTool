@@ -54,31 +54,31 @@ _int CEditObj::Update(_float fTimeDelta)
 
 #pragma region 요호 이펙트트리거(주석)
 
-	/*const _float4x4* BoneMatrix;
-	if (m_pModelCom->Check_TriggerQueue(BoneMatrix))
-	{
-		switch (TriggerCount)
-		{
-		case 0:
-		{
-			CTestStar::TESTSTAR_DESC desc;
-			desc.pSocketBoneMatrix = BoneMatrix;
-			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestStar, &desc);
-			TriggerCount = 1;
-			break;
-		}
-		case 1:
-		{
-			CTestSnow::TESTSNOW_DESC desc;
-			desc.pSocketBoneMatrix = *BoneMatrix;
-			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestSnow, &desc);
-			TriggerCount = 0;
-		}
-		break;
-		default:
-			break;
-		}
-	}*/
+	//const _float4x4* BoneMatrix;
+	//if (m_pModelCom->Check_TriggerQueue(BoneMatrix))
+	//{
+	//	switch (TriggerCount)
+	//	{
+	//	case 0:
+	//	{
+	//		CTestStar::TESTSTAR_DESC desc;
+	//		desc.pSocketBoneMatrix = BoneMatrix;
+	//		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestStar, &desc);
+	//		TriggerCount = 1;
+	//		break;
+	//	}
+	//	case 1:
+	//	{
+	//		CTestSnow::TESTSNOW_DESC desc;
+	//		desc.pSocketBoneMatrix = *BoneMatrix;
+	//		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), GameTag_TestSnow, &desc);
+	//		TriggerCount = 0;
+	//	}
+	//	break;
+	//	default:
+	//		break;
+	//	}
+	//}
 #pragma endregion
 
 	return OBJ_NOEVENT;

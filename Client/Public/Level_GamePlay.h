@@ -44,6 +44,7 @@ private:
 	_bool m_bShow_ChainPopup = { false };
 
 	_float* m_pAnimationSpeed = { nullptr };
+	_float m_fFlag_AnimationSpeed = { 1.f };
 	CCommander* m_pCommander = { nullptr };
 	map<_uint, vector<_double>>			m_mapAnimationSave;	// 애니번호, 시간 순서쌍의 트리거
 	map<_uint, vector<EFFECTTRIGGER>>	m_mapEffectTriggers;// 이펙트트리거 : 애니번호 -> 시간, 뼈이름
@@ -56,11 +57,15 @@ private:
 	_uint m_iSelectedBone = { 0 };
 	_int m_iInput = { 0 };
 
+	string stlFilePath;
+
 private:
 	void Format_ImGUI();
 	void Format_Trigger();
 	void Format_SelectBone();
 	void Format_AniChain();
+	void Imgui_Dialogue();
+
 
 	void TriggerSetting_Event();
 	void TriggerSetting_Effect();

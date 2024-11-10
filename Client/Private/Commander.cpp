@@ -70,9 +70,9 @@ const vector<CBone*>* CCommander::Get_Bones()
 	return m_pContaining_Models.front()->Get_Bones();
 }
 
-void CCommander::Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger)
+void CCommander::Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger)
 {
-	m_pContaining_Models.front()->Register_Trigger(_pEventTrigger, _pEffectTrigger);
+	m_pContaining_Models.front()->Register_Trigger(_pEventTrigger, _pEffectTrigger, _pSpeedTrigger);
 }
 
 void CCommander::Setup_Chains(ifstream* _LoadStream)

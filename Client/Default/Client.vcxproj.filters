@@ -234,6 +234,15 @@
     <ClInclude Include="..\public\TestSnow.h">
       <Filter>02.GameObjects\06.Effect\TestSnow</Filter>
     </ClInclude>
+    <ClInclude Include="..\ImGui\dirent.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuiFileDialog.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuiFileDialogConfig.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -343,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="..\private\TestSnow.cpp">
       <Filter>02.GameObjects\06.Effect\TestSnow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\ImGuiFileDialog.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

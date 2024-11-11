@@ -153,7 +153,7 @@ public:
 	_bool Check_TriggerQueue(const _float4x4*& BoneMatrix);
 
 private:
-	void TriggerSetting();
+	void TriggerSetting(); // 애니 전환할때 트리거 세팅
 
 public:
 	HRESULT	Ready_Meshes();

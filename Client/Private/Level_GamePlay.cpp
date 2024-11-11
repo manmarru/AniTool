@@ -140,8 +140,8 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 {
 	CEditObj::EDITOBJ_DESC Desc;
 	Desc.isShadowObj = true;
-	Desc.ModelTag = ModelTag_Syar;
-	//Desc.ModelTag = ModelTag_PlayerBody;
+	//Desc.ModelTag = ModelTag_Syar;
+	Desc.ModelTag = ModelTag_PlayerBody;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	
@@ -469,7 +469,7 @@ void CLevel_GamePlay::Save_Triggers()
 	if (!SaveStream.is_open())
 		MSG_BOX(TEXT("파일 스트림 오류!"));
 
-	map<_uint, vector<pair<_double, _bool>>> Triggers;
+	map<_uint, vector<DEFAULTTRIGGER>> Triggers;
 	queue<BONENAME> listBoneNames;
 	BONENAME tBONENAME;
 	// 두 종류의 트리거(이벤트, 이펙트)를 같은 컨테이너에 넣고 시간순 정렬해서 세이브
@@ -492,7 +492,7 @@ void CLevel_GamePlay::Save_Triggers()
 	//sort
 	for (auto& vecPair : Triggers)
 	{
-		sort(vecPair.second.begin(), vecPair.second.end());
+		sort(vecPair.second.begin(), vecPair.second.end(), [](DEFAULTTRIGGER Temp, DEFAULTTRIGGER Src) {return Temp.TriggerTime < Src.TriggerTime; });
 	}
 
 	//세이브
@@ -500,14 +500,12 @@ void CLevel_GamePlay::Save_Triggers()
 	for (auto& pair : Triggers)
 	{
 		SizeofTrigger = (_uint)pair.second.size();
-		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint)); // 트리거 갯수 먼저 한번 저장하고
-
-		for (auto& Trigger : pair.second) // <시간, 이펙트여부>
+		SaveStream.write((const char*)&pair.first, sizeof(_uint));		//몇번 애니읹
+		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint)); // 트리거 갯수
+		for (auto& Trigger : pair.second)
 		{
-			SaveStream.write((const char*)&pair.first, sizeof(_uint));		//몇번 애니
-			SaveStream.write((const char*)&Trigger.first, sizeof(_double));	//몇초에 트리거
-			SaveStream.write((const char*)&Trigger.second, sizeof(_bool)); //이펙트여부
-			if (Trigger.second) // 뼈이름도저장
+			SaveStream.write((const char*)&Trigger, sizeof(DEFAULTTRIGGER));
+			if (Trigger.isEffectTrigger) // 뼈이름도저장
 			{
 				SaveStream.write((const char*)&listBoneNames.front(), sizeof(char) * MAX_PATH);
 				listBoneNames.pop();
@@ -522,8 +520,8 @@ void CLevel_GamePlay::Save_Triggers()
 	for (auto& pair : m_mapSpeedTriggers)
 	{
 		SizeofTrigger = (_uint)pair.second.size();
-		SaveStream.write((const char*)&pair.first, sizeof(_uint));
-		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint));
+		SaveStream.write((const char*)&pair.first, sizeof(_uint)); // 몇번 애니
+		SaveStream.write((const char*)&SizeofTrigger, sizeof(_uint)); // 트리거갯수
 		for (auto& Trigger : pair.second)
 		{
 			SaveStream.write((const char*)&Trigger, sizeof(SPEEDTRIGGER));
@@ -539,9 +537,8 @@ void CLevel_GamePlay::Load_Triggers()
 	_uint SizeofLoad;
 	_uint SizeofTrigger;
 	_uint iAnimationNum;
-	_double dTriggerPos;
+	DEFAULTTRIGGER DefaultTrigger;
 
-	_bool Temp;
 	_char BoneName[260];
 
 	Clear_SaveMap();
@@ -552,25 +549,22 @@ void CLevel_GamePlay::Load_Triggers()
 	Loadstream.read((char*)&SizeofLoad, sizeof(_uint));
 	for (size_t i = 0; i < SizeofLoad; i++)
 	{
+		Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
 		Loadstream.read((char*)&SizeofTrigger, sizeof(_uint));
 		for (size_t i = 0; i < SizeofTrigger; i++)
 		{
-			Loadstream.read((char*)&iAnimationNum, sizeof(_uint));
-			Loadstream.read((char*)&dTriggerPos, sizeof(_double));
-			Loadstream.read((char*)&Temp, sizeof(_bool));
-			if (Temp)
+			Loadstream.read((char*)&DefaultTrigger, sizeof(DEFAULTTRIGGER));
+			if (DefaultTrigger.isEffectTrigger)
 			{
 				Loadstream.read((char*)&BoneName, sizeof(char) * MAX_PATH);
 				EFFECTTRIGGER EffectTriggerData;
-				//pair<_double, char[MAX_PATH]> Trigger;
-				EffectTriggerData.TriggerTime = dTriggerPos;
+				EffectTriggerData.TriggerTime = DefaultTrigger.TriggerTime;
 				strcpy_s(EffectTriggerData.BoneName, MAX_PATH, BoneName);
 				m_mapEffectTriggers[iAnimationNum].push_back(EffectTriggerData);
-				//strcpy_s(Trigger.second, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
 			}
 			else
 			{
-				m_mapAnimationSave[iAnimationNum].push_back(dTriggerPos);
+				m_mapAnimationSave[iAnimationNum].push_back(DefaultTrigger.TriggerTime);
 			}
 		}
 	}

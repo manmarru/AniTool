@@ -266,6 +266,7 @@ namespace Engine
 	{
 		_uint Before;
 		_uint After;
+		_bool bLerp;
 	}CHAIN_FOR_MAP;
 
 #pragma endregion

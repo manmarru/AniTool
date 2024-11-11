@@ -27,7 +27,6 @@ _bool CFSM::Update(_float _fTimeDelta)
         else if (ANI_CHAIN == m_eCurrentAniType)
         {
             SetUp_Animation(m_mapChainnedAnimation[m_strCurrentChain].After, ANI_STOP, m_mapChainnedAnimation[m_strCurrentChain].bLerp);
-
         }
         return true;
     }

@@ -124,7 +124,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 	return S_OK;
 }
 
-
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround()
 {
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
@@ -178,9 +177,6 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::SameLine();
 	if (ImGui::Button("Trigger##Setting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
-	ImGui::SameLine();
-	if (ImGui::Button("Speed##Setting"))
-		m_bShow_Speed = true;
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -660,21 +656,40 @@ void CLevel_GamePlay::Passing_Trigger()
 void CLevel_GamePlay::TriggerSetting_Event()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	if (ImGui::Button("Flag_Trigger"))
+	char Buttonbuffer[128];
+	ImGui::SetNextItemWidth(90.f);
+	ImGui::InputInt("AniIndex##EventTrigger", &m_iFixEventTirgger_AniIndex, 0, 0);
+	ImGui::SameLine(); 
+	ImGui::SetNextItemWidth(90.f);
+	ImGui::InputDouble("Position##EventTrigger", &m_dFixEventTrigger_TriggerPos);
+	ImGui::SameLine();
+	if (ImGui::Button("Flag##EventTrigger", ImVec2{50.f, 50.f}))
 	{
 		m_mapAnimationSave[iCurrentAnimationIndex].push_back(*m_pCommander->Get_CurrentTrackPosition_ptr());
 		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
 	}
 
 
-
+	int i(0);
 	ImGui::BeginTable("Triggers", 2);
-	for (auto& pair : m_mapAnimationSave)
+	//for (auto& pair : m_mapAnimationSave)
+	for(auto iterPair = m_mapAnimationSave.begin(); iterPair != m_mapAnimationSave.end(); ++iterPair)
 	{
-		for (auto& Trigger : pair.second)
+		//for (auto& Trigger : (*iterPair).second)
+		for(auto& iterTrigger = (*iterPair).second.begin(); iterTrigger != (*iterPair).second.end();)
 		{
 			ImGui::TableNextColumn();
-			ImGui::Text("%u : %f", pair.first, Trigger);
+			//ImGui::Text("%u : %f", pair.first, Trigger);
+			sprintf_s(Buttonbuffer, "%u, : %f##EventTrigger%d", (*iterPair).first, (*iterTrigger), i);
+			if (ImGui::Button(Buttonbuffer))
+			{
+				iterTrigger = (*iterPair).second.erase(iterTrigger);
+				m_mapAnimationSave[m_iFixEventTirgger_AniIndex].push_back(m_dFixEventTrigger_TriggerPos);
+				sort(m_mapAnimationSave[m_iFixEventTirgger_AniIndex].begin(), m_mapAnimationSave[m_iFixEventTirgger_AniIndex].end(), [](_double Temp, _double Src) {return Temp < Src; });
+			}
+			else
+				++iterTrigger;
+			++i;
 		}
 		ImGui::TableNextRow();
 	}
@@ -737,11 +752,7 @@ void CLevel_GamePlay::TriggerSetting_Speed()
 		}
 		m_mapSpeedTriggers.clear();
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("Apply##SpeedTriggers", ImVec2(50.f, 50.f)))
-	{
-		
-	}
+
 
 	ImGui::NewLine();
 

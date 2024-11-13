@@ -37,7 +37,6 @@ private:
 	_bool m_bDemoStart = { false };
 	_bool m_bEffectTrigger = { false };
 	_bool m_bShow_TriggerSetting = { false };
-	_bool m_bShow_Speed = { false };
 
 	_bool m_bShow_BoneFlags = { false };
 	_bool m_bShow_Chain = { false };
@@ -56,6 +55,9 @@ private:
 
 	_uint m_iSelectedBone = { 0 };
 	_int m_iInput = { 0 };
+
+	_int m_iFixEventTirgger_AniIndex = {};
+	_double m_dFixEventTrigger_TriggerPos = {};
 
 	string stlFilePath;
 

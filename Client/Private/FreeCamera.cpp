@@ -33,35 +33,39 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 void CFreeCamera::Priority_Update(_float fTimeDelta)
 {
 	_float m_fspeed = { 1.f };
-	if (m_pGameInstance->Get_DIKeyState(KeyType::LSHIFT))
+	if (m_pGameInstance->Get_DIKeyState_Once(KeyType::F1))
+		m_bCameraLock = !m_bCameraLock;
+	if (m_bCameraLock)
 	{
-		m_fspeed = 0.2f;
-	}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
-		m_pTransformCom->Go_Straight(fTimeDelta * m_fspeed);
-	if (m_pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
-		m_pTransformCom->Go_Backward(fTimeDelta * m_fspeed);
-	if (m_pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
-		m_pTransformCom->Go_Left(fTimeDelta * m_fspeed);
-	if (m_pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
-		m_pTransformCom->Go_Right(fTimeDelta * m_fspeed);
-
-	_long		MouseMove = { 0 };
-
-	if (m_pGameInstance->Get_DIMouseState(DIMK_RBUTTON))
-	{
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+		if (m_pGameInstance->Get_DIKeyState(KeyType::LSHIFT))
 		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * m_fSensor * m_fspeed);
+			m_fspeed = 0.2f;
 		}
 
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+		if (m_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
+			m_pTransformCom->Go_Straight(fTimeDelta * m_fspeed);
+		if (m_pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
+			m_pTransformCom->Go_Backward(fTimeDelta * m_fspeed);
+		if (m_pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
+			m_pTransformCom->Go_Left(fTimeDelta * m_fspeed);
+		if (m_pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
+			m_pTransformCom->Go_Right(fTimeDelta * m_fspeed);
+
+		_long		MouseMove = { 0 };
+
+		if (m_pGameInstance->Get_DIMouseState(DIMK_RBUTTON))
 		{
-			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * m_fSensor * m_fspeed);
+			if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+			{
+				m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * m_fSensor * m_fspeed);
+			}
+
+			if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+			{
+				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * m_fSensor * m_fspeed);
+			}
 		}
 	}
-
 	__super::Priority_Update(fTimeDelta);
 }
 

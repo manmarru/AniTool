@@ -55,6 +55,16 @@ CModel::CModel(const CModel& Prototype)
 			m_mapAnimationTrigger[triggerpair.first].push_back(trigger);
 		}
 	}
+
+	for (auto triggerpair : Prototype.m_mapTrigger_Speed)
+	{
+		m_mapTrigger_Speed[triggerpair.first] = triggerpair.second;		
+	}
+
+	for (auto triggerpair : Prototype.m_mapTrigger_BoneNames)
+	{
+		m_mapTrigger_BoneNames[triggerpair.first] = triggerpair.second;
+	}
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -766,30 +776,49 @@ HRESULT CModel::Ready_Triggers(ifstream* LoadStream)
 
 	_uint iNumAnimations(0); // 트리거 있는 애니 갯수
 	_uint iNumTriggers(0); // 애니메이션당 트리거 갯수
-	LoadStream->read((char*)&iNumAnimations, sizeof(_uint));
-	
 	_uint iAnimationIndex(0); // 애당 애니메이션 (구조 개선예정)
-	DEFAULTTRIGGER TriggerPos; // 트리거 위치
+	DEFAULTTRIGGER tTrigger; // 트리거 위치
+	BONENAME tBoneName;
+
+	LoadStream->read((char*)&iNumAnimations, sizeof(_uint));
 	for (size_t i = 0; i < iNumAnimations; i++)
 	{
-		m_mapAnimationTrigger;
+		LoadStream->read((char*)&iAnimationIndex, sizeof(_uint));
 		LoadStream->read((char*)&iNumTriggers, sizeof(_uint));
 		for (size_t i = 0; i < iNumTriggers; i++)
 		{
-			LoadStream->read((char*)&iAnimationIndex, sizeof(_uint));
-			LoadStream->read((char*)&TriggerPos.TriggerTime, sizeof(_double));
-			m_mapAnimationTrigger[iAnimationIndex].push_back(TriggerPos);
+			LoadStream->read((char*)&tTrigger, sizeof(DEFAULTTRIGGER));
+			if (tTrigger.isEffectTrigger)
+			{
+				LoadStream->read((char*)&tBoneName.BoneName, sizeof(char) * MAX_PATH);
+				m_mapTrigger_BoneNames[iAnimationIndex].push(tBoneName);
+			}
+			m_mapAnimationTrigger[iAnimationIndex].push_back(tTrigger);
 		}
 		sort(m_mapAnimationTrigger[iAnimationIndex].begin(), m_mapAnimationTrigger[iAnimationIndex].end(), []
-		(DEFAULTTRIGGER a, DEFAULTTRIGGER b) 
+		(DEFAULTTRIGGER Temp, DEFAULTTRIGGER Src) 
 			{
-				return a.TriggerTime < b.TriggerTime;
+				return Temp.TriggerTime < Src.TriggerTime;
 			});
 	}
 
 	for (_uint i = 0; i < m_iNumAnimations; i++)
 	{
 		m_mapAnimationTrigger[i].push_back({ m_Animations[i]->Get_Duration() , false });
+	}
+
+	//스피드트리거
+	SPEEDTRIGGER tSpeedTrigger;
+	LoadStream->read((char*)&iNumAnimations, sizeof(_uint));
+	for (_uint i = 0; i < iNumAnimations; i++)
+	{
+		LoadStream->read((char*)&iAnimationIndex, sizeof(_uint)); // 몇번 애니
+		LoadStream->read((char*)&iNumTriggers, sizeof(_uint)); //트리거갯수
+		for (_uint j = 0; j < iNumTriggers; j++)
+		{
+			LoadStream->read((char*)&tSpeedTrigger, sizeof(SPEEDTRIGGER));
+			m_mapTrigger_Speed[iAnimationIndex].push(tSpeedTrigger);
+		}
 	}
 
 	return S_OK;

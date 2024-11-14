@@ -458,6 +458,7 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 			m_iCurrentAnimIndex = m_iNextAnimIndex;
 			// 보간이 완료된 후 새로운 애니메이션 시작
 			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+			TriggerSetting();
 		}
 	}
 	else

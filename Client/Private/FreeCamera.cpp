@@ -35,7 +35,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 	_float m_fspeed = { 1.f };
 	if (m_pGameInstance->Get_DIKeyState_Once(KeyType::F1))
 		m_bCameraLock = !m_bCameraLock;
-	if (m_bCameraLock)
+	if (!m_bCameraLock)
 	{
 		if (m_pGameInstance->Get_DIKeyState(KeyType::LSHIFT))
 		{

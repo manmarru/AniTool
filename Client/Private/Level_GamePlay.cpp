@@ -387,7 +387,7 @@ void CLevel_GamePlay::Format_AniChain()
 	if (ImGui::BeginPopupModal("Fix Chain?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 
-		ImGui::Text("Before : % u -> % u\nAfter : % u -> % u", (*m_SelectedChain).Before, (*m_SelectedChain).After, m_tChain.Before, m_tChain.After);
+		ImGui::Text("Before : % u -> % u\nFixed : % u -> % u", (*m_SelectedChain).Before, (*m_SelectedChain).After, m_tChain.Before, m_tChain.After);
 
 		if (ImGui::Button("OK##Chain"))
 		{
@@ -732,8 +732,6 @@ void CLevel_GamePlay::TriggerSetting_Speed()
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
 	SPEEDTRIGGER InputTrigger;
 
-
-
 	ImGui::InputFloat("speed##Animation", &m_fFlag_AnimationSpeed, 0.f, 0.f);
 	ImGui::SameLine();
 	if (ImGui::Button("Flag##SpeedTriggers", ImVec2(50.f, 50.f)))
@@ -758,18 +756,58 @@ void CLevel_GamePlay::TriggerSetting_Speed()
 
 	ImGui::BeginTable("list##SpeedTrigger", 2);
 
+	char Buttonbuffer[256];
+	int i(0);
+
 	for (auto& pair : m_mapSpeedTriggers)
 	{
-		for (auto& Trigger : pair.second)
+		//for (auto& Trigger : pair.second)
+		for(auto trigger = pair.second.begin(); trigger != pair.second.end(); ++trigger)
 		{
 			ImGui::TableNextColumn();
-			ImGui::Text("%u, %f, %f", pair.first, Trigger.TriggerTime, Trigger.AnimationSpeed);
+			sprintf_s(Buttonbuffer, "%u, %f, %f##SpeedTrigger%d", pair.first, (*trigger).TriggerTime, (*trigger).AnimationSpeed, i);
+			if (ImGui::Button(Buttonbuffer))
+			{
+				m_SelectedSpeedTrigger = trigger;
+				m_bShow_SpeedPopup = true;
+			}
+			++i;
 		}
 		ImGui::TableNextRow();
 	}
 
 
 	ImGui::EndTable();
+
+
+	if (m_bShow_SpeedPopup)
+	{
+		ImGui::OpenPopup("Fix_Trigger?##SpeedTrigger");
+		m_bShow_SpeedPopup = false;
+	}
+	if (ImGui::BeginPopupModal("Fix_Trigger?##SpeedTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Before : %f, %f\nFixed : %f, %f", (*m_SelectedSpeedTrigger).TriggerTime, (*m_SelectedSpeedTrigger).AnimationSpeed, m_pCommander->Get_CurrentTrackPosition(), InputTrigger.AnimationSpeed);
+		if (ImGui::Button("OK##SpeedPopup"))
+		{
+			(*m_SelectedSpeedTrigger).AnimationSpeed = InputTrigger.AnimationSpeed;
+			(*m_SelectedSpeedTrigger).TriggerTime = m_pCommander->Get_CurrentTrackPosition();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("No##SpeedPopup"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove##SpeedPopup"))
+		{
+			m_mapSpeedTriggers[iCurrentAnimationIndex].erase(m_SelectedSpeedTrigger);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

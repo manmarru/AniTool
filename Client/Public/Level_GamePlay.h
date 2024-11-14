@@ -41,6 +41,7 @@ private:
 	_bool m_bShow_BoneFlags = { false };
 	_bool m_bShow_Chain = { false };
 	_bool m_bShow_ChainPopup = { false };
+	_bool m_bShow_SpeedPopup = { false };
 
 	_float* m_pAnimationSpeed = { nullptr };
 	_float m_fFlag_AnimationSpeed = { 1.f };
@@ -52,6 +53,7 @@ private:
 	list<CHAIN> m_listAniChained;
 	CHAIN m_tChain = { 0,0 };
 	list<CHAIN>::iterator m_SelectedChain = {};
+	vector<SPEEDTRIGGER>::iterator m_SelectedSpeedTrigger = {};
 
 	_uint m_iSelectedBone = { 0 };
 	_int m_iInput = { 0 };

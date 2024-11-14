@@ -225,7 +225,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	ifstream Loadstream("../Bin/Resources/Models/Player/Trigger_Player.dat");
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerBody"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, &Loadstream))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, nullptr))))
 		return E_FAIL;
 	Loadstream.close();
 	

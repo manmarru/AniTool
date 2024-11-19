@@ -2,7 +2,7 @@
 #include "..\Public\Body_Player.h"
 
 #include "Player.h"
-#include "FSM.h"
+#include "FSM_Player.h"
 
 #include "GameInstance.h"
 
@@ -12,7 +12,7 @@ CBody_Player::CBody_Player(ID3D11Device * pDevice, ID3D11DeviceContext * pContex
 }
 
 CBody_Player::CBody_Player(const CBody_Player & Prototype)
-	: CPartObject{ Prototype }
+	: CPartObject(Prototype)
 {
 }
 	
@@ -28,18 +28,19 @@ HRESULT CBody_Player::Initialize_Prototype()
 
 HRESULT CBody_Player::Initialize(void * pArg)
 {
+	BODY_DESC*			pDesc = static_cast<BODY_DESC*>(pArg);
+	m_pParentState = pDesc->pParentState;
+	m_pAnimationSpeed = pDesc->pAnimationSpeed;
+	m_pCurrentFSMIndex = pDesc->pFSMIndex;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	BODY_DESC*			pDesc = static_cast<BODY_DESC*>(pArg);
-	m_pParentState = pDesc->pParentState;
-	m_pAnimationSpeed = pDesc->pAnimationSpeed;
-	if (FAILED(Ready_FSM(pDesc->mapAnimationIndex)))
+	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
 	m_pModelCom->Set_Skip(9);
@@ -54,7 +55,6 @@ void CBody_Player::Priority_Update(_float fTimeDelta) {}
 
 _int CBody_Player::Update(_float fTimeDelta)
 {
-
 	m_pFSM->Update(fTimeDelta * (*m_pAnimationSpeed));
 
 	//cout << m_pModelCom->Get_CurrentTrigger() << endl;
@@ -137,14 +137,19 @@ HRESULT CBody_Player::Render_LightDepth()
 	return S_OK;
 }
 
+void CBody_Player::Set_ChainState(_uint _eState, _bool _bLerp)
+{
+	m_pFSM->Set_ChainState((OBJ_STATE)_eState, _bLerp);
+}
+
+void CBody_Player::Set_State(_uint _eState, _bool bLerp)
+{
+	m_pFSM->Set_State((OBJ_STATE)_eState, false, bLerp);
+}
+
 const _float4x4* CBody_Player::Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const
 {
 	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(pBoneName);
-}
-
-void CBody_Player::Set_State(_uint _eState)
-{
-	m_pFSM->Set_State((OBJ_STATE)_eState);
 }
 
 void CBody_Player::Change_Bone(CBone* pBone, _uint iBoneIndex)
@@ -187,18 +192,11 @@ HRESULT CBody_Player::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CBody_Player::Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex)
+HRESULT CBody_Player::Ready_FSM()
 {
-	m_pFSM = CFSM::Create(m_pModelCom);
+	m_pFSM = CFSM_Player::Create(m_pModelCom, m_pCurrentFSMIndex);
 	if (nullptr == m_pFSM)
 		return E_FAIL;
-
-	for (auto pair : *_pAnimationIndex)
-	{
-		m_pFSM->Register_AnimationIndex(pair.first, pair.second.first, pair.second.second);
-	}
-
-	m_pFSM->isTriggerObj();
 
 	m_pFSM->Set_State(OBJSTATE_IDLE);
 

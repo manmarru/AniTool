@@ -41,6 +41,7 @@ public:
 	const _float4x4* Get_WorldMatrix_Ptr() const {
 		return &m_WorldMatrix;
 	}
+	_float4x4* Get_WorldMatrix_Ptr(_bool WARNING_this_is_not_const) { return &m_WorldMatrix; }
 
 public:	
 	virtual HRESULT Initialize_Prototype();
@@ -53,6 +54,7 @@ public:
 	void Go_Backward(_float fTimeDelta);
 	void Go_Left(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
+	void Go_Direction(_fvector vDirection, _float fTimeDelta);
 	void Turn(_fvector vAxis, _float fTimeDelta);
 	void Turn(_bool isRotationX, _bool isRotationY, _bool isRotationZ, _float fTimeDelta);	
 	void Rotation(_fvector vAxis, _float fRadian);

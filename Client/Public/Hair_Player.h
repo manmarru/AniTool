@@ -15,8 +15,8 @@ class CHair_Player final : public CPartObject
 public:
 	typedef struct HAIR_DESC : EDITING_PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
-		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
+		const _uint*	pParentState = { nullptr };
+		_uint*			pFSMIndex;
 	}HAIR_DESC;
 
 private:
@@ -25,7 +25,8 @@ private:
 	virtual ~CHair_Player() = default;
 
 public:
-	virtual void Set_State(_uint _eState) override;
+	virtual void Set_State(_uint _eState, _bool _bLerp = true) override;
+	virtual void Set_ChainState(_uint _eState, _bool _bLerp = true) override;
 	const _float4x4* Get_BoneMatrix_Ptr(const _char* pBoneName) const;
 
 //For Editing
@@ -43,14 +44,15 @@ public:
 private:
 	class CShader*				m_pShaderCom = { nullptr };
 	class CModel*				m_pModelCom = { nullptr };
-	class CFSM*					m_pFSM = { nullptr };
+	class CFSM_Player*			m_pFSM = { nullptr };
 
 private:
 	const _uint*				m_pParentState = { nullptr };
+	_uint*						m_pCurrentFSMIndex = { nullptr };
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex);
+	HRESULT Ready_FSM();
 
 public:
 	static CHair_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -41,6 +41,10 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		{
 			m_fspeed = 0.2f;
 		}
+		else if (m_pGameInstance->Get_DIKeyState(KeyType::LCTRL))
+		{
+			m_fspeed = 2.f;
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
 			m_pTransformCom->Go_Straight(fTimeDelta * m_fspeed);

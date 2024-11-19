@@ -222,24 +222,28 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	/* For. Prototype_Component_Model_PlayerBody*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	ifstream Loadstream("../Bin/Resources/Models/Player/Trigger_Player.dat");
+	ifstream Loadstream("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerBody"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, nullptr))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, &Loadstream))))
 		return E_FAIL;
 	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerHead*/
+	Loadstream.open("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerHead"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Head/Head"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Head/Head"), PreTransformMatrix, &Loadstream))))
 		return E_FAIL;
+	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerHair*/
+	Loadstream.open("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerHair"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Hair/Hair"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Hair/Hair"), PreTransformMatrix, &Loadstream))))
 		return E_FAIL;
+	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerSword*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -250,7 +254,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_Component_Model_PlayerShild*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Shield,
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/SH/Shild"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/SH/Shield"), PreTransformMatrix))))
 		return E_FAIL;
 
 #pragma endregion

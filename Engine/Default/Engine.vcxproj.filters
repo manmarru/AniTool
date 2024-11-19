@@ -184,6 +184,9 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Anim">
       <UniqueIdentifier>{ecd13d30-c908-4c64-be68-c8917577ac57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\RigidBody">
+      <UniqueIdentifier>{029acac0-0c79-4f2c-b9b6-94fe06d4626a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -356,6 +359,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Anim_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RigidBody.cpp">
+      <Filter>01.Utility\03.Components\RigidBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,6 +547,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Anim_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RigidBody.h">
+      <Filter>01.Utility\03.Components\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyMath.h">
+      <Filter>99.Defines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

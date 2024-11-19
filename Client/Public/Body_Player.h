@@ -17,7 +17,7 @@ public:
 	typedef struct BODY_DESC : public CPartObject::EDITING_PARTOBJECT_DESC
 	{
 		const _uint* pParentState = { nullptr };
-		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
+		_uint* pFSMIndex;
 	}BODY_DESC;
 
 private:
@@ -38,10 +38,13 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	virtual void Set_State(_uint _eState, _bool bLerp = true) override;
+	virtual void Set_ChainState(_uint _eState, _bool _bLerp = true) override;
+	class CFSM_Player* Get_FSM(_uint iIndex) { return m_pFSM; }
 	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const override;
-	virtual void Set_State(_uint _eState) override;
 	void Change_Bone(CBone* pBone, _uint iBoneIndex);
 	CBone* Get_Bone(const char* BoneName);
+
 
 //For Editing
 public:
@@ -52,15 +55,16 @@ public:
 private:
 	class CShader*				m_pShaderCom = { nullptr };
 	class CModel*				m_pModelCom = { nullptr };
-	class CFSM*					m_pFSM = { nullptr };
+	class CFSM_Player*			m_pFSM = { nullptr };
 
 
 private:
 	const _uint*				m_pParentState = { nullptr };
+	_uint*						m_pCurrentFSMIndex = { nullptr };
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex);
+	HRESULT Ready_FSM();
 
 public:
 	static CBody_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

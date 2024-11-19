@@ -243,6 +243,9 @@
     <ClInclude Include="..\ImGui\ImGuiFileDialogConfig.h">
       <Filter>ImGUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\FSM_Player.h">
+      <Filter>95.FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="..\ImGui\ImGuiFileDialog.cpp">
       <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FSM_Player.cpp">
+      <Filter>95.FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

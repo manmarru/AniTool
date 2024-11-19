@@ -121,6 +121,16 @@ void CTransform::Go_Right(_float fTimeDelta)
 	Set_State(STATE_POSITION, vPosition);
 }
 
+void CTransform::Go_Direction(_fvector vDirection, _float fTimeDelta)
+{
+	_vector		vPosition = Get_State(STATE_POSITION);
+	_vector		vRight = Get_State(STATE_RIGHT);
+
+	vPosition += XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+
+	Set_State(STATE_POSITION, vPosition);
+}
+
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
 {
 	_vector		vRight = Get_State(STATE_RIGHT);

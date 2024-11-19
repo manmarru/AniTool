@@ -16,8 +16,8 @@ class CHead_Player final : public CPartObject
 public:
 	typedef struct HEAD_DESC : EDITING_PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
-		map<OBJ_STATE, pair<_uint, ANITYPE>>* mapAnimationIndex;
+		const _uint*	pParentState = { nullptr };
+		_uint*			pFSMIndex;
 	}HEAD_DESC;
 
 private:
@@ -38,7 +38,8 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	virtual void Set_State(_uint _eState) override;
+	virtual void Set_State(_uint _eState, _bool bLerp = true) override;
+	virtual void Set_ChainState(_uint _eState, _bool _bLerp = true) override;
 	void Change_Bone(CBone* pBone, _uint iBoneIndex);
 	void Set_Skip(_int iSkip);
 
@@ -49,14 +50,15 @@ public:
 private:
 	class CShader*				m_pShaderCom = { nullptr };
 	class CModel*				m_pModelCom = { nullptr };
-	class CFSM*					m_pFSM = { nullptr };
+	class CFSM_Player*			m_pFSM = { nullptr };
 
 private:
 	const _uint*				m_pParentState = { nullptr };
+	_uint*						m_pCurrentFSMIndex = { nullptr };
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_FSM(map<OBJ_STATE, pair<_uint, ANITYPE>>* _pAnimationIndex);
+	HRESULT Ready_FSM();
 
 public:
 	static CHead_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

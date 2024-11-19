@@ -31,7 +31,8 @@ public:
 	virtual HRESULT Render();
 
 public:
-	virtual void Set_State(_uint _eState) {};
+	virtual void Set_State(_uint _eState, _bool bLerp = true) {};
+	virtual void Set_ChainState(_uint _eState, _bool _bLerp = true) {};
 	virtual const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return nullptr; }
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) {};
 

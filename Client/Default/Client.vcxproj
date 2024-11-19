@@ -195,6 +195,7 @@
     <ClInclude Include="..\Public\FSM.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Public\FSM_Player.h" />
     <ClInclude Include="..\Public\Hair_Player.h" />
     <ClInclude Include="..\Public\Head_Player.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="..\Private\FSM.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Private\FSM_Player.cpp" />
     <ClCompile Include="..\Private\Hair_Player.cpp" />
     <ClCompile Include="..\Private\Head_Player.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />

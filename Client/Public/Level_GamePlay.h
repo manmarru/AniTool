@@ -40,28 +40,33 @@ private:
 
 	_bool m_bShow_BoneFlags = { false };
 	_bool m_bShow_Chain = { false };
+	_bool m_bShow_EventTriggerPopup = { false };
 	_bool m_bShow_ChainPopup = { false };
 	_bool m_bShow_SpeedPopup = { false };
+
 
 	_float* m_pAnimationSpeed = { nullptr };
 	_float m_fFlag_AnimationSpeed = { 1.f };
 	CCommander* m_pCommander = { nullptr };
-	map<_uint, vector<_double>>			m_mapAnimationSave;	// 애니번호, 시간 순서쌍의 트리거
+	map<_uint, vector<_double>>			m_mapEventTriggers;	// 애니번호, 시간 순서쌍의 트리거
 	map<_uint, vector<EFFECTTRIGGER>>	m_mapEffectTriggers;// 이펙트트리거 : 애니번호 -> 시간, 뼈이름
 	map<_uint, vector<SPEEDTRIGGER>>	m_mapSpeedTriggers;	// 스피드트리거 : 애니번호 -> 시간, 스피드 (가급적이면 1로 돌아오는 포인트도 찍어주자.)
-	vector<class CBoneFlag*> m_vecFlags;
-	list<CHAIN> m_listAniChained;
-	CHAIN m_tChain = { 0,0 };
-	list<CHAIN>::iterator m_SelectedChain = {};
-	vector<SPEEDTRIGGER>::iterator m_SelectedSpeedTrigger = {};
+	vector<class CBoneFlag*>		m_vecFlags;
+	list<CHAIN>						m_listAniChained;
+	CHAIN							m_tChain = { 0,0 };
 
-	_uint m_iSelectedBone = { 0 };
-	_int m_iInput = { 0 };
+	//팝업용
+	list<CHAIN>::iterator			m_SelectedChain = {};
+	vector<SPEEDTRIGGER>::iterator	m_SelectedSpeedTrigger = {};
+	vector<_double>::iterator		m_SelectedEventTrigger = {};
 
-	_int m_iFixEventTirgger_AniIndex = {};
+	_uint	m_iSelectedBone = { 0 };
+	_int	m_iInput = { 0 };
+
+	_int	m_iFixEventTirgger_AniIndex = {};
 	_double m_dFixEventTrigger_TriggerPos = {};
 
-	string stlFilePath;
+	string	stlFilePath;
 
 private:
 	void Format_ImGUI();

@@ -31,8 +31,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_EditObj()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Player()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Player()))
+		return E_FAIL;
 
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
@@ -57,7 +57,6 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	Format_ImGUI();
 
 	//Imgui_Dialogue();
-
 
 	if (m_bDemoStart)
 		ImGui::ShowDemoWindow(&m_bDemoStart);
@@ -442,11 +441,11 @@ void CLevel_GamePlay::Imgui_Dialogue()
 
 void CLevel_GamePlay::Clear_SaveMap()
 {
-	for (auto& pair : m_mapAnimationSave)
+	for (auto& pair : m_mapEventTriggers)
 	{
 		pair.second.clear();
 	}
-	m_mapAnimationSave.clear();
+	m_mapEventTriggers.clear();
 
 	for (auto& pair : m_mapEffectTriggers)
 	{
@@ -458,7 +457,7 @@ void CLevel_GamePlay::Clear_SaveMap()
 void CLevel_GamePlay::Save_Triggers()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	_uint SizeofSave((_uint)m_mapAnimationSave.size());
+	_uint SizeofSave((_uint)m_mapEventTriggers.size());
 	_uint SizeofTrigger;
 
 	ofstream SaveStream("../Bin/==Export==/Triggers.dat", ios::out | ios::trunc | ios::binary);
@@ -469,7 +468,7 @@ void CLevel_GamePlay::Save_Triggers()
 	queue<BONENAME> listBoneNames;
 	BONENAME tBONENAME;
 	// 두 종류의 트리거(이벤트, 이펙트)를 같은 컨테이너에 넣고 시간순 정렬해서 세이브
-	for (auto& pair : m_mapAnimationSave)
+	for (auto& pair : m_mapEventTriggers)
 	{
 		for (auto EventTrigger : pair.second)
 		{
@@ -508,7 +507,6 @@ void CLevel_GamePlay::Save_Triggers()
 			}
 		}
 	}
-
 
 	//스피드트리거 세이브
 	SizeofSave = (_uint)m_mapSpeedTriggers.size();
@@ -560,7 +558,7 @@ void CLevel_GamePlay::Load_Triggers()
 			}
 			else
 			{
-				m_mapAnimationSave[iAnimationNum].push_back(DefaultTrigger.TriggerTime);
+				m_mapEventTriggers[iAnimationNum].push_back(DefaultTrigger.TriggerTime);
 			}
 		}
 	}
@@ -592,7 +590,7 @@ void CLevel_GamePlay::Load_Triggers()
 
 
 
-	for (auto& vecTrigger : m_mapAnimationSave)
+	for (auto& vecTrigger : m_mapEventTriggers)
 	{
 		sort(vecTrigger.second.begin(), vecTrigger.second.end());
 	}
@@ -650,7 +648,7 @@ void CLevel_GamePlay::Passing_Trigger()
 		for (auto Trigger : pair.second)
 			TempSpeedTrigger[pair.first].push(Trigger);
 	}
-	m_pCommander->Register_Trigger(&m_mapAnimationSave, &m_mapEffectTriggers, &TempSpeedTrigger);
+	m_pCommander->Register_Trigger(&m_mapEventTriggers, &m_mapEffectTriggers, &TempSpeedTrigger);
 }
 
 void CLevel_GamePlay::TriggerSetting_Event()
@@ -665,15 +663,15 @@ void CLevel_GamePlay::TriggerSetting_Event()
 	ImGui::SameLine();
 	if (ImGui::Button("Flag##EventTrigger", ImVec2{50.f, 50.f}))
 	{
-		m_mapAnimationSave[iCurrentAnimationIndex].push_back(*m_pCommander->Get_CurrentTrackPosition_ptr());
-		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+		m_mapEventTriggers[iCurrentAnimationIndex].push_back(*m_pCommander->Get_CurrentTrackPosition_ptr());
+		sort(m_mapEventTriggers[iCurrentAnimationIndex].begin(), m_mapEventTriggers[iCurrentAnimationIndex].end());
 	}
 
 
 	int i(0);
 	ImGui::BeginTable("Triggers", 2);
-	//for (auto& pair : m_mapAnimationSave)
-	for(auto iterPair = m_mapAnimationSave.begin(); iterPair != m_mapAnimationSave.end(); ++iterPair)
+	//for (auto& pair : m_mapEventTriggers)
+	for(auto iterPair = m_mapEventTriggers.begin(); iterPair != m_mapEventTriggers.end(); ++iterPair)
 	{
 		//for (auto& Trigger : (*iterPair).second)
 		for(auto& iterTrigger = (*iterPair).second.begin(); iterTrigger != (*iterPair).second.end();)
@@ -683,9 +681,11 @@ void CLevel_GamePlay::TriggerSetting_Event()
 			sprintf_s(Buttonbuffer, "%u, : %f##EventTrigger%d", (*iterPair).first, (*iterTrigger), i);
 			if (ImGui::Button(Buttonbuffer))
 			{
-				iterTrigger = (*iterPair).second.erase(iterTrigger);
-				m_mapAnimationSave[m_iFixEventTirgger_AniIndex].push_back(m_dFixEventTrigger_TriggerPos);
-				sort(m_mapAnimationSave[m_iFixEventTirgger_AniIndex].begin(), m_mapAnimationSave[m_iFixEventTirgger_AniIndex].end(), [](_double Temp, _double Src) {return Temp < Src; });
+				m_bShow_EventTriggerPopup = true;
+				m_SelectedEventTrigger = iterTrigger;
+				//iterTrigger = (*iterPair).second.erase(iterTrigger);
+				//m_mapEventTriggers[m_iFixEventTirgger_AniIndex].push_back(m_dFixEventTrigger_TriggerPos);
+				//sort(m_mapEventTriggers[m_iFixEventTirgger_AniIndex].begin(), m_mapEventTriggers[m_iFixEventTirgger_AniIndex].end(), [](_double Temp, _double Src) {return Temp < Src; });
 			}
 			else
 				++iterTrigger;
@@ -694,6 +694,33 @@ void CLevel_GamePlay::TriggerSetting_Event()
 		ImGui::TableNextRow();
 	}
 	ImGui::EndTable();
+
+	if (m_bShow_EventTriggerPopup)
+	{
+		ImGui::OpenPopup("Fix_Trigger?##EventTrigger");
+		m_bShow_EventTriggerPopup = false;
+	}
+	if (ImGui::BeginPopupModal("Fix_Trigger?##EventTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Before : %f\nFixed : %f", (*m_SelectedEventTrigger), m_pCommander->Get_CurrentTrackPosition());
+		if (ImGui::Button("OK##EventPopup"))
+		{
+			(*m_SelectedEventTrigger) = m_pCommander->Get_CurrentTrackPosition();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("No##EventTPopup"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove##EventTrigger"))
+		{
+			m_mapEventTriggers[iCurrentAnimationIndex].erase(m_SelectedEventTrigger);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void CLevel_GamePlay::TriggerSetting_Effect()
@@ -708,7 +735,7 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 		Trigger.TriggerTime = m_pCommander->Get_CurrentTrackPosition();
 		strcpy_s(Trigger.BoneName, MAX_PATH, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
 		m_mapEffectTriggers[iCurrentAnimationIndex].push_back(Trigger);
-		sort(m_mapAnimationSave[iCurrentAnimationIndex].begin(), m_mapAnimationSave[iCurrentAnimationIndex].end());
+		sort(m_mapEventTriggers[iCurrentAnimationIndex].begin(), m_mapEventTriggers[iCurrentAnimationIndex].end());
 	}
 	ImGui::BeginTable("list", 2);
 

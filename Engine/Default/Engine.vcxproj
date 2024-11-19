@@ -58,6 +58,7 @@
     <ClCompile Include="..\private\QuadTree.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\private\RenderTarget.cpp" />
+    <ClCompile Include="..\Private\RigidBody.cpp" />
     <ClCompile Include="..\private\Shader.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\private\Target_Manager.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\public\Light_Manager.h" />
     <ClInclude Include="..\public\Mesh.h" />
     <ClInclude Include="..\public\Model.h" />
+    <ClInclude Include="..\Public\MyMath.h" />
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
     <ClInclude Include="..\public\PartObject.h" />
@@ -121,6 +123,7 @@
     <ClInclude Include="..\public\QuadTree.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\public\RenderTarget.h" />
+    <ClInclude Include="..\Public\RigidBody.h" />
     <ClInclude Include="..\public\Shader.h" />
     <ClInclude Include="..\Public\SoundManager.h" />
     <ClInclude Include="..\public\Target_Manager.h" />

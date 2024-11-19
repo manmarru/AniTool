@@ -45,6 +45,7 @@ using DirectX::SimpleMath::Vector3;
 #include <string>
 #include <unordered_set>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 #define AI_TEXTURE_TYPE_MAX 18

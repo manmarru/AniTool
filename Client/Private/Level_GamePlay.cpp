@@ -16,6 +16,7 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 HRESULT CLevel_GamePlay::Initialize()
 {
+	//asdf
 	m_pAnimationSpeed = new _float(1.f);
 
 	m_pCommander = new CCommander();

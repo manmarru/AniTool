@@ -16,7 +16,6 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 HRESULT CLevel_GamePlay::Initialize()
 {
-	//asdf
 	m_pAnimationSpeed = new _float(1.f);
 
 	m_pCommander = new CCommander();
@@ -34,7 +33,7 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_Player()))
 		return E_FAIL;
-
+		
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
 

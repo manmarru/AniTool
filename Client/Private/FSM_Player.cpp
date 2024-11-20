@@ -169,7 +169,13 @@ void CFSM_Player::Register_AnimationIndex()
 #pragma endregion
 
 #pragma region AXE
-
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_ATT1] = { 68, ANI_LOOP }; // 평타1
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_ATT2] = { 69, ANI_LOOP }; // 평타1
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_ATT3] = { 70, ANI_LOOP }; // 평타1
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_SH_DRAW] = { 71, ANI_LOOP };
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_SH_UNDRAW] = { 72, ANI_LOOP };
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_ROLL] = { 73, ANI_LOOP };
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_IDLE] = { 90, ANI_LOOP };
 #pragma endregion
 
 #pragma region BOW

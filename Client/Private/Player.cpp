@@ -73,7 +73,7 @@ _int CPlayer::Update(_float fTimeDelta)
 
 	Key_Input(fTimeDelta);
 
-	State_Frame(fTimeDelta);
+	//State_Frame(fTimeDelta);
 
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pRigidBodyCom->isFalling(false);
@@ -89,6 +89,10 @@ void CPlayer::Late_Update(_float fTimeDelta)
 {
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, m_Parts[PART_AXE]);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, m_Parts[PART_SWORD]);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, m_Parts[PART_SHIELD]);
 
 	Vector3 vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_vector vLightPos = XMVectorSet(vMyPos.x, vMyPos.y + 40.f, vMyPos.z - 30, 0.f);
@@ -143,15 +147,50 @@ void CPlayer::Set_ChainState(OBJ_STATE _eState, _bool bLerp)
 
 void CPlayer::Key_Input(_float fTimeDelta)
 {
-	if (FSM_SH == m_iCurrentFSM)
-		Key_Input_SH(fTimeDelta);
-	else if (FSM_COMM == m_iCurrentFSM)
-		Key_Input_COMM(fTimeDelta);
+	if (m_pGameInstance->Get_DIKeyState(KeyType::UP))
+		m_pTransformCom->Go_Straight(fTimeDelta);
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::RIGHT))
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::DOWN))
+		m_pTransformCom->Go_Backward(fTimeDelta);
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::LEFT))
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -fTimeDelta);
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::Key1))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_ATT1);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key2))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_ATT2);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key3))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_ATT3);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key4))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_SH_DRAW);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key5))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_SH_UNDRAW);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key6))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_ROLL);
+	}
+	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key7))
+	{
+		m_iCurrentFSM = FSM_AXE;
+		Set_State(OBJSTATE_IDLE);
+	}
 
-	//if (!m_pBodyFSM->ActingCheck())
-	//{
-		//공통키인풋 여기 넣을예정
-	//}
 }
 
 void CPlayer::Key_Input_SH(_float fTimeDelta)
@@ -565,14 +604,19 @@ HRESULT CPlayer::Ready_PartObjects()
 	CWeapon::WEAPON_DESC WeaponDesc{};
 	WeaponDesc.ModelTag = ModelTag_Sword;
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Finger01");
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
 	if (FAILED(Add_PartObject(PART_SWORD, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 
 	WeaponDesc.ModelTag = ModelTag_Shield;
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Finger01");
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Hand");
 	if (FAILED(Add_PartObject(PART_SHIELD, GameTag_Weapon, &WeaponDesc)))
+		return E_FAIL;
+
+	WeaponDesc.ModelTag = ModelTag_GoodAxe;
+	WeaponDesc.pSocketBoneMatrix = m_Parts[PART_BODY]->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
+	if (FAILED(Add_PartObject(PART_AXE, GameTag_Weapon, &WeaponDesc)))
 		return E_FAIL;
 
 	m_pBodyModelCom = static_cast<CModel*>(m_Parts[PART_BODY]->Find_Component(TEXT("Com_Model")));

@@ -89,7 +89,7 @@ HRESULT CLoader::Loading()
 
 void CLoader::Draw_LoadingText()
 {
-	SetWindowText(g_hWnd, m_szLoadingText);
+	//SetWindowText(g_hWnd, m_szLoadingText);
 }
 
 HRESULT CLoader::Ready_Resources_For_LogoLevel()
@@ -246,18 +246,26 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerSword*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Sword,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/SH/Sword"), PreTransformMatrix))))
 		return E_FAIL;
 	
 	/* For. Prototype_Component_Model_PlayerShild*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Shield,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/SH/Shield"), PreTransformMatrix))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Model_GoodAxe*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(80.f)) * XMMatrixTranslation(0.05f, 0.f, 0.f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_GoodAxe,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Axe/GoodAxe"), PreTransformMatrix))))
+		return E_FAIL;
+
 #pragma endregion
+
+
 
 	/* For. Prototype_Component_Model_Syar*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
@@ -316,7 +324,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Weapon */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon"),
+	if (FAILED(m_pGameInstance->Add_Prototype(GameTag_Weapon,
 		CWeapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	

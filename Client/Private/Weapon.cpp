@@ -65,10 +65,10 @@ void CWeapon::Late_Update(_float fTimeDelta)
 	
 
 #ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+	//m_pGameInstance->Add_DebugObject(m_pColliderCom);
 	
 #endif
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CWeapon::Render()
@@ -86,7 +86,7 @@ HRESULT CWeapon::Render()
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{	
 		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, i)))
-			return E_FAIL;	
+			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;

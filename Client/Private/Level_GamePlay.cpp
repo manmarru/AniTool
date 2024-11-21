@@ -330,7 +330,7 @@ void CLevel_GamePlay::Format_AniChain()
 	ImGui::SameLine();
 	if (ImGui::Button("Apply_Save##Chain"))
 	{
-		ifstream Loadstream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::in);
+		ifstream Loadstream("../Bin/AAExportAA/CHAIN.dat", ios::binary | ios::in);
 		m_pCommander->Setup_Chains(&Loadstream);
 		Loadstream.close();
 	}
@@ -457,10 +457,10 @@ void CLevel_GamePlay::Clear_SaveMap()
 void CLevel_GamePlay::Save_Triggers()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	_uint SizeofSave((_uint)m_mapEventTriggers.size());
+	_uint SizeofSave;
 	_uint SizeofTrigger;
 
-	ofstream SaveStream("../Bin/==Export==/Triggers.dat", ios::out | ios::trunc | ios::binary);
+	ofstream SaveStream("../Bin/AAExportAA/Triggers.dat", ios::out | ios::trunc | ios::binary);
 	if (!SaveStream.is_open())
 		MSG_BOX(TEXT("파일 스트림 오류!"));
 
@@ -477,7 +477,7 @@ void CLevel_GamePlay::Save_Triggers()
 	}
 	for (auto& pair : m_mapEffectTriggers)
 	{
-		for (auto EffectTrigger : pair.second)
+		for (auto& EffectTrigger : pair.second)
 		{
 			Triggers[pair.first].push_back({ EffectTrigger.TriggerTime, true });
 			strcpy_s(tBONENAME.BoneName, MAX_PATH, EffectTrigger.BoneName);
@@ -491,6 +491,7 @@ void CLevel_GamePlay::Save_Triggers()
 	}
 
 	//세이브
+	SizeofSave = ((_uint)Triggers.size());
 	SaveStream.write((const char*)&SizeofSave, sizeof(_uint));
 	for (auto& pair : Triggers)
 	{
@@ -536,7 +537,7 @@ void CLevel_GamePlay::Load_Triggers()
 	_char BoneName[260];
 
 	Clear_SaveMap();
-	ifstream Loadstream("../Bin/==Export==/Triggers.dat", ios::binary | ios::in);
+	ifstream Loadstream("../Bin/AAExportAA/Triggers.dat", ios::binary | ios::in);
 	if (!Loadstream.is_open())
 		MSG_BOX(TEXT("파일 스트림 오류!"));
 
@@ -609,7 +610,7 @@ void CLevel_GamePlay::Load_Triggers()
 
 void CLevel_GamePlay::Save_ChainnedAnimation()
 {
-	ofstream SaveStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::trunc | ios::out);
+	ofstream SaveStream("../Bin/AAExportAA/CHAIN.dat", ios::binary | ios::trunc | ios::out);
 	_int iSize((_int)m_listAniChained.size());
 	SaveStream.write((const char*)(&iSize), sizeof(iSize));
 	
@@ -623,7 +624,7 @@ void CLevel_GamePlay::Save_ChainnedAnimation()
 
 void CLevel_GamePlay::Load_ChainnedAnimation()
 {
-	ifstream LoadStream("../Bin/==Export==/CHAIN.dat", ios::binary | ios::in);
+	ifstream LoadStream("../Bin/AAExportAA/CHAIN.dat", ios::binary | ios::in);
 
 	m_listAniChained.clear(); // 로드전에 비우기
 

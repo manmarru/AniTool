@@ -25,7 +25,6 @@ using namespace std;
 
 #define MiniMax 999
 
-
 #define ModelTag_Sword TEXT("Prototype_Component_Model_PlayerSword")
 #define ModelTag_Shield TEXT("Prototype_Component_Model_PlayerShield")
 #define ModelTag_Syar TEXT("Prototype_Component_Model_Syar")

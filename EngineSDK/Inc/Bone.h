@@ -22,7 +22,7 @@ public:
 	const _float4x4* Get_CombinedTransformationMatrix_Ptr() const {
 		return &m_CombinedTransformationMatrix;
 	}
-
+	_float3* Get_CombinedPos();
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	}

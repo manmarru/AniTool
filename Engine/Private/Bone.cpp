@@ -5,6 +5,11 @@ CBone::CBone()
 
 }
 
+_float3* CBone::Get_CombinedPos()
+{
+	return reinterpret_cast<XMFLOAT3*>(&m_CombinedTransformationMatrix._41);
+}
+
 HRESULT CBone::Initialize(DATA_BINNODE* pNode)
 {
 	m_iParentBoneIndex = pNode->m_iParentBoneIndex;

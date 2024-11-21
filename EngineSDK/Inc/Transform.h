@@ -19,29 +19,14 @@ private:
 	virtual ~CTransform() = default;
 
 public:
-	void Set_State(STATE eState, _fvector vState) {
-		XMStoreFloat3((_float3*)&m_WorldMatrix.m[eState][0], vState);
-	}
-	void Set_Look(_fvector vLook);
-
-	_vector Get_State(STATE eState) {
-		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];
-	}
-
-	_float3 Get_Scaled() const;
-
-	_matrix Get_WorldMatrix_Inverse() const {
-		return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix));
-	}
-
-	_matrix Get_WorldMatrix() const {
-		return XMLoadFloat4x4(&m_WorldMatrix);
-	}
-
-	const _float4x4* Get_WorldMatrix_Ptr() const {
-		return &m_WorldMatrix;
-	}
-	_float4x4* Get_WorldMatrix_Ptr(_bool WARNING_this_is_not_const) { return &m_WorldMatrix; }
+	void				Set_State(STATE eState, _fvector vState) { XMStoreFloat3((_float3*)&m_WorldMatrix.m[eState][0], vState); }
+	void				Set_Look(_fvector vLook);
+	_vector				Get_State(STATE eState) { return XMLoadFloat4x4(&m_WorldMatrix).r[eState]; }
+	_float3				Get_Scaled() const;
+	_matrix				Get_WorldMatrix_Inverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
+	_matrix				Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
+	const _float4x4*	Get_WorldMatrix_Ptr() const { return &m_WorldMatrix; }
+	_float4x4*			Get_WorldMatrix_Ptr(_bool WARNING_this_is_not_const) { return &m_WorldMatrix; }
 
 public:	
 	virtual HRESULT Initialize_Prototype();

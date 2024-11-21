@@ -1,5 +1,5 @@
 #pragma once
-
+#define LRDistance 0.613326f
 #include "Client_Defines.h"
 #include "actor.h"
 

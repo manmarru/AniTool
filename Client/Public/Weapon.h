@@ -35,8 +35,9 @@ public:
 
 public:
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) override;
+	void Set_LocalPos(_fvector vPos);
 	void StoreShield(_bool bDraw);
-
+	
 private:
 	CShader*			m_pShaderCom = { nullptr };
 	CModel*				m_pModelCom = { nullptr };

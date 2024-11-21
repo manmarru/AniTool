@@ -16,23 +16,21 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	_uint Get_NumMeshes() const {
-		return m_iNumMeshes;
+	_uint Get_NumMeshes() const { return m_iNumMeshes;
 	}
 
-	TYPE Get_ModelType() const {
-		return m_eType;
+	TYPE Get_ModelType() const { return m_eType;
 	}
 
 	_int Get_BoneIndex(const _char* pBoneName) const;
 	_int Get_AnimIndex(const _char* pAnimName) const;
 	_matrix Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const {
-
 		return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
 	}
 	const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const {
 		return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr();
 	}
+	_float3* Get_BoneCombindPos(const _char* pBoneName) { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedPos(); }
 	void Set_Bones(const vector<class CBone*>* vBone);
 	const vector<class CBone*>* Get_Bones() { return &m_Bones; };
 	void Set_AnimFrameReset()

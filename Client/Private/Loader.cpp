@@ -258,7 +258,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_GoodAxe*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(80.f)) * XMMatrixTranslation(0.05f, 0.f, 0.f);
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.05f, 0.f, 0.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_GoodAxe,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Axe/GoodAxe"), PreTransformMatrix))))
 		return E_FAIL;

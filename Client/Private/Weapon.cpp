@@ -60,10 +60,6 @@ void CWeapon::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-
-
-	
-
 #ifdef _DEBUG
 	//m_pGameInstance->Add_DebugObject(m_pColliderCom);
 	
@@ -103,6 +99,11 @@ HRESULT CWeapon::Render()
 void CWeapon::Set_SocketMatrix(const _float4x4* pSocketMatrix)
 {
 	m_pSocketMatrix = pSocketMatrix;
+}
+
+void CWeapon::Set_LocalPos(_fvector vPos)
+{
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 
 //true면 방패 꺼내드는거임

@@ -668,7 +668,8 @@ void CLevel_GamePlay::TriggerSetting_Event()
 		sort(m_mapEventTriggers[iCurrentAnimationIndex].begin(), m_mapEventTriggers[iCurrentAnimationIndex].end());
 	}
 
-
+	ImGui::BeginGroup();
+	ImGui::BeginChild("list##EventTrigger");
 	int i(0);
 	ImGui::BeginTable("Triggers", 2);
 	//for (auto& pair : m_mapEventTriggers)
@@ -695,6 +696,9 @@ void CLevel_GamePlay::TriggerSetting_Event()
 		ImGui::TableNextRow();
 	}
 	ImGui::EndTable();
+	ImGui::EndChild();
+	ImGui::EndGroup();
+
 
 	if (m_bShow_EventTriggerPopup)
 	{
@@ -738,6 +742,8 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 		m_mapEffectTriggers[iCurrentAnimationIndex].push_back(Trigger);
 		sort(m_mapEventTriggers[iCurrentAnimationIndex].begin(), m_mapEventTriggers[iCurrentAnimationIndex].end());
 	}
+	ImGui::BeginGroup();
+	ImGui::BeginChild("list##EffectTrigger");
 	ImGui::BeginTable("list", 2);
 
 	for (auto& pair : m_mapEffectTriggers)
@@ -751,7 +757,8 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	}
 
 	ImGui::EndTable();
-
+	ImGui::EndChild();
+	ImGui::EndGroup();
 
 }
 

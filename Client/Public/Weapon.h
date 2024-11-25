@@ -37,6 +37,7 @@ public:
 	virtual void Set_SocketMatrix(const _float4x4* pSocketMatrix) override;
 	void Set_LocalPos(_fvector vPos);
 	void StoreShield(_bool bDraw);
+	void HandControl(_fmatrix vRightHand, _float3* vLeftHand);
 	
 private:
 	CShader*			m_pShaderCom = { nullptr };

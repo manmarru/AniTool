@@ -2,7 +2,7 @@
 #include "..\Public\Weapon.h"
 
 #include "Player.h"
-
+#include "MyMath.h"
 #include "GameInstance.h"
 
 CWeapon::CWeapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -111,6 +111,25 @@ void CWeapon::StoreShield(_bool bDraw)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, bDraw ? 0.f : 0.5f, 1.f));
 	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(bDraw ? 0.f : 180.f));
+}
+
+void CWeapon::HandControl(_fmatrix vRightHand, _float3* vLeftHand)
+{
+	_float3 RHand;
+	XMStoreFloat3(&RHand, XMVector3TransformCoord(XMVectorZero(), vRightHand));
+
+	//´Ã¾î³ª´Âµµ³¢
+	_float fDistance = Compute_Distance(XMLoadFloat3(&RHand), XMLoadFloat3(vLeftHand));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, abs(fDistance) - LRDistance, 1.f));
+
+	////±â¿ï¾îÁö´Âµµ³¢
+	//_vector Dir = XMVector3Normalize(*vLeftHand - RHand);
+	//_vector vAxis = vRightHand.r[1];
+	//_float Angle = acosf(XMVectorGetX(XMVector3Dot(XMVectorSet(0.f, 0.f, 1.f, 0.f), Dir)));
+
+	//_matrix RotationMatrix = XMMatrixRotationAxis(vAxis, Angle);
+
+	//XMStoreFloat4x4(&m_WorldMatrix, RotationMatrix * XMLoadFloat4x4(&m_WorldMatrix));// * vRightHand);
 }
 
 HRESULT CWeapon::Ready_Components(_wstring _MoadeTag)

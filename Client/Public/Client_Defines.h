@@ -28,6 +28,7 @@ using namespace std;
 #define ModelTag_Sword TEXT("Prototype_Component_Model_PlayerSword")
 #define ModelTag_Shield TEXT("Prototype_Component_Model_PlayerShield")
 #define ModelTag_Syar TEXT("Prototype_Component_Model_Syar")
+#define ModelTag_Duaca TEXT("Prototyoe_Component_Model_Duaca")
 #define ModelTag_PlayerBody TEXT("Prototype_Component_Model_PlayerBody")
 #define ModelTag_GoodAxe TEXT("Prototype_Component_Model_GoodAxe")
 #define ModelTag_BadAxe TEXT("Prototype_Component_Model_BadAxe")

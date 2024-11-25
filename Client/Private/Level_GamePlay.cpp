@@ -31,8 +31,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_EditObj()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player()))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Player()))
+	//	return E_FAIL;
 		
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 
@@ -140,6 +140,7 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	Desc.isShadowObj = true;
 	//Desc.ModelTag = ModelTag_Syar;
 	Desc.ModelTag = ModelTag_PlayerBody;
+	//Desc.ModelTag = ModelTag_Duaca;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	

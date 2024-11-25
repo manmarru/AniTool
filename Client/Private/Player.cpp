@@ -82,13 +82,10 @@ _int CPlayer::Update(_float fTimeDelta)
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
 
-	_float3* RHand = m_pBodyModelCom->Get_BoneCombindPos("Bip001-R-Hand");
+	_matrix RHandMatrix = XMLoadFloat4x4(m_pBodyModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand"));
 	_float3* LHand = m_pBodyModelCom->Get_BoneCombindPos("Bip001-L-Hand");
-	_float fDistance = Compute_Distance(XMLoadFloat3(RHand), XMLoadFloat3(LHand));
-	static_cast<CWeapon*>(m_Parts[PART_AXE])->Set_LocalPos(XMVectorSet(0.f, 0.f, abs(fDistance) - LRDistance, 1.f));
-	
-	XMVECTOR Dir = XMVector3Normalize(*RHand - *LHand);
 
+	static_cast<CWeapon*>(m_Parts[PART_AXE])->HandControl(RHandMatrix, LHand);
 	
 	return OBJ_NOEVENT;
 }

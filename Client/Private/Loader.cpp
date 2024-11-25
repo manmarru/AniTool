@@ -225,7 +225,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	ifstream Loadstream("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerBody"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix, &Loadstream))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Body/body"), PreTransformMatrix/*, &Loadstream*/))))
 		return E_FAIL;
 	Loadstream.close();
 	
@@ -233,7 +233,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	Loadstream.open("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerHead"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Head/Head"), PreTransformMatrix, &Loadstream))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Head/Head"), PreTransformMatrix/*, &Loadstream*/))))
 		return E_FAIL;
 	Loadstream.close();
 	
@@ -241,12 +241,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	Loadstream.open("../Bin/Resources/Models/Player/Trigger_Player.dat", ios::in, ios::binary);
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerHair"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Hair/Hair"), PreTransformMatrix, &Loadstream))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Player/Hair/Hair"), PreTransformMatrix/*, &Loadstream*/))))
 		return E_FAIL;
 	Loadstream.close();
 	
 	/* For. Prototype_Component_Model_PlayerSword*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixTranslation(0.05f, 0.f, 0.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Sword,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/SH/Sword"), PreTransformMatrix))))
 		return E_FAIL;
@@ -258,7 +258,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_GoodAxe*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.05f, 0.f, 0.f);
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_GoodAxe,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Axe/GoodAxe"), PreTransformMatrix))))
 		return E_FAIL;
@@ -273,6 +273,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Syar/syar"), PreTransformMatrix))))
 		return E_FAIL;
 
+	//For Prototype_Component_Model_Duaca
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Duaca,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Duaca/Duaca"), PreTransformMatrix))))
+		return E_FAIL;
+		
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */

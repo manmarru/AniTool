@@ -187,6 +187,11 @@ void CLevel_GamePlay::Format_ImGUI()
 	{
 		*m_pAnimationSpeed = 0.f;
 	}
+	ImGui::SameLine();
+	if (ImGui::Button("RePlay"))
+	{
+		m_pCommander->Reset_Animation();
+	}
 
 	ImGui::SliderFloat("AnimationSpeed", m_pAnimationSpeed, 0, 2.f);
 	_float CurrentTrackPosition = (_float)*m_pCommander->Get_CurrentTrackPosition_ptr();

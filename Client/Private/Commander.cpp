@@ -80,6 +80,11 @@ void CCommander::Setup_Chains(ifstream* _LoadStream)
 	m_pFSM->Setup_Chains(_LoadStream);
 }
 
+void CCommander::Reset_Animation()
+{
+	m_pContaining_Models.front()->Set_AnimFrameReset();
+}
+
 void CCommander::Key_Input(_float _fTimeDelta)
 {
 	

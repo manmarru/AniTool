@@ -39,6 +39,7 @@ public:
 			i = 0;
 		m_CurrentTrackPosition = 0;
 		Play_Animation(0.f);
+		TriggerSetting();
 	}
 
 	void Set_CurrentTrackPosition(_double dPosition);

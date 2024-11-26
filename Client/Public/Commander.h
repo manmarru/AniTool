@@ -36,7 +36,7 @@ public:
 	const vector<CBone*>* Get_Bones();
 	void Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger);
 	void Setup_Chains(ifstream* _LoadStream);
-
+	void Reset_Animation();
 
 public:
 	void Key_Input(_float _fTimeDelta);

@@ -40,10 +40,11 @@ private:
 
 	_bool m_bShow_BoneFlags = { false };
 	_bool m_bShow_Chain = { false };
+	_bool m_bShow_Prop = { false };
+
 	_bool m_bShow_EventTriggerPopup = { false };
 	_bool m_bShow_ChainPopup = { false };
 	_bool m_bShow_SpeedPopup = { false };
-
 
 	_float* m_pAnimationSpeed = { nullptr };
 	_float m_fFlag_AnimationSpeed = { 1.f };
@@ -73,6 +74,7 @@ private:
 	void Format_Trigger();
 	void Format_SelectBone();
 	void Format_AniChain();
+	void Format_Prop();
 	void Imgui_Dialogue();
 
 

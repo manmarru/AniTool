@@ -16,12 +16,8 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	_uint Get_NumMeshes() const { return m_iNumMeshes;
-	}
-
-	TYPE Get_ModelType() const { return m_eType;
-	}
-
+	_uint Get_NumMeshes() const { return m_iNumMeshes; }
+	TYPE Get_ModelType() const { return m_eType; }
 	_int Get_BoneIndex(const _char* pBoneName) const;
 	_int Get_AnimIndex(const _char* pAnimName) const;
 	_matrix Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const {
@@ -39,7 +35,6 @@ public:
 			i = 0;
 		m_CurrentTrackPosition = 0;
 		Play_Animation(0.f);
-		TriggerSetting();
 	}
 
 	void Set_CurrentTrackPosition(_double dPosition);
@@ -85,6 +80,8 @@ public:
 	_bool Play_Animation(_float fTimeDelta, const char* _BoneName); // 루트애님
 	_bool Play_TriggerAnimation(_float fTimeDelta); // 밟은 트리거 반환 -> 밟은 트리거를 스텍에 넣어주는걸로 변경
 	_bool Animation_Interpolation(_float fTimeDelta);
+
+	void Turn90();
 
 	HRESULT Read_BinFile(const _tchar* pModelFilePath);
 

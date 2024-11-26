@@ -85,6 +85,11 @@ void CCommander::Reset_Animation()
 	m_pContaining_Models.front()->Set_AnimFrameReset();
 }
 
+void CCommander::Turn90()
+{
+	m_pContaining_Models.front()->Turn90();
+}
+
 void CCommander::Key_Input(_float _fTimeDelta)
 {
 	

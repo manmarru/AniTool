@@ -540,6 +540,11 @@ _bool CModel::Animation_Interpolation(_float fTimeDelta)
 	return false;
 }
 
+void CModel::Turn90()
+{
+	XMStoreFloat4x4(&m_PreTransformMatrix, XMLoadFloat4x4(&m_PreTransformMatrix) * XMMatrixRotationY(XMConvertToRadians(90.f)));
+}
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, aiTextureType eMaterialType, _uint iMeshIndex)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();

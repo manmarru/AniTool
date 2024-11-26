@@ -70,6 +70,9 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	if (m_bShow_Chain)
 		Format_AniChain();
 
+	if (m_bShow_Prop)
+		Format_Prop();
+
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -177,6 +180,9 @@ void CLevel_GamePlay::Format_ImGUI()
 	ImGui::SameLine();
 	if (ImGui::Button("Trigger##Setting"))
 		m_bShow_TriggerSetting = !m_bShow_TriggerSetting;
+	ImGui::SameLine();
+	if (ImGui::Button("Prop##Prop"))
+		m_bShow_Prop = !m_bShow_Prop;
 
 	if (ImGui::Button("Speed->1"))
 	{
@@ -200,8 +206,6 @@ void CLevel_GamePlay::Format_ImGUI()
 
 	m_pCommander->Set_CurrentTrackPosition((_double)CurrentTrackPosition);
 	
-
-
 	ImGui::Text("Animation : %d / %d", m_pCommander->Get_CurrentAnimationIndex(), m_pCommander->Get_AnimationNum() - 1);
 
 	int aniNum(0);
@@ -218,6 +222,11 @@ void CLevel_GamePlay::Format_ImGUI()
 	if (ImGui::Button("+", ImVec2(50.f, 50.f)))
 	{
 		m_pCommander->Set_Animation(min(m_pCommander->Get_AnimationNum() - 1, m_pCommander->Get_CurrentAnimationIndex() + 1));
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("@", ImVec2(50.f, 50.f)))
+	{
+		m_pCommander->Turn90();
 	}
 
 	ImGui::End();
@@ -414,6 +423,25 @@ void CLevel_GamePlay::Format_AniChain()
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
+	}
+
+
+	ImGui::End();
+}
+
+void CLevel_GamePlay::Format_Prop()
+{
+	ImGui::Begin("Prop##Prop");
+
+	//»À ¼±ÅÃ
+	if (ImGui::Button("Bone##Prop"))
+	{
+		m_bEffectTrigger = !m_bEffectTrigger;
+	}
+
+	if (ImGui::Button("Appear##Prop")) // ÆÄÃ÷ »ý¼º
+	{
+
 	}
 
 

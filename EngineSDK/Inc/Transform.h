@@ -21,6 +21,7 @@ private:
 public:
 	void				Set_State(STATE eState, _fvector vState) { XMStoreFloat3((_float3*)&m_WorldMatrix.m[eState][0], vState); }
 	void				Set_Look(_fvector vLook);
+	void				Set_Right(_fvector vRight);
 	_vector				Get_State(STATE eState) { return XMLoadFloat4x4(&m_WorldMatrix).r[eState]; }
 	_float3				Get_Scaled() const;
 	_matrix				Get_WorldMatrix_Inverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }

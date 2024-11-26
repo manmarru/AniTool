@@ -21,6 +21,20 @@ void CTransform::Set_Look(_fvector vLook)
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
+void CTransform::Set_Right(_fvector vRight)
+{
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight));
+	_float3	vScale = Get_Scaled();
+
+	//up X Right = Look
+	_vector vLook = XMVector3Cross(Get_State(STATE_UP), vRight);
+	_vector vUp = XMVector3Cross(vRight, vLook);
+
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight));
+	Set_State(STATE_UP, XMVector3Normalize(vUp));
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook));
+}
+
 _float3 CTransform::Get_Scaled() const
 {
 	_matrix		WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);

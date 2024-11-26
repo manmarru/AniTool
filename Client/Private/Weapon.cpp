@@ -113,23 +113,21 @@ void CWeapon::StoreShield(_bool bDraw)
 	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(bDraw ? 0.f : 180.f));
 }
 
-void CWeapon::HandControl(_fmatrix vRightHand, _float3* vLeftHand)
+void CWeapon::HandControl(_fmatrix vRightHand, _fmatrix vLeftHand)
 {
 	_float3 RHand;
 	XMStoreFloat3(&RHand, XMVector3TransformCoord(XMVectorZero(), vRightHand));
+	_float3 LHand;
+	XMStoreFloat3(&LHand, XMVector3TransformCoord(XMVectorZero(), vLeftHand));
 
 	//늘어나는도끼
-	_float fDistance = Compute_Distance(XMLoadFloat3(&RHand), XMLoadFloat3(vLeftHand));
+	_float fDistance = Compute_Distance(XMLoadFloat3(&RHand), XMLoadFloat3(&LHand));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, abs(fDistance) - LRDistance, 1.f));
 
-	////기울어지는도끼
-	//_vector Dir = XMVector3Normalize(*vLeftHand - RHand);
-	//_vector vAxis = vRightHand.r[1];
-	//_float Angle = acosf(XMVectorGetX(XMVector3Dot(XMVectorSet(0.f, 0.f, 1.f, 0.f), Dir)));
+	//기울어지는도끼
+	//xmflaot3
 
-	//_matrix RotationMatrix = XMMatrixRotationAxis(vAxis, Angle);
 
-	//XMStoreFloat4x4(&m_WorldMatrix, RotationMatrix * XMLoadFloat4x4(&m_WorldMatrix));// * vRightHand);
 }
 
 HRESULT CWeapon::Ready_Components(_wstring _MoadeTag)

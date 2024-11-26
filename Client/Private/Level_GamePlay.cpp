@@ -31,8 +31,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_EditObj()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Player()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Player()))
+		return E_FAIL;
 		
 	//m_pGameInstance->PlayBGM(L"Default.ogg", 0.5f, true);
 

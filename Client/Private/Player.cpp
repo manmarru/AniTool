@@ -83,9 +83,9 @@ _int CPlayer::Update(_float fTimeDelta)
 		pPartObject->Update(fTimeDelta);
 
 	_matrix RHandMatrix = XMLoadFloat4x4(m_pBodyModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand"));
-	_float3* LHand = m_pBodyModelCom->Get_BoneCombindPos("Bip001-L-Hand");
+	_matrix LHandMatrix = XMLoadFloat4x4(m_pBodyModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-Hand"));
 
-	static_cast<CWeapon*>(m_Parts[PART_AXE])->HandControl(RHandMatrix, LHand);
+	static_cast<CWeapon*>(m_Parts[PART_AXE])->HandControl(RHandMatrix, LHandMatrix);
 	
 	return OBJ_NOEVENT;
 }

@@ -104,7 +104,8 @@ void CFSM_Player::SetUp_Animation(_uint _iAnimationIndex, ANITYPE _AniType, _boo
 
 _bool CFSM_Player::Play_Animation(_float _fTimeDelta)
 {
-	return m_pModelCom->Play_TriggerAnimation(_fTimeDelta);
+	//return m_pModelCom->Play_TriggerAnimation(_fTimeDelta);
+	return m_pModelCom->Play_Animation(_fTimeDelta);
 }
 
 void CFSM_Player::Register_AnimationIndex()

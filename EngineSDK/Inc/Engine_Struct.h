@@ -112,7 +112,7 @@ namespace Engine
 		XMFLOAT4		vRight;
 		XMFLOAT4		vUp;
 		XMFLOAT4		vLook;
-		XMFLOAT4		vTranslation;			
+		XMFLOAT4		vTranslation;
 		XMFLOAT2		vLifeTime;
 
 		static const unsigned int	iNumElements = 7;

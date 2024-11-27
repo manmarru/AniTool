@@ -34,6 +34,7 @@ public:
 
 public:
     void Set_TextureNum(_uint _iNum) { m_iTextureNum = _iNum; }
+    void Set_Scale(_float _fScale);
 
 private:
     CTexture*   m_pTextureCom = { nullptr };

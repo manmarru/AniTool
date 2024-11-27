@@ -23,9 +23,9 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 #pragma region VERTEX_BUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
-	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT; /* 정적버퍼로 생성한다. */
+	m_BufferDesc.Usage = D3D11_USAGE_DYNAMIC; //동적버퍼로 생성할거임
 	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	m_BufferDesc.CPUAccessFlags = 0;
+	m_BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
@@ -95,6 +95,22 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 HRESULT CVIBuffer_Rect::Initialize(void * pArg)
 {
 	return S_OK;
+}
+
+void CVIBuffer_Rect::Set_Scale(_float _fScale)
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTXPOSTEX* pVertices = static_cast<VTXPOSTEX*>(SubResource.pData);
+
+	pVertices[0].vPosition = { -_fScale, _fScale, 0.f };
+	pVertices[1].vPosition = { _fScale, _fScale, 0.f };
+	pVertices[2].vPosition = { _fScale, -_fScale, 0.f };
+	pVertices[3].vPosition = { -_fScale, -_fScale, 0.f };
+	
+	m_pContext->Unmap(m_pVB, 0);
 }
 
 CVIBuffer_Rect * CVIBuffer_Rect::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

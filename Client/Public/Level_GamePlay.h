@@ -46,6 +46,7 @@ private:
 	_bool m_bShow_ChainPopup = { false };
 	_bool m_bShow_SpeedPopup = { false };
 
+	_float m_fFlagScale = { 1.f };
 	_float* m_pAnimationSpeed = { nullptr };
 	_float m_fFlag_AnimationSpeed = { 1.f };
 	CCommander* m_pCommander = { nullptr };

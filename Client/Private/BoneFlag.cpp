@@ -76,6 +76,11 @@ HRESULT CBoneFlag::Render()
     return S_OK;
 }
 
+void CBoneFlag::Set_Scale(_float _fScale)
+{
+    static_cast<CVIBuffer_Rect*>(m_pVIBufferCom)->Set_Scale(_fScale);
+}
+
 HRESULT CBoneFlag::Ready_Components()
 {
     /* FOR.Com_Shader */

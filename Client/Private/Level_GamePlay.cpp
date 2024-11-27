@@ -281,8 +281,9 @@ void CLevel_GamePlay::Format_Trigger()
 void CLevel_GamePlay::Format_SelectBone()
 {
 	ImGui::Begin("Trigger_Effect");
+	//여기 플래그들 크기 조절하는 기능 넣어두자, 체크박스 체크해둔 동안에는 스케일이 슬라이드에 동기화되게 하면 될거같아!
 	ImGui::SameLine();
-	if (ImGui::Button("Show_Flags"))
+	if (ImGui::Button("Flags", ImVec2{ 50.f, 50.f }))
 	{
 		m_bShow_BoneFlags = !m_bShow_BoneFlags;
 	}
@@ -298,8 +299,19 @@ void CLevel_GamePlay::Format_SelectBone()
 	{
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_vecFlags[m_iSelectedBone]);
 	}
+	ImGui::SameLine();
 
+	float Scale(0);
+	if (ImGui::InputFloat("Scale##BoneFlag", &Scale, 0.f, 0.f) && ImGui::IsItemDeactivatedAfterEdit())
+	{
+		for (auto& Flag : m_vecFlags)
+		{
+			Flag->Set_Scale(Scale);
+		}
+	}
 
+	ImGui::BeginGroup();
+	ImGui::BeginChild("bones##BoneFlag");
 	ImGui::BeginTable("bones", 2);
 	
 	int i(0);
@@ -326,6 +338,9 @@ void CLevel_GamePlay::Format_SelectBone()
 		++i;
 	}
 	ImGui::EndTable();
+	ImGui::EndChild();
+	ImGui::EndGroup();
+
 
 	ImGui::End();
 }

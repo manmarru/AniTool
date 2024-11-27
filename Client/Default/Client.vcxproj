@@ -190,7 +190,6 @@
     <ClInclude Include="..\public\CameraManager.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\EditObj.h" />
-    <ClInclude Include="..\Public\Effect_Explosion.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\FSM.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -206,12 +205,9 @@
     <ClInclude Include="..\Public\Monster.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Public\Particle_Explosion.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Pooling_Manager.h" />
+    <ClInclude Include="..\public\Prop.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\public\TestSnow.h" />
@@ -239,7 +235,6 @@
     <ClCompile Include="..\private\CameraManager.cpp" />
     <ClCompile Include="..\Private\Commander.cpp" />
     <ClCompile Include="..\private\EditObj.cpp" />
-    <ClCompile Include="..\Private\Effect_Explosion.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\FSM.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -255,12 +250,9 @@
     <ClCompile Include="..\Private\Monster.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Private\Particle_Explosion.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Pooling_Manager.cpp" />
+    <ClCompile Include="..\private\Prop.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\private\TestSnow.cpp" />

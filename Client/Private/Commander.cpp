@@ -2,6 +2,8 @@
 #include "Commander.h"
 #include "GameInstance.h"
 #include "FSM.h"
+#include "EditObj.h"
+#include "Prop.h"
 
 CCommander::CCommander()
 {
@@ -63,6 +65,11 @@ void CCommander::Set_Animation(string _strChain)
 _uint CCommander::Get_AnimationNum()
 {
 	return m_pContaining_Models.front()->Get_AnimationNum();
+}
+
+const _float4x4* CCommander::Get_WorldMatrix_Ptr()
+{
+	return static_cast<CEditObj*>(m_pUnit)->Get_WorldMatrix_Ptr();
 }
 
 const vector<CBone*>* CCommander::Get_Bones()

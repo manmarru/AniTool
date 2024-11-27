@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CShader;
 class CModel;
+class CPartObject;
 END
 
 BEGIN(Client)
@@ -37,11 +38,12 @@ public:
 
 public:
 	virtual void* Get_FSM() { return m_pFSM; }
+	const _float4x4* Get_WorldMatrix_Ptr();
 
 private:
-	class CShader*	m_pShaderCom = { nullptr };
-	class CModel*	m_pModelCom = { nullptr };
-	class CFSM*		m_pFSM = { nullptr };
+	class CShader*		m_pShaderCom = { nullptr };
+	class CModel*		m_pModelCom = { nullptr };
+	class CFSM*			m_pFSM = { nullptr };
 
 private:
 	_bool m_bShadowObj = { false };

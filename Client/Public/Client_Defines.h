@@ -36,6 +36,7 @@ using namespace std;
 #define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")
 #define GameTag_BoneFlag TEXT("Prototype_GameObject_BoneFlag")
+#define GameTag_Prop TEXT("Prototype_Gameobject_Prop")
 #define GameTag_TestStar TEXT("Prototype_GameObject_TestStar")
 #define GameTag_TestSnow TEXT("Prototype_GameObject_TestSnow")
 

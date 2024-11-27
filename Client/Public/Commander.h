@@ -33,6 +33,7 @@ public:
 	void Set_Animation(_uint _iAnimationIndex);
 	void Set_Animation(string _strChain);
 	_uint Get_AnimationNum();
+	const _float4x4* Get_WorldMatrix_Ptr();
 	const vector<CBone*>* Get_Bones();
 	void Register_Trigger(map<_uint, vector<_double>>* _pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger);
 	void Setup_Chains(ifstream* _LoadStream);
@@ -50,7 +51,6 @@ private:
 	class CFSM*		m_pFSM = { nullptr };
 	map<_uint, vector<_double>> EventTrigger;
 	map<_uint, vector<EFFECTTRIGGER>> EffectTrigger;
-
 
 };
 

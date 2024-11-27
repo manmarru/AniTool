@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "TestStar.h"
 #include "TestSnow.h"
+#include "PartObject.h"
 #include "FSM.h"
 
 CEditObj::CEditObj(ID3D11)
@@ -154,6 +155,11 @@ HRESULT CEditObj::Render_LightDepth()
 	}
 
 	return S_OK;
+}
+
+const _float4x4* CEditObj::Get_WorldMatrix_Ptr()
+{
+	return m_pTransformCom->Get_WorldMatrix_Ptr();
 }
 
 HRESULT CEditObj::Ready_Components(_wstring& _ModelTag)

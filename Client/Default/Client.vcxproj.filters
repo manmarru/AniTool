@@ -46,17 +46,8 @@
     <Filter Include="02.GameObjects\03.Player\Weapon">
       <UniqueIdentifier>{a2e63eda-00f8-4bd2-b6f4-8a17ca24f471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\05.Particle">
-      <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Particle\Snow">
-      <UniqueIdentifier>{9392b809-ca85-48c4-b3c0-fb5fcb8e0c90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\03.Player\Explosion">
-      <UniqueIdentifier>{4c7940a8-2d92-4181-8112-21df9a7b6ddc}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\06.Effect">
       <UniqueIdentifier>{38d0ca3c-8850-4277-ba14-71f70831eac9}</UniqueIdentifier>
@@ -108,6 +99,9 @@
     </Filter>
     <Filter Include="02.GameObjects\###EditObj###">
       <UniqueIdentifier>{263c5ea6-e0b2-4c0b-a95f-e215b6c7ec8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Prop">
+      <UniqueIdentifier>{3929f961-604d-4d89-ae8f-78690f39d6d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -161,15 +155,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h">
-      <Filter>02.GameObjects\05.Particle\Snow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Particle_Explosion.h">
-      <Filter>02.GameObjects\03.Player\Explosion</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Effect_Explosion.h">
-      <Filter>02.GameObjects\06.Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Actor.h">
       <Filter>02.GameObjects\00.Actor</Filter>
@@ -246,6 +231,9 @@
     <ClInclude Include="..\Public\FSM_Player.h">
       <Filter>95.FSM</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Prop.h">
+      <Filter>02.GameObjects\05.Prop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -289,15 +277,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp">
-      <Filter>02.GameObjects\05.Particle\Snow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Particle_Explosion.cpp">
-      <Filter>02.GameObjects\03.Player\Explosion</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Effect_Explosion.cpp">
-      <Filter>02.GameObjects\06.Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Actor.cpp">
       <Filter>02.GameObjects\00.Actor</Filter>
@@ -361,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FSM_Player.cpp">
       <Filter>95.FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Prop.cpp">
+      <Filter>02.GameObjects\05.Prop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

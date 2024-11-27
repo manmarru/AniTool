@@ -69,7 +69,7 @@ void CWeapon::Late_Update(_float fTimeDelta)
 
 HRESULT CWeapon::Render()
 {
-	if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))  
 		return E_FAIL;
 	
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))

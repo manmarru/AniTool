@@ -8,6 +8,7 @@
 
 #include "EditObj.h"
 #include "BoneFlag.h"
+#include "Prop.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -281,7 +282,7 @@ void CLevel_GamePlay::Format_Trigger()
 void CLevel_GamePlay::Format_SelectBone()
 {
 	ImGui::Begin("Trigger_Effect");
-	//여기 플래그들 크기 조절하는 기능 넣어두자, 체크박스 체크해둔 동안에는 스케일이 슬라이드에 동기화되게 하면 될거같아!
+
 	ImGui::SameLine();
 	if (ImGui::Button("Flags", ImVec2{ 50.f, 50.f }))
 	{
@@ -379,7 +380,6 @@ void CLevel_GamePlay::Format_AniChain()
 		m_listAniChained.clear();
 	}
 
-
 	if (ImGui::Button("Preview"))
 	{
 		m_pCommander->Set_Animation(m_tChain.ChainTag);
@@ -456,9 +456,25 @@ void CLevel_GamePlay::Format_Prop()
 
 	if (ImGui::Button("Appear##Prop")) // 파츠 생성
 	{
+		CProp::PROP_DESC desc;
+		desc.ModelTag = ModelTag_GoodAxe;
+		int i(0);
+		for (auto& bone : *m_pCommander->Get_Bones())
+		{
+			if (i == m_iSelectedBone)
+			{
+				desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
+				desc.pParentWorldMatrix = m_pCommander->Get_WorldMatrix_Ptr();
 
+				m_pProp.push_back(static_cast<CProp*>(CGameInstance::Get_Instance()->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_Prop"), GameTag_Prop, &desc)));
+				if (nullptr == m_pProp.back())
+				{
+					MSG_BOX(TEXT("Failed To Cloned : CProp"));
+				}
+			}
+			++i;
+		}
 	}
-
 
 	ImGui::End();
 }

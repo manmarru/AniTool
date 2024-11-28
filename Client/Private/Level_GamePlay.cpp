@@ -465,7 +465,8 @@ void CLevel_GamePlay::Format_Prop()
 		if (ImGui::Button("Export##Prop", ImVec2{ 50.f, 50.f })) // ÆÄÃ÷ »ý¼º
 		{
 			CProp::PROP_DESC desc;
-			desc.ModelTag = ModelTag_GoodAxe;
+			//desc.ModelTag = ModelTag_GoodAxe;
+			desc.ModelTag = ModelTag_GoodBowBox;
 			int i(0);
 			for (auto& bone : *m_pCommander->Get_Bones())
 			{
@@ -494,12 +495,20 @@ void CLevel_GamePlay::Format_Prop()
 	if (ImGui::BeginTabItem("Setting##Prop"))
 	{
 		ImGui::Checkbox("Syncro##Prop", &m_bPropRotationSyncro);
-		ImGui::SliderFloat("X##Prop", &m_fPropRotationX, -180, 180);
-		ImGui::SliderFloat("Y##Prop", &m_fPropRotationY, -180, 180);
-		ImGui::SliderFloat("Z##Prop", &m_fPropRotationZ, -180, 180);
+		ImGui::SliderFloat("X##PropRotation", &m_fPropRotationX, -180, 180);
+		ImGui::SliderFloat("Y##PropRotation", &m_fPropRotationY, -180, 180);
+		ImGui::SliderFloat("Z##PropRotation", &m_fPropRotationZ, -180, 180);
+
+		ImGui::NewLine();
+		ImGui::SliderFloat("X##PropPos", &m_vPropRevisionPos.x, -10.f, 10.f);
+		ImGui::SliderFloat("Y##PropPos", &m_vPropRevisionPos.y, -10.f, 10.f);
+		ImGui::SliderFloat("Z##PropPos", &m_vPropRevisionPos.z, -10.f, 10.f);
 
 		if (m_bPropRotationSyncro)
+		{
 			m_pProp->Rotation(XMConvertToRadians(m_fPropRotationX), XMConvertToRadians(m_fPropRotationY), XMConvertToRadians(m_fPropRotationZ));
+			m_pProp->Set_LocalPos(XMVectorSet(m_vPropRevisionPos.x, m_vPropRevisionPos.y, m_vPropRevisionPos.z, 1.f));
+		}
 
 		ImGui::EndTabItem();
 	}

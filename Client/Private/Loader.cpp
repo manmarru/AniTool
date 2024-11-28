@@ -219,6 +219,20 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_GoodAxe,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Axe/GoodAxe"), PreTransformMatrix))))
 		return E_FAIL;
+	
+	/* For. Prototype_Component_Model_GoodBowBox*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_GoodBowBox,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Bow/Good/GoodBowBox"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_BadBowBox*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_BadBowBox,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Player/Bow/Bad/BadBowBox"), PreTransformMatrix))))
+		return E_FAIL;
+
+
 
 #pragma endregion
 

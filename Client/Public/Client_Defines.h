@@ -32,6 +32,9 @@ using namespace std;
 #define ModelTag_PlayerBody TEXT("Prototype_Component_Model_PlayerBody")
 #define ModelTag_GoodAxe TEXT("Prototype_Component_Model_GoodAxe")
 #define ModelTag_BadAxe TEXT("Prototype_Component_Model_BadAxe")
+#define ModelTag_GoodBowBox TEXT("Prototype_Component_Model_GoodBowBox")
+#define ModelTag_BadBowBox TEXT("Prototype_Component_Model_BadBowBox")
+
 
 #define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")

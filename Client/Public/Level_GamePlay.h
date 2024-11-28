@@ -51,11 +51,14 @@ private:
 	_float* m_pAnimationSpeed = { nullptr };
 	_float m_fFlag_AnimationSpeed = { 1.f };
 	CCommander* m_pCommander = { nullptr };
+	//소품
 	CProp* m_pProp = { nullptr };
 	_bool m_bPropRotationSyncro = { false };
 	_float m_fPropRotationX = { 0.f }; // 사원수임
 	_float m_fPropRotationY = { 0.f };
 	_float m_fPropRotationZ = { 0.f };
+	_float3 m_vPropRevisionPos = {0.f, 0.f, 0.f}; // 보정값
+
 	map<_uint, vector<_double>>			m_mapEventTriggers;	// 애니번호, 시간 순서쌍의 트리거
 	map<_uint, vector<EFFECTTRIGGER>>	m_mapEffectTriggers;// 이펙트트리거 : 애니번호 -> 시간, 뼈이름
 	map<_uint, vector<SPEEDTRIGGER>>	m_mapSpeedTriggers;	// 스피드트리거 : 애니번호 -> 시간, 스피드 (가급적이면 1로 돌아오는 포인트도 찍어주자.)

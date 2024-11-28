@@ -448,33 +448,63 @@ void CLevel_GamePlay::Format_Prop()
 {
 	ImGui::Begin("Prop##Prop");
 
-	//뼈 선택
-	if (ImGui::Button("Bone##Prop"))
-	{
-		m_bEffectTrigger = !m_bEffectTrigger;
-	}
+	//생성해둔 소품들 고르는 탭, 삭제기능도 있으면 좋고
+	ImGui::BeginTabBar("asdf##Prop");
 
-	if (ImGui::Button("Appear##Prop")) // 파츠 생성
+	ImGui::NewLine();
+
+	if (ImGui::BeginTabItem("Props##Prop"))
 	{
-		CProp::PROP_DESC desc;
-		desc.ModelTag = ModelTag_GoodAxe;
-		int i(0);
-		for (auto& bone : *m_pCommander->Get_Bones())
+		//뼈 선택
+		if (ImGui::Button("Bone##Prop", ImVec2{ 50.f, 50.f }))
 		{
-			if (i == m_iSelectedBone)
-			{
-				desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
-				desc.pParentWorldMatrix = m_pCommander->Get_WorldMatrix_Ptr();
-
-				m_pProp.push_back(static_cast<CProp*>(CGameInstance::Get_Instance()->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_Prop"), GameTag_Prop, &desc)));
-				if (nullptr == m_pProp.back())
-				{
-					MSG_BOX(TEXT("Failed To Cloned : CProp"));
-				}
-			}
-			++i;
+			m_bEffectTrigger = !m_bEffectTrigger;
 		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Export##Prop", ImVec2{ 50.f, 50.f })) // 파츠 생성
+		{
+			CProp::PROP_DESC desc;
+			desc.ModelTag = ModelTag_GoodAxe;
+			int i(0);
+			for (auto& bone : *m_pCommander->Get_Bones())
+			{
+				if (i == m_iSelectedBone)
+				{
+					desc.pSocketBoneMatrix = bone->Get_CombinedTransformationMatrix_Ptr();
+					desc.pParentWorldMatrix = m_pCommander->Get_WorldMatrix_Ptr();
+
+					if (nullptr == m_pProp)
+						m_pProp = static_cast<CProp*>(CGameInstance::Get_Instance()->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_Prop"), GameTag_Prop, &desc));
+					else
+						m_pProp->Set_SocketMatrix(desc.pSocketBoneMatrix);
+
+
+					if (nullptr == m_pProp)
+					{
+						MSG_BOX(TEXT("Failed To Cloned : CProp"));
+					}
+				}
+				++i;
+			}
+		}
+		ImGui::EndTabItem();
 	}
+	//회전 + 이동해보는 탭
+	if (ImGui::BeginTabItem("Setting##Prop"))
+	{
+		ImGui::Checkbox("Syncro##Prop", &m_bPropRotationSyncro);
+		ImGui::SliderFloat("X##Prop", &m_fPropRotationX, -180, 180);
+		ImGui::SliderFloat("Y##Prop", &m_fPropRotationY, -180, 180);
+		ImGui::SliderFloat("Z##Prop", &m_fPropRotationZ, -180, 180);
+
+		if (m_bPropRotationSyncro)
+			m_pProp->Rotation(XMConvertToRadians(m_fPropRotationX), XMConvertToRadians(m_fPropRotationY), XMConvertToRadians(m_fPropRotationZ));
+
+		ImGui::EndTabItem();
+	}
+
+	ImGui::EndTabBar();
 
 	ImGui::End();
 }

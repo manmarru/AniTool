@@ -100,6 +100,11 @@ void CProp::Set_LocalPos(_fvector vPos)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 
+void CProp::Rotation(_float _fX, _float _fY, _float _fZ)
+{
+	m_pTransformCom->Rotation(_fX, _fY, _fZ);
+}
+
 HRESULT CProp::Ready_Components(_wstring _MoadeTag)
 {
 	/* FOR.Com_Shader */

@@ -496,13 +496,49 @@ void CLevel_GamePlay::Format_Prop()
 	{
 		ImGui::Checkbox("Syncro##Prop", &m_bPropRotationSyncro);
 		ImGui::SliderFloat("X##PropRotation", &m_fPropRotationX, -180, 180);
+		ImGui::SameLine();
+		if (ImGui::Button("+##xRot+"))
+			m_fPropRotationX += 1.f;
+		ImGui::SameLine();
+		if (ImGui::Button("-##xRot-"))
+			m_fPropRotationX -= 1.f;
 		ImGui::SliderFloat("Y##PropRotation", &m_fPropRotationY, -180, 180);
+		ImGui::SameLine();
+		if (ImGui::Button("+##yRot+"))
+			m_fPropRotationX += 1.f;
+		ImGui::SameLine();
+		if (ImGui::Button("-##yRot-"))
+			m_fPropRotationX -= 1.f;
 		ImGui::SliderFloat("Z##PropRotation", &m_fPropRotationZ, -180, 180);
+		ImGui::SameLine();
+		if (ImGui::Button("+##zRot+"))
+			m_fPropRotationX += 1.f;
+		ImGui::SameLine();
+		if (ImGui::Button("-##zRot-"))
+			m_fPropRotationX -= 1.f;
 
 		ImGui::NewLine();
 		ImGui::SliderFloat("X##PropPos", &m_vPropRevisionPos.x, -10.f, 10.f);
+		ImGui::SameLine();
+		if (ImGui::Button("+##xPos+"))
+			m_vPropRevisionPos.x += 0.01f;
+		ImGui::SameLine();
+		if (ImGui::Button("-##xPos-"))
+			m_vPropRevisionPos.x -= 0.01f;
 		ImGui::SliderFloat("Y##PropPos", &m_vPropRevisionPos.y, -10.f, 10.f);
+		ImGui::SameLine();
+		if (ImGui::Button("+##yPos+"))
+			m_vPropRevisionPos.y += 0.01f;
+		ImGui::SameLine();
+		if (ImGui::Button("-##yPos-"))
+			m_vPropRevisionPos.y -= 0.01f;
 		ImGui::SliderFloat("Z##PropPos", &m_vPropRevisionPos.z, -10.f, 10.f);
+		ImGui::SameLine();
+		if (ImGui::Button("+##zPos+"))
+			m_vPropRevisionPos.z += 0.01f;
+			ImGui::SameLine();
+		if (ImGui::Button("-##zPos-"))
+			m_vPropRevisionPos.z -= 0.01f;
 
 		if (m_bPropRotationSyncro)
 		{

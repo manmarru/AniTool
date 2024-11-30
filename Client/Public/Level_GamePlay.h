@@ -44,6 +44,7 @@ private:
 	_bool m_bShow_Prop = { false };
 
 	_bool m_bShow_EventTriggerPopup = { false };
+	_bool m_bShow_EffectTriggerPopup = { false };
 	_bool m_bShow_ChainPopup = { false };
 	_bool m_bShow_SpeedPopup = { false };
 
@@ -58,6 +59,7 @@ private:
 	_float m_fPropRotationY = { 0.f };
 	_float m_fPropRotationZ = { 0.f };
 	_float3 m_vPropRevisionPos = {0.f, 0.f, 0.f}; // 보정값
+	_uint m_iSelectedIndex = { 0 }; // 다양한 팝업에 쓸려고 만든거 막써도됨
 
 	map<_uint, vector<_double>>			m_mapEventTriggers;	// 애니번호, 시간 순서쌍의 트리거
 	map<_uint, vector<EFFECTTRIGGER>>	m_mapEffectTriggers;// 이펙트트리거 : 애니번호 -> 시간, 뼈이름
@@ -70,6 +72,7 @@ private:
 	list<CHAIN>::iterator			m_SelectedChain = {};
 	vector<SPEEDTRIGGER>::iterator	m_SelectedSpeedTrigger = {};
 	vector<_double>::iterator		m_SelectedEventTrigger = {};
+	vector<EFFECTTRIGGER>::iterator m_SelectedEffectTrigger = {};
 
 	_uint	m_iSelectedBone = { 0 };
 	_int	m_iInput = { 0 };

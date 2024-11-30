@@ -466,7 +466,8 @@ void CLevel_GamePlay::Format_Prop()
 		{
 			CProp::PROP_DESC desc;
 			//desc.ModelTag = ModelTag_GoodAxe;
-			desc.ModelTag = ModelTag_GoodBowBox;
+			//desc.ModelTag = ModelTag_GoodBowBox;
+			desc.ModelTag = ModelTag_GoodBow;
 			int i(0);
 			for (auto& bone : *m_pCommander->Get_Bones())
 			{
@@ -495,28 +496,28 @@ void CLevel_GamePlay::Format_Prop()
 	if (ImGui::BeginTabItem("Setting##Prop"))
 	{
 		ImGui::Checkbox("Syncro##Prop", &m_bPropRotationSyncro);
-		ImGui::SliderFloat("X##PropRotation", &m_fPropRotationX, -180, 180);
+		ImGui::SliderFloat("Pitch##PropRotation", &m_fPropRotationX, -180, 180);
 		ImGui::SameLine();
-		if (ImGui::Button("+##xRot+"))
+		if (ImGui::Button("+##Pitch+"))
 			m_fPropRotationX += 1.f;
 		ImGui::SameLine();
-		if (ImGui::Button("-##xRot-"))
+		if (ImGui::Button("-##Pitch-"))
 			m_fPropRotationX -= 1.f;
-		ImGui::SliderFloat("Y##PropRotation", &m_fPropRotationY, -180, 180);
+		ImGui::SliderFloat("Yaw##PropRotation", &m_fPropRotationY, -180, 180);
 		ImGui::SameLine();
-		if (ImGui::Button("+##yRot+"))
-			m_fPropRotationX += 1.f;
+		if (ImGui::Button("+##Yaw+"))
+			m_fPropRotationY += 1.f;
 		ImGui::SameLine();
-		if (ImGui::Button("-##yRot-"))
-			m_fPropRotationX -= 1.f;
-		ImGui::SliderFloat("Z##PropRotation", &m_fPropRotationZ, -180, 180);
+		if (ImGui::Button("-##Yaw-"))
+			m_fPropRotationY -= 1.f;
+		ImGui::SliderFloat("Roll##PropRotation", &m_fPropRotationZ, -180, 180);
 		ImGui::SameLine();
-		if (ImGui::Button("+##zRot+"))
-			m_fPropRotationX += 1.f;
+		if (ImGui::Button("+##RollRot+"))
+			m_fPropRotationZ += 1.f;
 		ImGui::SameLine();
-		if (ImGui::Button("-##zRot-"))
-			m_fPropRotationX -= 1.f;
-
+		if (ImGui::Button("-##RollRot-"))
+			m_fPropRotationZ -= 1.f;
+		
 		ImGui::NewLine();
 		ImGui::SliderFloat("X##PropPos", &m_vPropRevisionPos.x, -10.f, 10.f);
 		ImGui::SameLine();
@@ -812,22 +813,18 @@ void CLevel_GamePlay::TriggerSetting_Event()
 	ImGui::BeginChild("list##EventTrigger");
 	int i(0);
 	ImGui::BeginTable("Triggers", 2);
-	//for (auto& pair : m_mapEventTriggers)
+
 	for(auto iterPair = m_mapEventTriggers.begin(); iterPair != m_mapEventTriggers.end(); ++iterPair)
 	{
-		//for (auto& Trigger : (*iterPair).second)
 		for(auto& iterTrigger = (*iterPair).second.begin(); iterTrigger != (*iterPair).second.end();)
 		{
 			ImGui::TableNextColumn();
-			//ImGui::Text("%u : %f", pair.first, Trigger);
 			sprintf_s(Buttonbuffer, "%u, : %f##EventTrigger%d", (*iterPair).first, (*iterTrigger), i);
 			if (ImGui::Button(Buttonbuffer))
 			{
 				m_bShow_EventTriggerPopup = true;
 				m_SelectedEventTrigger = iterTrigger;
-				//iterTrigger = (*iterPair).second.erase(iterTrigger);
-				//m_mapEventTriggers[m_iFixEventTirgger_AniIndex].push_back(m_dFixEventTrigger_TriggerPos);
-				//sort(m_mapEventTriggers[m_iFixEventTirgger_AniIndex].begin(), m_mapEventTriggers[m_iFixEventTirgger_AniIndex].end(), [](_double Temp, _double Src) {return Temp < Src; });
+				m_iSelectedIndex = (*iterPair).first;
 			}
 			else
 				++iterTrigger;
@@ -861,7 +858,20 @@ void CLevel_GamePlay::TriggerSetting_Event()
 		ImGui::SameLine();
 		if (ImGui::Button("Remove##EventTrigger"))
 		{
-			m_mapEventTriggers[iCurrentAnimationIndex].erase(m_SelectedEventTrigger);
+			m_mapEventTriggers[m_iSelectedIndex].erase(m_SelectedEventTrigger);
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Send->Effect"))
+		{
+			EFFECTTRIGGER TempEffectTrigger;
+			TempEffectTrigger.TriggerTime = (*m_SelectedEventTrigger);
+			strcpy_s(TempEffectTrigger.BoneName, (*m_pCommander->Get_Bones())[m_iSelectedBone]->Get_Name());
+			m_mapEffectTriggers[m_iSelectedIndex].push_back(TempEffectTrigger);
+			sort(m_mapEffectTriggers[m_iSelectedIndex].begin(), m_mapEffectTriggers[m_iSelectedIndex].end(), [](EFFECTTRIGGER Temp, EFFECTTRIGGER Src)
+				{
+					//정렬코드
+					return Temp.TriggerTime < Src.TriggerTime;
+				});
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -871,10 +881,11 @@ void CLevel_GamePlay::TriggerSetting_Event()
 void CLevel_GamePlay::TriggerSetting_Effect()
 {
 	_uint iCurrentAnimationIndex = m_pCommander->Get_CurrentAnimationIndex();
-	if (ImGui::Button("Select_Bone"))
+	char Buttonbuffer[128];
+	if (ImGui::Button("Bone##EffectTrigger", ImVec2{50.f, 50.f}))
 		m_bEffectTrigger = !m_bEffectTrigger;
 	ImGui::SameLine();
-	if (ImGui::Button("Flag_Trigger"))
+	if (ImGui::Button("Flag##EffectTrigger", ImVec2{50.f, 50.f}))
 	{
 		EFFECTTRIGGER Trigger;
 		Trigger.TriggerTime = m_pCommander->Get_CurrentTrackPosition();
@@ -885,13 +896,22 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::BeginGroup();
 	ImGui::BeginChild("list##EffectTrigger");
 	ImGui::BeginTable("list", 2);
-
-	for (auto& pair : m_mapEffectTriggers)
+	_int i(0);
+	for(auto iterPair = m_mapEffectTriggers.begin(); iterPair != m_mapEffectTriggers.end(); ++iterPair)
 	{
-		for (auto& Trigger : pair.second)
+		for(auto& iterTrigger = (*iterPair).second.begin(); iterTrigger != (*iterPair).second.end();)
 		{
 			ImGui::TableNextColumn();
-			ImGui::Text("%u, %f, %s", pair.first, Trigger.TriggerTime, Trigger.BoneName);
+			sprintf_s(Buttonbuffer, "%u, %f, %s##EffectTrigger%d", (*iterPair).first, (*iterTrigger).TriggerTime, (*iterTrigger).BoneName, i);
+			if (ImGui::Button(Buttonbuffer))
+			{
+				m_bShow_EffectTriggerPopup = true;
+				m_SelectedEffectTrigger = iterTrigger;
+				m_iSelectedIndex = (*iterPair).first;
+			}
+			else
+				++iterTrigger;
+			++i;
 		}
 		ImGui::TableNextRow();
 	}
@@ -899,6 +919,25 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 	ImGui::EndTable();
 	ImGui::EndChild();
 	ImGui::EndGroup();
+
+	if (m_bShow_EffectTriggerPopup)
+	{
+		ImGui::OpenPopup("Fix_Trigger?##EventTrigger");
+		m_bShow_EffectTriggerPopup = false;
+	}
+	if (ImGui::BeginPopupModal("Fix_Trigger?##EventTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		if (ImGui::Button("Remove##EventTrigger"))
+		{
+			m_mapEffectTriggers[m_iSelectedIndex].erase(m_SelectedEffectTrigger);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("No##EventTrigger"))
+			ImGui::CloseCurrentPopup();
+		ImGui::EndPopup();
+	}
+
 
 }
 

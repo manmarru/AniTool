@@ -872,6 +872,7 @@ void CLevel_GamePlay::TriggerSetting_Event()
 					//정렬코드
 					return Temp.TriggerTime < Src.TriggerTime;
 				});
+			m_mapEventTriggers[m_iSelectedIndex].erase(m_SelectedEventTrigger);
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -922,18 +923,18 @@ void CLevel_GamePlay::TriggerSetting_Effect()
 
 	if (m_bShow_EffectTriggerPopup)
 	{
-		ImGui::OpenPopup("Fix_Trigger?##EventTrigger");
+		ImGui::OpenPopup("Fix_Trigger?##EffectTrigger");
 		m_bShow_EffectTriggerPopup = false;
 	}
-	if (ImGui::BeginPopupModal("Fix_Trigger?##EventTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginPopupModal("Fix_Trigger?##EffectTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		if (ImGui::Button("Remove##EventTrigger"))
+		if (ImGui::Button("Remove##EffectTrigger"))
 		{
 			m_mapEffectTriggers[m_iSelectedIndex].erase(m_SelectedEffectTrigger);
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("No##EventTrigger"))
+		if (ImGui::Button("No##EffectTrigger"))
 			ImGui::CloseCurrentPopup();
 		ImGui::EndPopup();
 	}

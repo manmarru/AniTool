@@ -36,7 +36,7 @@ using namespace std;
 #define ModelTag_BadBow TEXT("Prototype_Component_Model_BadBow")
 #define ModelTag_GoodBowBox TEXT("Prototype_Component_Model_GoodBowBox")
 #define ModelTag_BadBowBox TEXT("Prototype_Component_Model_BadBowBox")
-
+#define ModelTag_Arrow TEXT("Prototype_Component_Model_Arrow")
 
 #define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")

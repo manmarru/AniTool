@@ -467,7 +467,8 @@ void CLevel_GamePlay::Format_Prop()
 			CProp::PROP_DESC desc;
 			//desc.ModelTag = ModelTag_GoodAxe;
 			//desc.ModelTag = ModelTag_GoodBowBox;
-			desc.ModelTag = ModelTag_GoodBow;
+			//desc.ModelTag = ModelTag_GoodBow;
+			desc.ModelTag = ModelTag_Arrow;
 			int i(0);
 			for (auto& bone : *m_pCommander->Get_Bones())
 			{

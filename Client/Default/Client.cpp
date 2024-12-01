@@ -26,15 +26,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
 {
 #ifdef _DEBUG
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    if (::AllocConsole() == TRUE)
-    {
-        FILE* nfp[3];
-        freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
-        freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
-        freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
-        std::ios::sync_with_stdio();
-    }
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+ //   if (::AllocConsole() == TRUE)
+ //   {
+ //       FILE* nfp[3];
+ //       freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
+ //       freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
+ //       freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
+ //       std::ios::sync_with_stdio();
+ //   }
 #endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);

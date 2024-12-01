@@ -142,6 +142,7 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 {
 	CEditObj::EDITOBJ_DESC Desc;
 	Desc.isShadowObj = true;
+	//¿¡µ÷¸ðµ¨
 	//Desc.ModelTag = ModelTag_Syar;
 	Desc.ModelTag = ModelTag_PlayerBody;
 	//Desc.ModelTag = ModelTag_Duaca;
@@ -465,11 +466,14 @@ void CLevel_GamePlay::Format_Prop()
 		if (ImGui::Button("Export##Prop", ImVec2{ 50.f, 50.f })) // ÆÄÃ÷ »ý¼º
 		{
 			CProp::PROP_DESC desc;
+			//ÇÁ·Ó¸ðµ¨
 			//desc.ModelTag = ModelTag_GoodAxe;
 			//desc.ModelTag = ModelTag_GoodBowBox;
 			//desc.ModelTag = ModelTag_GoodBow;
 			desc.ModelTag = ModelTag_Arrow;
+			//desc.ModelTag = ModelTag_Duaca;
 			int i(0);
+			
 			for (auto& bone : *m_pCommander->Get_Bones())
 			{
 				if (i == m_iSelectedBone)

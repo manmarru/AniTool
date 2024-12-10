@@ -35,6 +35,7 @@ public:
     virtual void Set_SocketMatrix(const _float4x4* _pSocketMatrix) override;
     void Set_LocalPos(_fvector vPos);
     void Rotation(_float fX, _float fY, _float fZ);
+    void Play_Animaion(_float fTimeDelta);
 
 private:
     CShader* m_pShaderCom = { nullptr };

@@ -35,17 +35,19 @@ HRESULT CProp::Initialize(void* _pArg)
 	if (FAILED(Ready_Components(pDesc->ModelTag)))
 		return E_FAIL;
 
+	m_pModelCom->Set_NextAnimIndex(0, true, 0.f);
+
 	return S_OK;
 }
 
-void CProp::Priority_Update(_float _fTimeDelta)
-{
-}
+void CProp::Priority_Update(_float _fTimeDelta) {}
 
 _int CProp::Update(_float _fTimeDelta)
 {
 	_matrix SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
-
+	
+	m_pModelCom->Play_Animation(_fTimeDelta);
+		
 	for (size_t i = 0; i < 3; i++)
 	{
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
@@ -77,6 +79,8 @@ HRESULT CProp::Render()
 
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", i);
+
 		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, i)))
 			return E_FAIL;
 
@@ -105,10 +109,15 @@ void CProp::Rotation(_float _fX, _float _fY, _float _fZ)
 	m_pTransformCom->Rotation(_fX, _fY, _fZ);
 }
 
+void CProp::Play_Animaion(_float fTimeDelta)
+{
+	m_pModelCom->Play_Animation(fTimeDelta);
+}
+
 HRESULT CProp::Ready_Components(_wstring _MoadeTag)
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, ComponentTag_Shader_AnimModel,
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 

@@ -37,6 +37,9 @@ using namespace std;
 #define ModelTag_GoodBowBox TEXT("Prototype_Component_Model_GoodBowBox")
 #define ModelTag_BadBowBox TEXT("Prototype_Component_Model_BadBowBox")
 #define ModelTag_Arrow TEXT("Prototype_Component_Model_Arrow")
+#define ModelTag_Lion TEXT("Prototype_Component_Model_Lion")
+#define ModelTag_Saddle TEXT("Prototype_Component_Model_Saddle")
+#define ModelTag_RidingPlayer TEXT("Prototype_Component_Model_RidingPlayer")
 
 #define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")
@@ -50,3 +53,6 @@ using namespace std;
 #define TextureTag_Snow TEXT("Prototype_Component_Texture_Particle")
 
 #define BufferTag_Rect TEXT("Prototype_Component_VIBuffer_Rect")
+
+#define ComponentTag_Shader_Model TEXT("Prototype_Component_Shader_VtxModel")
+#define ComponentTag_Shader_AnimModel TEXT("Prototype_Component_Shader_VtxAnimModel")

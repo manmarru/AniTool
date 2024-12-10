@@ -56,6 +56,8 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	Format_ImGUI();
+	//if (nullptr != m_pProp)
+	//	m_pProp->Play_Animaion(fTimeDelta);
 
 	//Imgui_Dialogue();
 
@@ -144,8 +146,10 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	Desc.isShadowObj = true;
 	//¿¡µ÷¸ðµ¨
 	//Desc.ModelTag = ModelTag_Syar;
-	Desc.ModelTag = ModelTag_PlayerBody;
+	//Desc.ModelTag = ModelTag_PlayerBody;
 	//Desc.ModelTag = ModelTag_Duaca;
+	//Desc.ModelTag = ModelTag_GoodBow;
+	Desc.ModelTag = ModelTag_Saddle;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	
@@ -470,10 +474,11 @@ void CLevel_GamePlay::Format_Prop()
 			//desc.ModelTag = ModelTag_GoodAxe;
 			//desc.ModelTag = ModelTag_GoodBowBox;
 			//desc.ModelTag = ModelTag_GoodBow;
-			desc.ModelTag = ModelTag_Arrow;
+			//desc.ModelTag = ModelTag_Arrow;
 			//desc.ModelTag = ModelTag_Duaca;
+			desc.ModelTag = ModelTag_RidingPlayer;
+
 			int i(0);
-			
 			for (auto& bone : *m_pCommander->Get_Bones())
 			{
 				if (i == m_iSelectedBone)

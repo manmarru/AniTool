@@ -165,7 +165,7 @@ const _float4x4* CEditObj::Get_WorldMatrix_Ptr()
 HRESULT CEditObj::Ready_Components(_wstring& _ModelTag)
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, ComponentTag_Shader_AnimModel,
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
@@ -185,7 +185,7 @@ HRESULT CEditObj::Ready_FSM()
 	if (nullptr == m_pFSM)
 		return E_FAIL;
 
-	//애니 등록 할 필요 없다. 체인거는거만 테스틀할거임
+	//애니 등록 할 필요 없다. 체인거는거만 테스트할거임
 
 	return S_OK;
 }

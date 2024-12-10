@@ -340,7 +340,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 			m_bLinearFinished = false;
 			m_bInterupted = false;
 
-			for (_uint i = m_iNumSkip; i < m_Bones.size(); ++i)
+			for (_uint i = 0; i < m_Bones.size(); ++i)
 				m_StartBonesTransforms[i] = m_Bones[i]->Get_TransformationMatrix();
 
 			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_NewBones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);

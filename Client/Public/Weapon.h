@@ -18,6 +18,7 @@ public:
 	{
 		_wstring ModelTag;
 		const _float4x4* pSocketBoneMatrix = { nullptr };
+		_bool isAnimModel = false;
 	}WEAPON_DESC;
 
 private:
@@ -48,6 +49,7 @@ private:
 	const _float4x4*			m_pSocketMatrix = { nullptr };
 	const _uint*				m_pParentState = { nullptr };
 	_bool						m_isStored = { false };
+	_bool						m_isAnimModel = { false };
 
 private:
 	HRESULT Ready_Components(_wstring _MoadeTag);

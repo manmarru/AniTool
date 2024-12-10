@@ -24,6 +24,7 @@ HRESULT CWeapon::Initialize(void * pArg)
 {
 	WEAPON_DESC*			pDesc = static_cast<WEAPON_DESC*>(pArg);
 	m_pSocketMatrix = pDesc->pSocketBoneMatrix;
+	m_isAnimModel = pDesc->isAnimModel;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(pDesc)))

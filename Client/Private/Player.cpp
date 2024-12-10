@@ -164,12 +164,12 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	else if (m_pGameInstance->Get_DIKeyState(KeyType::Key1))
 	{
 		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_ATT1);
+		Set_State(OBJSTATE_ATT1, false);
 	}
 	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key2))
 	{
 		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_ATT2);
+		Set_State(OBJSTATE_ATT2, false);
 	}
 	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key3))
 	{
@@ -632,7 +632,10 @@ HRESULT CPlayer::Ready_PartObjects()
 	if (nullptr == m_pBodyFSM)
 		return E_FAIL;
 
-
+	CModel* pHeadModelCom = static_cast<CModel*>(m_Parts[PART_HEAD]->Find_Component(TEXT("Com_Model")));
+	CModel* pHairModelCom = static_cast<CModel*>(m_Parts[PART_HAIR]->Find_Component(TEXT("Com_Model")));
+	pHeadModelCom->Unify_Bones(m_pBodyModelCom);
+	pHairModelCom->Unify_Bones(pHeadModelCom);
 
 
 	return S_OK;

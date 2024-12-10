@@ -34,7 +34,7 @@ HRESULT CAnimation::Initialize(DATA_BINANIM* pAIAnimation, vector<_uint>& KeyFra
 	return S_OK;
 }
 
-_bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _float fTimeDelta, _float fPlaySpeed, _double dSubTime)
+_bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _float fTimeDelta, _uint iNumSkip, _float fPlaySpeed, _double dSubTime)
 {
 	/* 현재 재생위치를 계산하낟. */
 	*pCurrentTrackPosition += m_SpeedPerSec * fTimeDelta * fPlaySpeed;
@@ -51,10 +51,14 @@ _bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 	/* 현재 재생위치에 맞게 현재 애니메이션이 컨트롤해야 할 뼈의 상태들을 갱신해준다. */
 	_uint		iChannelIndex = { 0 };
 	m_iKeyFrameIndex = CurrentKeyFrameIndices.back();
-	for (auto& pChannel : m_Channels)
+	for (_uint i = iNumSkip; i < m_Channels.size(); i++)
+	{
+		m_Channels[i]->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex++], *pCurrentTrackPosition);
+	}
+	/*for (auto& pChannel : m_Channels)
 	{
 		pChannel->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex++], *pCurrentTrackPosition);
-	}
+	}*/
 
 	return false;
 }

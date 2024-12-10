@@ -40,7 +40,6 @@ public:
 	void Set_CurrentTrackPosition(_double dPosition);
 	void Change_Bone(CBone* _pBone, _uint _iBoneIndex);
 	CBone* Get_Bone(const char* BoneName);
-	void Set_Skip(_int _iSkip) { m_iNumSkip = _iSkip; }
 
 	_double& Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
 	_double* Get_CurrentTrackPosition_ptr() { return &m_CurrentTrackPosition; }
@@ -89,8 +88,8 @@ public:
 	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, aiTextureType eMaterialType, _uint iMeshIndex);
 	HRESULT Check_Material(aiTextureType eMaterialType, _uint iMeshIndex);
 	HRESULT Bind_MeshBoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
-
 	HRESULT Bind_Bone_Mesh(CModel* pOtherModel);
+	void Unify_Bones(CModel* pModel);
 
 private:
 	DATA_BINSCENE* m_pBin_Scene = nullptr;

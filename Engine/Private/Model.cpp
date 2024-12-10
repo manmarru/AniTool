@@ -360,7 +360,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 
 			m_iCurrentAnimIndex = m_iNextAnimIndex;
 			// 보간이 완료된 후 새로운 애니메이션 시작
-			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip);
 			TriggerSetting();
 		}
 	}
@@ -373,7 +373,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 
 			m_bLinearFinished = true;
 		}
-		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
+		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip, m_fPlaySpeed, m_dSubTime);
 		if (m_bLinearFinished && m_CurrentTrackPosition == 0) // 루프시점처럼 보간 안들어가는 애니 시작할떄
 			TriggerSetting();
 	}
@@ -409,7 +409,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 //루트애님 - 지정한 뼈의 회전을 무시함
 _bool CModel::Play_Animation(_float fTimeDelta, const char* _BoneName)
 {
-	_bool isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
+	_bool isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip, m_fPlaySpeed, m_dSubTime);
 
 	for (auto& pBone : m_Bones)
 	{
@@ -440,7 +440,7 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 			for (_uint i = 0; i < m_Bones.size(); ++i)
 				m_StartBonesTransforms[i] = m_Bones[i]->Get_TransformationMatrix();
 
-			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_NewBones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_NewBones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip);
 		}
 		if (!m_bLinearFinished)
 		{
@@ -457,7 +457,7 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 
 			m_iCurrentAnimIndex = m_iNextAnimIndex;
 			// 보간이 완료된 후 새로운 애니메이션 시작
-			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta);
+			m_Animations[m_iNextAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iNextAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip);
 			TriggerSetting();
 		}
 	}
@@ -470,7 +470,7 @@ _bool CModel::Play_TriggerAnimation(_float fTimeDelta)
 
 			m_bLinearFinished = true;
 		}
-		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_fPlaySpeed, m_dSubTime);
+		isFinished = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, fTimeDelta, m_iNumSkip, m_fPlaySpeed, m_dSubTime);
 	
 		//트리거 체크
 		if (m_mapAnimationTrigger[m_iCurrentAnimIndex][m_iCurrentTrigger].TriggerTime <= m_CurrentTrackPosition)
@@ -580,6 +580,21 @@ HRESULT CModel::Bind_Bone_Mesh(CModel* pOtherModel)
 	vector<class CMesh*>* pOtherMeshes = pOtherModel->Get_Meshs();
 
 	return S_OK;
+}
+
+void CModel::Unify_Bones(CModel* pModel)
+{
+	m_iNumSkip = 0;
+	for (size_t i = 0; i < min(m_Bones.size(), pModel->m_Bones.size()); i++)
+	{
+		if (!strcmp(m_Bones[i]->Get_Name(), pModel->m_Bones[i]->Get_Name()))
+		{
+			Safe_Release(m_Bones[i]);
+			m_Bones[i] = pModel->m_Bones[i];
+			Safe_AddRef(m_Bones[i]);
+			++m_iNumSkip;
+		}
+	}
 }
 
 void CModel::Register_Trigger(map<_uint, vector<_double>>* pEventTrigger, map<_uint, vector<EFFECTTRIGGER>>* _pEffectTrigger, map<_uint, queue<SPEEDTRIGGER>>* _pSpeedTrigger)

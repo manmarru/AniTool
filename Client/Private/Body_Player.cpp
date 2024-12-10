@@ -43,11 +43,6 @@ HRESULT CBody_Player::Initialize(void * pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
-	m_pModelCom->Set_Skip(9);
-	
-
-	//m_pModelCom->SetUp_Animation(3, true);
-
 	return S_OK;
 }
 

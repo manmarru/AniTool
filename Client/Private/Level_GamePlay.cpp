@@ -146,10 +146,10 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	Desc.isShadowObj = true;
 	//¿¡µ÷¸ðµ¨
 	//Desc.ModelTag = ModelTag_Syar;
-	//Desc.ModelTag = ModelTag_PlayerBody;
+	Desc.ModelTag = ModelTag_PlayerBody;
 	//Desc.ModelTag = ModelTag_Duaca;
 	//Desc.ModelTag = ModelTag_GoodBow;
-	Desc.ModelTag = ModelTag_Saddle;
+	//Desc.ModelTag = ModelTag_Saddle;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	

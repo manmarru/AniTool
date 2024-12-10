@@ -131,7 +131,7 @@ HRESULT CHead_Player::Render_LightDepth()
 
 void CHead_Player::Set_State(_uint _eState, _bool _bLerp)
 {
-	m_pFSM->Set_State((OBJ_STATE)_eState, _bLerp);
+	m_pFSM->Set_State((OBJ_STATE)_eState, false, _bLerp);
 }
 
 void CHead_Player::Set_ChainState(_uint _eState, _bool _bLerp)

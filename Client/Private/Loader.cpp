@@ -98,12 +98,6 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default.png"), 1))))
 		return E_FAIL;
 
-	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
-
-
-	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
-
-
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
@@ -153,14 +147,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_Component_Texture_TestStar */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TextureTag_TestStar,
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/flame/cookingFlame%d.png"), 7))))
-		return E_FAIL;
-	
-
-	/* For. Prototype_Component_Texture_Explosion */
-	/*if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Explosion"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Explosion/Explosion%d.png"), 90))))
-		return E_FAIL;*/
-	
+		return E_FAIL;	
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 	/* For. Prototype_Component_VIBuffer_Terrain*/
@@ -283,17 +270,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Duaca,
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Duaca/Duaca"), PreTransformMatrix))))
 		return E_FAIL;
-		
-
-	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
-	/* For.Prototype_Component_Navigation */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation.dat")))))
-		return E_FAIL;
-
-	//쉐이더
-
-	//콜라이더
 
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
   	m_pGameInstance->Load_Sound("BGM");

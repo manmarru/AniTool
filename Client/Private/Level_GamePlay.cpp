@@ -145,8 +145,9 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	CEditObj::EDITOBJ_DESC Desc;
 	Desc.isShadowObj = true;
 	//¿¡µ÷¸ðµ¨
-	Desc.ModelTag = ModelTag_Syar;
-	//Desc.ModelTag = ModelTag_PlayerBody;
+	//Desc.ModelTag = ModelTag_Syar;
+	//Desc.ModelTag = ModelTag_SummonSyar;
+	Desc.ModelTag = ModelTag_PlayerBody;
 	//Desc.ModelTag = ModelTag_Duaca;
 	//Desc.ModelTag = ModelTag_GoodBow;
 	//Desc.ModelTag = ModelTag_Saddle;

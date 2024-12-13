@@ -206,6 +206,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\public\PlayerActing.h" />
     <ClInclude Include="..\Public\Pooling_Manager.h" />
     <ClInclude Include="..\public\Prop.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -251,6 +252,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\private\PlayerActing.cpp" />
     <ClCompile Include="..\Private\Pooling_Manager.cpp" />
     <ClCompile Include="..\private\Prop.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />

@@ -234,6 +234,9 @@
     <ClInclude Include="..\public\Prop.h">
       <Filter>02.GameObjects\05.Prop</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PlayerActing.h">
+      <Filter>95.FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Prop.cpp">
       <Filter>02.GameObjects\05.Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerActing.cpp">
+      <Filter>95.FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

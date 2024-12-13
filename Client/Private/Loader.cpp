@@ -262,8 +262,15 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_Component_Model_Syar*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Syar,
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Syar/syar"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Syar/Syar"), PreTransformMatrix))))
 		return E_FAIL;
+	
+	/* For. Prototype_Component_Model_SummonSyar*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_SummonSyar,
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Syar/SummonSyar"), PreTransformMatrix))))
+		return E_FAIL;
+
 
 	//For Prototype_Component_Model_Duaca
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);

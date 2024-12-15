@@ -38,6 +38,7 @@ public:
 	}
 
 	void Set_CurrentTrackPosition(_double dPosition);
+	void Set_DivideMatrix(const _char* pBoneName, _float4x4 vDivideMatrix);
 	void Change_Bone(CBone* _pBone, _uint _iBoneIndex);
 	CBone* Get_Bone(const char* BoneName);
 

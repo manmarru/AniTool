@@ -66,6 +66,9 @@ namespace Client
 		, OBJSTATE_TUMBLEL // ¿·¿¡ ¸Â°í ¾þ¾îÁü
 		, OBJSTATE_TUMBLER
 
+		, OBJSTATE_TEST1
+		, OBJSTATE_TEST2
+
 		, OBJSTATE_END
 	};
 

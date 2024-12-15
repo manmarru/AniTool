@@ -11,25 +11,32 @@ CRigidBody::CRigidBody(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _fl
 
 void CRigidBody::Update(_float fTimeDelta)
 {
-	if (m_bFalling)
+	if (m_bFalling) // 중력
 	{
 		m_vInertia.y -= m_fGravity * fTimeDelta;
 	}
-	m_vInertia.x *= 0.9f;
-	m_vInertia.z *= 0.9f;
 
-	if (abs(m_vInertia.x) < 0.1f)
+	_float fForce = XMVectorGetX(XMVector2Length(XMVectorSet(m_vInertia.x, m_vInertia.z, 0.f, 0.f)));
+	fForce = max(0.f, fForce * (1.f - fTimeDelta * 1.5f));  // 저항 = 1.5
+
+	if (fForce < 0.05f)
+	{
 		m_vInertia.x = 0.f;
-	if (abs(m_vInertia.z) < 0.1f)
 		m_vInertia.z = 0.f;
+	}
+	else
+	{
+		_vector InertiaDir = XMVector2Normalize(XMVectorSet(m_vInertia.x, m_vInertia.z, 0.f, 0.f)) * fForce;
+		m_vInertia.x = XMVectorGetX(InertiaDir);
+		m_vInertia.z = XMVectorGetY(InertiaDir); //vector2라서 z를 y에 넣고 계산했음
+	}
 
+	//계산한거 적용
 	_vector convInertia = XMLoadFloat3(&m_vInertia);
-	
+
 	_matrix temp = XMLoadFloat4x4(m_pWorldMatrix);
 	temp.r[3] = XMVectorAdd(temp.r[3], convInertia);
 	XMStoreFloat4x4(m_pWorldMatrix, temp);
-	
-	XMStoreFloat3(&m_vInertia, convInertia);
 }
 
 void CRigidBody::Strike(_fvector vDir, _float fPower)

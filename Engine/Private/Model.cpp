@@ -125,6 +125,18 @@ void CModel::Set_CurrentTrackPosition(_double dPosition)
 	m_Animations[m_iCurrentAnimIndex];
 }
 
+void CModel::Set_DivideMatrix(const _char* pBoneName, _float4x4 vDivideMatrix)
+{
+	for (auto& pBone : m_Bones)
+	{
+		if (0 == strcmp(pBone->Get_Name(), pBoneName))
+		{
+			pBone->Set_DivideMatrix(vDivideMatrix);
+			return;
+		}
+	}
+}
+
 void CModel::Change_Bone(CBone* _pBone, _uint _iBoneIndex)
 {
 	Safe_Release(m_Bones[_iBoneIndex]);

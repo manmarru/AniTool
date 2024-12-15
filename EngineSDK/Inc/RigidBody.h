@@ -24,7 +24,7 @@ public:
 private:
 	_float4x4* m_pWorldMatrix = { nullptr }; //트랜스폼에서 가져올 월드
     _float3 m_vInertia = {};                // 관성
-    _float m_fGravity = {6.f};   // 중력상수
+    _float m_fGravity = {1.f};   // 중력상수
     _bool m_bFalling = { false };
 
 public:

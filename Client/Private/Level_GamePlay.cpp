@@ -385,7 +385,7 @@ void CLevel_GamePlay::Format_AniChain()
 	{
 		m_listAniChained.clear();
 	}
-
+	ImGui::SameLine();
 	if (ImGui::Button("Preview"))
 	{
 		m_pCommander->Set_Animation(m_tChain.ChainTag);
@@ -1013,10 +1013,11 @@ void CLevel_GamePlay::TriggerSetting_Speed()
 	}
 	if (ImGui::BeginPopupModal("Fix_Trigger?##SpeedTrigger", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		ImGui::Text("Before : %f, %f\nFixed : %f, %f", (*m_SelectedSpeedTrigger).TriggerTime, (*m_SelectedSpeedTrigger).AnimationSpeed, m_pCommander->Get_CurrentTrackPosition(), InputTrigger.AnimationSpeed);
+		//ImGui::Text("Before : %f, %f\nFixed : %f, %f", (*m_SelectedSpeedTrigger).TriggerTime, (*m_SelectedSpeedTrigger).AnimationSpeed, m_pCommander->Get_CurrentTrackPosition(), InputTrigger.AnimationSpeed);
+		ImGui::Text("Before : %f, %f\nFixed : %f, %f", (*m_SelectedSpeedTrigger).TriggerTime, (*m_SelectedSpeedTrigger).AnimationSpeed, m_pCommander->Get_CurrentTrackPosition(), m_fFlag_AnimationSpeed);
 		if (ImGui::Button("OK##SpeedPopup"))
 		{
-			(*m_SelectedSpeedTrigger).AnimationSpeed = InputTrigger.AnimationSpeed;
+			(*m_SelectedSpeedTrigger).AnimationSpeed = m_fFlag_AnimationSpeed;
 			(*m_SelectedSpeedTrigger).TriggerTime = m_pCommander->Get_CurrentTrackPosition();
 			ImGui::CloseCurrentPopup();
 		}

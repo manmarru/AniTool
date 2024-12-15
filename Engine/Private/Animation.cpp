@@ -55,10 +55,6 @@ _bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 	{
 		m_Channels[i]->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex++], *pCurrentTrackPosition);
 	}
-	/*for (auto& pChannel : m_Channels)
-	{
-		pChannel->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex++], *pCurrentTrackPosition);
-	}*/
 
 	return false;
 }

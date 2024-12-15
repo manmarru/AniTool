@@ -75,8 +75,13 @@ _int CPlayer::Update(_float fTimeDelta)
 	//State_Frame(fTimeDelta);
 
 	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pRigidBodyCom->isFalling(false);
-
+	_float3 vPos;
+	XMStoreFloat3(&vPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	if (0 >= vPos.y)
+	{
+		m_pRigidBodyCom->isFalling(false);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(vPos.x, 0.f, vPos.z, 1.f));
+	}
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
@@ -174,29 +179,29 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key3))
 	{
 		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_ATT3);
+		Set_State(OBJSTATE_TEST1);
 	}
 	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key4))
 	{
 		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_SH_DRAW);
+		Set_State(OBJSTATE_TEST2);
+		m_pRigidBodyCom->Strike(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.5f);
+		m_pRigidBodyCom->isFalling(true);
 	}
-	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key5))
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::X)) //상체 좌로 기울이기
 	{
-		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_SH_UNDRAW);
+		m_fDivideRotation += 10 * fTimeDelta;
+		_float4x4 Temp;
+		XMStoreFloat4x4(&Temp, XMMatrixRotationY(XMConvertToRadians(m_fDivideRotation)));
+		m_pBodyModelCom->Set_DivideMatrix("Bip001-Spine-Upper", Temp);
 	}
-	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key6))
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::C))//상체 우로 기울이기
 	{
-		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_ROLL);
+		m_fDivideRotation -= 10 * fTimeDelta;
+		_float4x4 Temp;
+		XMStoreFloat4x4(&Temp, XMMatrixRotationY(XMConvertToRadians(m_fDivideRotation)));
+		m_pBodyModelCom->Set_DivideMatrix("Bip001-Spine-Upper", Temp);
 	}
-	else if (m_pGameInstance->Get_DIKeyState_Once(KeyType::Key7))
-	{
-		m_iCurrentFSM = FSM_AXE;
-		Set_State(OBJSTATE_IDLE);
-	}
-
 }
 
 void CPlayer::Key_Input_SH(_float fTimeDelta)
@@ -604,8 +609,6 @@ HRESULT CPlayer::Ready_PartObjects()
 	HairDesc.pAnimationSpeed = m_pAnimationSpeed;
 	if (FAILED(Add_PartObject(PART_HAIR, TEXT("Prototype_GameObject_Hair_Player"), &HairDesc)))
 		return E_FAIL;
-
-
 
 	CWeapon::WEAPON_DESC WeaponDesc{};
 	WeaponDesc.ModelTag = ModelTag_Sword;

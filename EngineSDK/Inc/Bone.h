@@ -11,27 +11,16 @@ private:
 	virtual ~CBone() = default;
 
 public:
-	const _char* Get_Name() const {
-		return m_szName;
-	}
-
-	_matrix Get_CombinedTransformationMatrix() const {
-		return XMLoadFloat4x4(&m_CombinedTransformationMatrix);
-	}
-
-	const _float4x4* Get_CombinedTransformationMatrix_Ptr() const {
-		return &m_CombinedTransformationMatrix;
-	}
+	const _char* Get_Name() const { return m_szName; }
+	_matrix Get_CombinedTransformationMatrix() const { return XMLoadFloat4x4(&m_CombinedTransformationMatrix); }
+	const _float4x4* Get_CombinedTransformationMatrix_Ptr() const { return &m_CombinedTransformationMatrix; }
 	_float4x4* Get_CombinedTransformationMatrix_Ptr_NotConst() { return &m_CombinedTransformationMatrix; }
 	_float3* Get_CombinedPos();
-	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
-		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
-	}
+	void Set_TransformationMatrix(_fmatrix TransformationMatrix) { XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix); }
+	_float4x4 Get_TransformationMatrix() const { return m_TransformationMatrix; }
 
-	_float4x4 Get_TransformationMatrix() const {
-		return m_TransformationMatrix;
-	}
-
+public:
+	void Set_DivideMatrix(_float4x4 vDivideMatrix) { m_vDivideMatrix = vDivideMatrix; }
 
 public:
 	HRESULT Initialize(DATA_BINNODE* pNode);
@@ -43,6 +32,7 @@ private:
 
 	/* 부모기준으로 표현된 이 뼈만의 상태행렬. */
 	_float4x4			m_TransformationMatrix = {};
+	_float4x4			m_vDivideMatrix = {}; // 애니 따로 돌릴 때 사용할 행렬
 
 	/* 이 뼈의 최종적인 상태행렬 ( 내 상태행렬 * 부모의 최종상태행렬 ) */
 	/* m_TransformationMatrix * Parent`s m_CombinedTransformationMatrix */

@@ -55,6 +55,7 @@ private:
 	_uint				m_iCurrentFSM = { FSM_END };
 	_uint				m_iCurrentWeapon = { FSM_SH };
 	_uint				m_iTriggerCount = { 0 };
+	_float				m_fDivideRotation = { 0.f };
 
 private:
 	CShader*			m_pShaderCom = { nullptr };

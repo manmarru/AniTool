@@ -176,6 +176,8 @@ void CFSM_Player::Register_AnimationIndex()
 	m_mapAnimationIndex[FSM_AXE][OBJSTATE_SH_DRAW] = { 71, ANI_LOOP };
 	m_mapAnimationIndex[FSM_AXE][OBJSTATE_SH_UNDRAW] = { 72, ANI_LOOP };
 	m_mapAnimationIndex[FSM_AXE][OBJSTATE_ROLL] = { 73, ANI_LOOP };
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_TEST1] = { 85, ANI_STOP };
+	m_mapAnimationIndex[FSM_AXE][OBJSTATE_TEST2] = { 84, ANI_STOP };
 	m_mapAnimationIndex[FSM_AXE][OBJSTATE_IDLE] = { 90, ANI_LOOP };
 #pragma endregion
 

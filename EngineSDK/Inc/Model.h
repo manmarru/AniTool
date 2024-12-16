@@ -63,7 +63,8 @@ public:
 		m_isLoop = isLoop;
 		m_NextStartTrackPosition = dStartPosition;
 	}
-	 
+	void Set_Skip(_uint iSkip) { m_iNumSkip = iSkip; }
+
 	vector<class CMesh*>* Get_Meshs() { return &m_Meshes; }
 
 public:

@@ -88,8 +88,6 @@ _int CEditObj::Update(_float fTimeDelta)
 void CEditObj::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	if (m_bShadowObj)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 }
 
 HRESULT CEditObj::Render()

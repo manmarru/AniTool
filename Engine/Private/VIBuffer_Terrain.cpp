@@ -12,32 +12,36 @@ CVIBuffer_Terrain::CVIBuffer_Terrain(const CVIBuffer_Terrain & Prototype)
 	: CVIBuffer{ Prototype }
 	, m_iNumVerticesX { Prototype.m_iNumVerticesX }
 	, m_iNumVerticesZ { Prototype.m_iNumVerticesZ }
-	, m_pQuadTree { Prototype.m_pQuadTree}
+	//, m_pQuadTree { Prototype.m_pQuadTree}
 
 {
-	Safe_AddRef(m_pQuadTree);
+	//Safe_AddRef(m_pQuadTree);
 }
 
 HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath)
 {
 	_ulong			dwByte = {};
 
-	HANDLE			hFile = CreateFile(pHeightMapFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
+	//HANDLE			hFile = CreateFile(pHeightMapFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	//if (0 == hFile)
+	//	return E_FAIL;
 
-	BITMAPFILEHEADER			fh{};
-	BITMAPINFOHEADER			ih{};
+	//BITMAPFILEHEADER			fh{};
+	//BITMAPINFOHEADER			ih{};
 
-	ReadFile(hFile, &fh, sizeof fh, &dwByte, nullptr);
-	ReadFile(hFile, &ih, sizeof ih, &dwByte, nullptr);
-	m_iNumVerticesX = ih.biWidth;
-	m_iNumVerticesZ = ih.biHeight;
+	//ReadFile(hFile, &fh, sizeof fh, &dwByte, nullptr);
+	//ReadFile(hFile, &ih, sizeof ih, &dwByte, nullptr);
+	//m_iNumVerticesX = ih.biWidth;
+	//m_iNumVerticesZ = ih.biHeight;
+	m_iNumVerticesX = 40.f;
+	m_iNumVerticesZ = 40.f;
 
-	_uint*						pPixel = new _uint[m_iNumVerticesX * m_iNumVerticesZ];
-	ReadFile(hFile, pPixel, sizeof(_uint) * m_iNumVerticesX * m_iNumVerticesZ, &dwByte, nullptr);
+	//_uint*						pPixel = new _uint[m_iNumVerticesX * m_iNumVerticesZ];
+	//ReadFile(hFile, pPixel, sizeof(_uint) * m_iNumVerticesX * m_iNumVerticesZ, &dwByte, nullptr);
 
-	CloseHandle(hFile);	
+	//CloseHandle(hFile);	
+	
+
 
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = m_iNumVerticesX * m_iNumVerticesZ;
@@ -61,7 +65,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath
 		{
 			_uint			iIndex = i * m_iNumVerticesX + j;
 
-			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = _float3((float)j, 0.f/*(pPixel[iIndex] & 0x000000ff) / 10.0f*/, (float)i);
+			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = _float3((float)j, 0.f, (float)i);
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
 			pVertices[iIndex].vTexcoord = _float2((float)j / (m_iNumVerticesX - 1.f), (float)i / (m_iNumVerticesZ - 1.f));
 		}
@@ -153,14 +157,14 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath
 
 	Safe_Delete_Array(pIndices);
 	Safe_Delete_Array(pVertices);
-	Safe_Delete_Array(pPixel);
+	//Safe_Delete_Array(pPixel);
 
-	m_pQuadTree = CQuadTree::Create(m_iNumVerticesX * m_iNumVerticesZ - m_iNumVerticesX, 
-		m_iNumVerticesX * m_iNumVerticesZ - 1, 
-		m_iNumVerticesX - 1, 
-		0);
+	//m_pQuadTree = CQuadTree::Create(m_iNumVerticesX * m_iNumVerticesZ - m_iNumVerticesX, 
+	//	m_iNumVerticesX * m_iNumVerticesZ - 1, 
+	//	m_iNumVerticesX - 1, 
+	//	0);
 
-	m_pQuadTree->Make_Neighbors();
+	//m_pQuadTree->Make_Neighbors();
 
 	return S_OK;
 }
@@ -264,5 +268,5 @@ void CVIBuffer_Terrain::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pQuadTree);
+	//Safe_Release(m_pQuadTree);
 }

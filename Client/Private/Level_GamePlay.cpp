@@ -824,7 +824,7 @@ void CLevel_GamePlay::TriggerSetting_Event()
 	ImGui::BeginGroup();
 	ImGui::BeginChild("list##EventTrigger");
 	int i(0);
-	ImGui::BeginTable("Triggers", 2);
+	ImGui::BeginTable("Triggers", 3);
 
 	for(auto iterPair = m_mapEventTriggers.begin(); iterPair != m_mapEventTriggers.end(); ++iterPair)
 	{

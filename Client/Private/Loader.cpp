@@ -278,7 +278,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 
-	////For Prototype_Component_Model_Duaca
+	//For Prototype_Component_Model_Duaca
 	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, ModelTag_Duaca,
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Boss/Duaca/Duaca"), PreTransformMatrix))))

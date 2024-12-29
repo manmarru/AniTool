@@ -82,6 +82,17 @@ _int CEditObj::Update(_float fTimeDelta)
 	//}
 #pragma endregion
 
+	if (m_pGameInstance->Get_DIKeyState(KeyType::Q))
+	{
+		//허리꺾기 구현부 (필요없으면 지워도 됨)
+	}
+	else if (m_pGameInstance->Get_DIKeyState(KeyType::E))
+	{
+
+	}
+
+
+
 	return OBJ_NOEVENT;
 }
 

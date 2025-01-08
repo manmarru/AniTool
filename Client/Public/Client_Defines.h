@@ -39,9 +39,13 @@ using namespace std;
 #define ModelTag_BadBowBox TEXT("Prototype_Component_Model_BadBowBox")
 #define ModelTag_Arrow TEXT("Prototype_Component_Model_Arrow")
 #define ModelTag_Lion TEXT("Prototype_Component_Model_Lion")
+#define ModelTag_Horse TEXT("Prototype_Component_Model_Horse")
 #define ModelTag_Evena TEXT("Prototype_Component_Model_Evena")
 #define ModelTag_Saddle TEXT("Prototype_Component_Model_Saddle")
 #define ModelTag_RidingPlayer TEXT("Prototype_Component_Model_RidingPlayer")
+#define ModelTag_Traitor TEXT("Prototype_Component_Model_Traitor")
+
+
 
 #define GameTag_Weapon TEXT("Prototype_GameObject_Weapon")
 #define GameTag_EditObj TEXT("Prototype_GameObject_EditObj")

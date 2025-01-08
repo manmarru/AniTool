@@ -149,9 +149,12 @@ HRESULT CLevel_GamePlay::Ready_EditObj()
 	//Desc.ModelTag = ModelTag_Evena;
 	//Desc.ModelTag = ModelTag_SummonSyar;
 	Desc.ModelTag = ModelTag_PlayerBody;
+	//Desc.ModelTag = ModelTag_Traitor;
 	//Desc.ModelTag = ModelTag_Duaca;
 	//Desc.ModelTag = ModelTag_GoodBow;
 	//Desc.ModelTag = ModelTag_Saddle;
+	//Desc.ModelTag = ModelTag_Lion;
+	//Desc.ModelTag = ModelTag_Horse;
 	Desc.pAnimationSpeed = m_pAnimationSpeed;
 	m_pCommander->Register(m_pGameInstance->Add_CloneObject_ToLayer_Get(LEVEL_GAMEPLAY, TEXT("Layer_EditObj"), GameTag_EditObj, &Desc));
 	
@@ -478,7 +481,8 @@ void CLevel_GamePlay::Format_Prop()
 			//desc.ModelTag = ModelTag_GoodBow;
 			//desc.ModelTag = ModelTag_Arrow;
 			//desc.ModelTag = ModelTag_Duaca;
-			desc.ModelTag = ModelTag_RidingPlayer;
+			desc.ModelTag = ModelTag_Sword;
+			//desc.ModelTag = ModelTag_RidingPlayer;
 
 			int i(0);
 			for (auto& bone : *m_pCommander->Get_Bones())

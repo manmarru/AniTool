@@ -46,7 +46,7 @@ _int CProp::Update(_float _fTimeDelta)
 {
 	_matrix SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
 	
-	m_pModelCom->Play_Animation(_fTimeDelta);
+	//m_pModelCom->Play_Animation(_fTimeDelta);
 		
 	for (size_t i = 0; i < 3; i++)
 	{
@@ -117,7 +117,7 @@ void CProp::Play_Animaion(_float fTimeDelta)
 HRESULT CProp::Ready_Components(_wstring _MoadeTag)
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, ComponentTag_Shader_AnimModel,
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, ComponentTag_Shader_Model,
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
